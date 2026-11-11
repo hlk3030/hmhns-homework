@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>机器增强的人机混合神经系统 · 系统层级图谱</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231B2A4A'/%3E%3Cpath d='M9 16h5l2-6 3 12 2-6h2' stroke='%232B5CE6' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@700;900&display=swap">
+<style>
+:root{
+  --bg:#ECEFF3;
+  --paper:#F7F8FA;
+  --ink:#16202E;
+  --muted:#5A6573;
+  --line:#D5DCE4;
+  --navy:#1B2A4A;
+  --cobalt:#2B5CE6;
+  --cobalt-soft:#E5ECFD;
+  --brick:#C4553B;
+  --brick-soft:#F9E7E2;
+  --sage:#3E8E7E;
+  --mono:"JetBrains Mono","SFMono-Regular",Consolas,"Courier New",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans SC",system-ui,-apple-system,"Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+/* ===== header ===== */
+header.masthead{background:var(--paper);border-bottom:1px solid var(--line);padding:52px 0 38px}
+.kicker-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:26px}
+.kicker-row .dot{color:var(--brick)}
+header.masthead h1{
+  font-family:"Noto Serif SC",serif;font-weight:900;
+  font-size:clamp(28px,4.2vw,42px);line-height:1.3;max-width:780px;
+}
+header.masthead h1 .mark{color:var(--cobalt)}
+.lead{margin-top:16px;color:var(--muted);max-width:720px;font-size:15.5px}
+.meta-row{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px}
+.meta-row span{font-size:13px;border:1px solid var(--line);border-radius:6px;padding:6px 13px;background:#fff;color:var(--navy)}
+/* ===== anchor nav ===== */
+nav.levelnav{position:sticky;top:0;z-index:20;background:var(--navy);border-bottom:1px solid var(--navy)}
+nav.levelnav .wrap{display:flex;flex-wrap:wrap;gap:0}
+nav.levelnav a{
+  color:#C9D3E6;text-decoration:none;font-size:13px;padding:13px 16px;
+  border-right:1px solid rgba(255,255,255,.08);display:flex;gap:8px;align-items:center;
+}
+nav.levelnav a b{font-family:var(--mono);color:#7FA0F5;font-weight:400}
+nav.levelnav a:hover{color:#fff;background:rgba(255,255,255,.06)}
+/* ===== level block ===== */
+section.lv{padding:44px 0 6px}
+.lv-grid{display:grid;grid-template-columns:230px 1fr;gap:34px}
+.rail{border-left:2px solid var(--line);padding-left:22px;position:relative}
+.rail::before{
+  content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;
+  background:var(--navy);border:2px solid var(--bg);
+}
+.rail .idx{font-family:var(--mono);font-size:13px;color:var(--cobalt);letter-spacing:.1em}
+.rail h2{font-family:"Noto Serif SC",serif;font-size:23px;font-weight:700;margin-top:6px}
+.rail .en{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:4px}
+.rail .pos{margin-top:12px;font-size:13.5px;color:var(--muted)}
+.rows{border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:230px 1fr;gap:18px;padding:15px 0;border-bottom:1px solid var(--line)}
+.row .name{font-weight:700;font-size:14.5px}
+.row .name small{display:block;font-family:var(--mono);font-weight:400;font-size:11px;color:var(--muted);margin-top:2px}
+.row .desc{font-size:14px;color:var(--muted)}
+.bridge{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;font-size:13px}
+.bridge span{border-radius:6px;padding:8px 14px}
+.bridge .up{background:var(--brick-soft);color:#8A3B28}
+.bridge .down{background:var(--cobalt-soft);color:#1E3F9E}
+/* accent per level */
+.lv-1 .rail::before{background:var(--brick)}
+.lv-2 .rail::before{background:#B98A2F}
+.lv-3 .rail::before{background:var(--sage)}
+.lv-4 .rail::before{background:var(--cobalt)}
+.lv-5 .rail::before{background:#2F6F8F}
+.lv-6 .rail::before{background:#46589B}
+/* ===== narrative ===== */
+section.narr{padding:50px 0 10px}
+section.narr h2{font-family:"Noto Serif SC",serif;font-size:26px;margin-bottom:8px}
+section.narr .lead{margin-bottom:26px}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px}
+.panel h3{font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.panel h3 .no{font-family:var(--mono);font-size:12px;color:var(--cobalt)}
+.panel ol{margin-left:18px;font-size:13.5px;color:var(--muted)}
+.panel ol li{margin:7px 0}
+.loop{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px}
+.loop h3{font-size:15px;margin-bottom:18px}
+.loop-svg{width:100%;height:auto}
+/* ===== footer ===== */
+footer{margin-top:36px;background:var(--navy);color:#C9D3E6;padding:26px 0;font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+footer b{color:#fff}
+/* ===== responsive ===== */
+@media (max-width:860px){
+  .lv-grid{grid-template-columns:1fr;gap:16px}
+  .rail{border-left:none;padding-left:0}
+  .rail::before{display:none}
+  .row{grid-template-columns:1fr;gap:6px}
+  .cols3{grid-template-columns:1fr}
+  nav.levelnav .wrap{overflow-x:auto;flex-wrap:nowrap}
+  nav.levelnav a{white-space:nowrap}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 刊头 ===== -->
+<header class="masthead">
+  <div class="wrap">
+    <div class="kicker-row">
+      <span><span class="dot">●</span> Complex Systems Engineering · 小组作业 1</span>
+      <span>Hierarchy Map / v2</span>
+    </div>
+    <h1>机器增强的<span class="mark">人机混合神经系统</span><br>六层层级图谱与闭环链路</h1>
+    <p class="lead">在人体生物神经系统之上叠加可穿戴 / 植入式机器增强链路，沿「任务 — 体系 — 整机 — 系统 — 子系统 — 模块」完成自上而下的需求分解与自下而上的集成验证。</p>
+    <div class="meta-row">
+      <span>课程：复杂系统工程</span>
+      <span>核心对象：人机混合神经闭环系统</span>
+      <span>交付：GitHub Pages 静态网页</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 锚点导航 ===== -->
+<nav class="levelnav">
+  <div class="wrap">
+    <a href="#lv1"><b>01</b>任务</a>
+    <a href="#lv2"><b>02</b>体系</a>
+    <a href="#lv3"><b>03</b>整机</a>
+    <a href="#lv4"><b>04</b>系统</a>
+    <a href="#lv5"><b>05</b>子系统</a>
+    <a href="#lv6"><b>06</b>模块</a>
+  </div>
+</nav>
+
+<!-- ===== L1 任务 ===== -->
+<section class="lv lv-1" id="lv1">
+  <div class="wrap lv-grid">
+    <div class="rail">
+      <div class="idx">LEVEL 01 / MISSION</div>
+      <h2>任务</h2>
+      <div class="en">Mission</div>
+      <p class="pos">体系存在的目的与边界：为谁解决什么问题、在何种约束下达成什么成效，是全部分解的出发点。</p>
+    </div>
+    <div>
+      <div class="rows">
+        <div class="row"><div class="name">感知代偿与增强<small>Perception augmentation</small></div><div class="desc">视觉、听觉、触觉信号的采集、补偿与再现，弥补感官缺损，并在安全范围内拓展感知范围。</div></div>
+        <div class="row"><div class="name">运动辅助与重建<small>Motor assistance</small></div><div class="desc">依据解码出的神经意图驱动智能义肢与外骨骼，辅助瘫痪、衰弱或残障肢体完成抓握、行走等动作。</div></div>
+        <div class="row"><div class="name">双向神经闭环<small>Closed-loop bidirectional</small></div><div class="desc">采集生物神经信号 → 解码意图 → 机器输出作用于人体 → 感觉反馈回传，形成持续闭环。</div></div>
+        <div class="row"><div class="name">状态监护与预警<small>Monitoring &amp; alert</small></div><div class="desc">持续监测接口、设备状态与人体生理指标，发现漂移、过载或异常时及时预警并安全干预。</div></div>
+        <div class="row"><div class="name">安全、隐私与伦理<small>Safety &amp; ethics</small></div><div class="desc">数据加密、隐私脱敏、知情同意与操作可追溯，满足医疗器械、个人信息保护与伦理审查要求。</div></div>
+        <div class="row"><div class="name">长期可用与可演进<small>Sustainability</small></div><div class="desc">支持长期佩戴 / 植入使用，模型可校准升级，硬件可维护更换，体系具备面向未来需求的扩展空间。</div></div>
+      </div>
+      <div class="bridge">
+        <span class="up">上承：社会需求、医疗康复目标与健康人能力提升诉求</span>
+        <span class="down">下接：分解为体系层的成员系统、协同关系与接口标准</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== L2 体系 ===== -->
+<section class="lv lv-2" id="lv2">
+  <div class="wrap lv-grid">
+    <div class="rail">
+      <div class="idx">LEVEL 02 / SoS</div>
+      <h2>体系</h2>
+      <div class="en">System of Systems</div>
+      <p class="pos">多个独立可运行、通过标准接口互操作的成员系统组成；整体能力在跨系统协同中涌现，而非来自单台设备。</p>
+    </div>
+    <div>
+      <div class="rows">
+        <div class="row"><div class="name">神经接口装备系统<small>Interface equipment</small></div><div class="desc">直接接触人体、完成神经信号采集与电 / 机械刺激输出的植入与穿戴装备集群。</div></div>
+        <div class="row"><div class="name">个人边缘计算终端<small>Edge terminal</small></div><div class="desc">手环、头环、便携主机等本地设备，承担实时信号处理、意图推理与设备联动控制。</div></div>
+        <div class="row"><div class="name">云端孪生与训练平台<small>Cloud twin &amp; training</small></div><div class="desc">模型训练、个性化校准、数字孪生仿真、算法版本管理与远程配置下发。</div></div>
+        <div class="row"><div class="name">医疗与康复系统<small>Clinical &amp; rehab</small></div><div class="desc">医院、康复机构的功能评估、康复训练、随访记录与病历管理，形成临床数据闭环。</div></div>
+        <div class="row"><div class="name">家庭 / 社区监护系统<small>Home monitoring</small></div><div class="desc">居家状态监测、远程随访、异常告警与紧急呼叫联动，衔接家庭、社区与医疗机构。</div></div>
+        <div class="row"><div class="name">安全与伦理监管系统<small>Governance</small></div><div class="desc">访问控制、数据审计、伦理审查、合规留痕，贯穿体系内所有成员系统与数据流。</div></div>
+      </div>
+      <div class="bridge">
+        <span class="up">上承：任务层的使命、约束与成效指标</span>
+        <span class="down">下接：体系能力落到整机装备形态、部署位置与成员系统边界</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== L3 整机 ===== -->
+<section class="lv lv-3" id="lv3">
+  <div class="wrap lv-grid">
+    <div class="rail">
+      <div class="idx">LEVEL 03 / VEHICLES</div>
+      <h2>整机</h2>
+      <div class="en">Vehicles</div>
+      <p class="pos">系统能力的物理载体，按穿戴、植入、便携三种形态划分，是人体与机器之间发生信号与能量交换的直接界面。</p>
+    </div>
+    <div>
+      <div class="rows">
+        <div class="row"><div class="name">智能神经手环 / 腕带<small>Wrist band</small></div><div class="desc">外周神经与肌电信号采集，振动、电刺激反馈输出，日常长期佩戴。</div></div>
+        <div class="row"><div class="name">头戴式神经头环 / 脑电帽<small>EEG headgear</small></div><div class="desc">脑电信号采集与头戴式处理单元，用于认知状态监测与意图识别实验。</div></div>
+        <div class="row"><div class="name">AR 神经视觉眼镜<small>AR visual display</small></div><div class="desc">视觉代偿显示与增强信息叠加，把机器侧信息以视觉通道反馈回人体。</div></div>
+        <div class="row"><div class="name">耳后式听觉处理器<small>Audio processor</small></div><div class="desc">人工耳蜗 / 骨传导设备，完成听觉信号重建与声反馈。</div></div>
+        <div class="row"><div class="name">智能义肢与动力外骨骼<small>Prosthesis &amp; exoskeleton</small></div><div class="desc">按意图指令执行抓握、支撑、行走等运动输出，是运动辅助的执行终端。</div></div>
+        <div class="row"><div class="name">植入式神经接口体<small>Implantable interface</small></div><div class="desc">皮层 / 外周电极阵列与闭环刺激器，体内长期植入，完成高精度信号交互。</div></div>
+        <div class="row"><div class="name">便携边缘计算主机<small>Edge host</small></div><div class="desc">多设备信号汇聚、本地推理、无线通信与供电管理，是整机群的中枢节点。</div></div>
+        <div class="row"><div class="name">床旁 / 桌面康复终端<small>Rehab terminal</small></div><div class="desc">康复训练场景下的固定终端，承载训练任务、可视化反馈与过程数据记录。</div></div>
+      </div>
+      <div class="bridge">
+        <span class="up">上承：体系层成员系统的分工与部署要求</span>
+        <span class="down">下接：每台整机内部按功能划分为若干系统</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== L4 系统 ===== -->
+<section class="lv lv-4" id="lv4">
+  <div class="wrap lv-grid">
+    <div class="rail">
+      <div class="idx">LEVEL 04 / SYSTEMS</div>
+      <h2>系统</h2>
+      <div class="en">Systems</div>
+      <p class="pos">整机内部按功能划分的系统集合。本作业选定的核心系统即「人机混合神经闭环系统」，向下分解为六类功能系统。</p>
+    </div>
+    <div>
+      <div class="rows">
+        <div class="row"><div class="name">神经信号采集系统<small>Acquisition</small></div><div class="desc">从人体采集脑电、肌电与外周神经信号，完成放大、滤波、模数转换与质量评估。</div></div>
+        <div class="row"><div class="name">意图解码与识别系统<small>Decoding</small></div><div class="desc">从信号中提取特征，分类出运动意图、感知状态与控制指令，输出给输出系统执行。</div></div>
+        <div class="row"><div class="name">机器增强输出系统<small>Actuation &amp; feedback</small></div><div class="desc">依据解码结果生成刺激波形、运动指令与感觉反馈，作用于人体或驱动外部执行设备。</div></div>
+        <div class="row"><div class="name">能量与电源管理系统<small>Power</small></div><div class="desc">供电、无线充电、功耗调度、电池健康监测与低电量安全降级策略。</div></div>
+        <div class="row"><div class="name">通信与时间同步系统<small>Communication</small></div><div class="desc">体内—体外、设备—终端、终端—云端之间的加密链路，以及全系统统一时基与同步。</div></div>
+        <div class="row"><div class="name">安全监护与容错系统<small>Safety &amp; fault tolerance</small></div><div class="desc">异常检测、故障隔离、急停保护、运行日志与审计，贯穿其余所有系统。</div></div>
+      </div>
+      <div class="bridge">
+        <span class="up">上承：整机形态与体系部署要求</span>
+        <span class="down">下接：每个功能系统进一步分解为子系统</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== L5 子系统 ===== -->
+<section class="lv lv-5" id="lv5">
+  <div class="wrap lv-grid">
+    <div class="rail">
+      <div class="idx">LEVEL 05 / SUB-SYSTEMS</div>
+      <h2>子系统</h2>
+      <div class="en">Sub-systems</div>
+      <p class="pos">将六类功能系统继续拆分为可独立设计、独立验证的子系统，每个子系统承担明确的信号流或控制流环节。</p>
+    </div>
+    <div>
+      <div class="rows">
+        <div class="row"><div class="name">电极阵列子系统<small>采集系统</small></div><div class="desc">布置电极点位，完成与人体组织的电气耦合与信号引出。</div></div>
+        <div class="row"><div class="name">模拟前端子系统<small>采集系统</small></div><div class="desc">微弱信号放大、滤波与阻抗检测，保证信号质量。</div></div>
+        <div class="row"><div class="name">数据采样子系统<small>采集系统</small></div><div class="desc">模数转换、采样率控制与原始数据缓冲上传。</div></div>
+        <div class="row"><div class="name">特征提取子系统<small>解码系统</small></div><div class="desc">从信号中提取时域、频域与波形特征，形成特征向量。</div></div>
+        <div class="row"><div class="name">意图分类推理子系统<small>解码系统</small></div><div class="desc">运行轻量分类模型，输出意图类别与置信度。</div></div>
+        <div class="row"><div class="name">模型更新与校准子系统<small>解码系统</small></div><div class="desc">在线 / 离线校准、模型版本更新与个体化参数适配。</div></div>
+        <div class="row"><div class="name">刺激波形生成子系统<small>输出系统</small></div><div class="desc">生成幅度、脉宽、频率可调的电 / 光刺激波形。</div></div>
+        <div class="row"><div class="name">运动驱动子系统<small>输出系统</small></div><div class="desc">把意图指令转换为义肢 / 外骨骼的运动轨迹与力矩控制。</div></div>
+        <div class="row"><div class="name">触觉反馈再现子系统<small>输出系统</small></div><div class="desc">通过振动、电刺激或压力把接触信息反馈回人体。</div></div>
+        <div class="row"><div class="name">无线充电子系统<small>电源系统</small></div><div class="desc">无线能量接收、充电管理与异物检测。</div></div>
+        <div class="row"><div class="name">电池管理子系统<small>电源系统</small></div><div class="desc">电量估算、均衡、过充过放保护与健康状态评估。</div></div>
+        <div class="row"><div class="name">功耗调度子系统<small>电源系统</small></div><div class="desc">按任务优先级动态分配算力与功耗，支持低电量降级。</div></div>
+        <div class="row"><div class="name">体内-体外近场通信子系统<small>通信系统</small></div><div class="desc">植入体与体外设备之间的短距无线链路。</div></div>
+        <div class="row"><div class="name">加密链路子系统<small>通信系统</small></div><div class="desc">设备到云端的加密传输、身份认证与数据脱敏。</div></div>
+        <div class="row"><div class="name">时间同步子系统<small>通信系统</small></div><div class="desc">统一各设备时基，保证信号采集与输出在时间上对齐。</div></div>
+        <div class="row"><div class="name">异常检测子系统<small>安全系统</small></div><div class="desc">监测信号质量、设备状态与行为边界，识别漂移与故障。</div></div>
+        <div class="row"><div class="name">急停保护子系统<small>安全系统</small></div><div class="desc">触发急停、切断危险输出并切换到安全状态。</div></div>
+        <div class="row"><div class="name">数据加密与隐私子系统<small>安全系统</small></div><div class="desc">神经数据加密存储、访问授权与隐私脱敏审计。</div></div>
+      </div>
+      <div class="bridge">
+        <span class="up">上承：系统层的功能划分与信号流要求</span>
+        <span class="down">下接：每个子系统由若干可制造、可采购的模块组成</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== L6 模块 ===== -->
+<section class="lv lv-6" id="lv6">
+  <div class="wrap lv-grid">
+    <div class="rail">
+      <div class="idx">LEVEL 06 / MODULES</div>
+      <h2>模块</h2>
+      <div class="en">Modules</div>
+      <p class="pos">层级体系最底层：可独立设计、采购、制造与测试的硬件 / 软件模块，是子系统功能的物理与算法载体。</p>
+    </div>
+    <div>
+      <div class="rows">
+        <div class="row"><div class="name">电极模块</div><div class="desc">干电极 / 湿电极 / 植入电极阵列，完成人体-电路电气耦合。</div></div>
+        <div class="row"><div class="name">模拟放大模块</div><div class="desc">仪表放大器，对微伏级神经信号进行低噪声前置放大。</div></div>
+        <div class="row"><div class="name">滤波模块</div><div class="desc">带通滤波与 50Hz 工频陷波，去除干扰与噪声频段。</div></div>
+        <div class="row"><div class="name">ADC 采样模块</div><div class="desc">高精度模数转换，按设定采样率完成信号数字化。</div></div>
+        <div class="row"><div class="name">信号预处理模块</div><div class="desc">去伪迹、重参考、归一化与信号质量评估。</div></div>
+        <div class="row"><div class="name">特征提取模块</div><div class="desc">时域、频域与波形特征计算，输出特征向量。</div></div>
+        <div class="row"><div class="name">神经网络推理模块</div><div class="desc">轻量分类模型的本地推理执行与结果输出。</div></div>
+        <div class="row"><div class="name">刺激波形生成模块</div><div class="desc">脉冲幅度、脉宽、频率可调的刺激波形发生。</div></div>
+        <div class="row"><div class="name">功率驱动模块</div><div class="desc">刺激电流 / 电机功率的放大与安全限幅驱动。</div></div>
+        <div class="row"><div class="name">触觉再现模块</div><div class="desc">振动马达、电刺激或压力单元，再现接触反馈。</div></div>
+        <div class="row"><div class="name">无线充电模块</div><div class="desc">谐振接收线圈与充电整流电路。</div></div>
+        <div class="row"><div class="name">电源管理模块</div><div class="desc">PMIC：多路稳压、电量计与充放电保护。</div></div>
+        <div class="row"><div class="name">近场通信模块</div><div class="desc">体内外短距无线收发电路与协议栈。</div></div>
+        <div class="row"><div class="name">加密模块</div><div class="desc">密钥管理、数据加解密与完整性校验。</div></div>
+        <div class="row"><div class="name">故障自检模块</div><div class="desc">上电自检、周期巡检与故障码记录上报。</div></div>
+        <div class="row"><div class="name">急停模块</div><div class="desc">硬件急停回路与输出切断执行器。</div></div>
+        <div class="row"><div class="name">状态显示模块</div><div class="desc">电量、连接、工作状态与告警的本地指示。</div></div>
+        <div class="row"><div class="name">存储与日志模块</div><div class="desc">运行数据、模型版本与审计日志的本地留存。</div></div>
+      </div>
+      <div class="bridge">
+        <span class="up">上承：子系统的功能接口与性能指标</span>
+        <span class="down">向下：模块可进一步细化为元器件、电路版图与软件算法单元</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 层级串联 ===== -->
+<section class="narr">
+  <div class="wrap">
+    <h2>六层如何串联：分解、集成与闭环</h2>
+    <p class="lead">六个层级不是简单堆叠：自上而下是任务需求的逐级分解，自下而上是模块能力的逐级集成，神经信号在人体与机器之间形成持续双向闭环。</p>
+    <div class="cols3">
+      <div class="panel">
+        <h3><span class="no">A</span>自上而下：需求分解</h3>
+        <ol>
+          <li><b>任务</b>定义使命、成效与安全伦理约束；</li>
+          <li><b>体系</b>划定成员系统、协同关系与接口标准；</li>
+          <li><b>整机</b>把体系能力落到可佩戴、可植入、可便携的装备形态；</li>
+          <li><b>系统</b>在整机内部按采集、解码、输出、电源、通信、安全划分功能；</li>
+          <li><b>子系统</b>拆成可独立设计验证的环节；</li>
+          <li><b>模块</b>落到可制造、可采购、可测试的最小单元。</li>
+        </ol>
+      </div>
+      <div class="panel">
+        <h3><span class="no">B</span>自下而上：集成验证</h3>
+        <ol>
+          <li><b>模块</b>组装为子系统，完成单元级测试；</li>
+          <li>子系统集成为功能系统，完成系统联调；</li>
+          <li>系统装入整机，完成装备级验证；</li>
+          <li>多台整机与终端、云端、医疗机构联网成体系；</li>
+          <li>体系协同输出整体能力，对照任务层指标验收；</li>
+          <li>运行数据回流云端，驱动模型校准与体系迭代。</li>
+        </ol>
+      </div>
+      <div class="panel">
+        <h3><span class="no">C</span>闭环运行要点</h3>
+        <ol>
+          <li>采集与输出必须在统一时基下对齐；</li>
+          <li>解码置信度不足时退回安全默认状态；</li>
+          <li>反馈通道持续校正下一轮意图识别；</li>
+          <li>安全系统独立于主链路，可随时切断输出；</li>
+          <li>全过程数据留痕，支持审计与复盘。</li>
+        </ol>
+      </div>
+    </div>
+    <div class="loop">
+      <h3>人机混合神经闭环链路</h3>
+      <svg class="loop-svg" viewBox="0 0 1000 300" role="img" aria-label="神经闭环示意图：人体生物神经到信号采集、意图解码、机器输出、感觉反馈，再回到人体；安全监护贯穿全程">
+        <defs>
+          <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 10 5 0 10z" fill="#2B5CE6"/>
+          </marker>
+          <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 10 5 0 10z" fill="#C4553B"/>
+          </marker>
+        </defs>
+        <g font-family="Noto Sans SC, sans-serif" font-size="15" fill="#16202E">
+          <rect x="20" y="90" width="160" height="70" rx="10" fill="#1B2A4A"/>
+          <text x="100" y="120" text-anchor="middle" font-weight="700" fill="#fff">人体生物神经</text>
+          <text x="100" y="142" text-anchor="middle" font-size="12" fill="#C9D3E6">脑电 / 肌电 / 外周神经</text>
+
+          <rect x="220" y="90" width="160" height="70" rx="10" fill="#E5ECFD" stroke="#2B5CE6"/>
+          <text x="300" y="120" text-anchor="middle" font-weight="700">信号采集</text>
+          <text x="300" y="142" text-anchor="middle" font-size="12" fill="#1E3F9E">放大 · 滤波 · 数字化</text>
+
+          <rect x="420" y="90" width="160" height="70" rx="10" fill="#E5ECFD" stroke="#2B5CE6"/>
+          <text x="500" y="120" text-anchor="middle" font-weight="700">意图解码</text>
+          <text x="500" y="142" text-anchor="middle" font-size="12" fill="#1E3F9E">特征提取 · 分类推理</text>
+
+          <rect x="620" y="90" width="160" height="70" rx="10" fill="#E5ECFD" stroke="#2B5CE6"/>
+          <text x="700" y="120" text-anchor="middle" font-weight="700">机器输出</text>
+          <text x="700" y="142" text-anchor="middle" font-size="12" fill="#1E3F9E">刺激 · 驱动 · 反馈</text>
+
+          <rect x="820" y="90" width="160" height="70" rx="10" fill="#F9E7E2" stroke="#C4553B"/>
+          <text x="900" y="120" text-anchor="middle" font-weight="700">感觉反馈再现</text>
+          <text x="900" y="142" text-anchor="middle" font-size="12" fill="#8A3B28">触觉 / 视觉 / 听觉回传</text>
+        </g>
+        <g stroke="#2B5CE6" stroke-width="2" fill="none">
+          <line x1="180" y1="125" x2="216" y2="125" marker-end="url(#arr2)"/>
+          <line x1="380" y1="125" x2="416" y2="125" marker-end="url(#arr2)"/>
+          <line x1="580" y1="125" x2="616" y2="125" marker-end="url(#arr2)"/>
+          <line x1="780" y1="125" x2="816" y2="125" marker-end="url(#arr2)"/>
+        </g>
+        <path d="M900 160 V220 H100 V164" fill="none" stroke="#C4553B" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arr3)"/>
+        <text x="500" y="212" text-anchor="middle" font-size="13" fill="#8A3B28" font-family="Noto Sans SC, sans-serif">反馈闭环：输出结果经感觉通道回到人体，持续校准下一轮意图解码</text>
+        <rect x="20" y="248" width="960" height="36" rx="10" fill="#EEF1F6" stroke="#1B2A4A"/>
+        <text x="500" y="271" text-anchor="middle" font-size="13.5" fill="#1B2A4A" font-weight="700" font-family="Noto Sans SC, sans-serif">安全监护与容错贯穿全程：异常检测 · 急停保护 · 数据加密 · 日志审计</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><b>机器增强的人机混合神经系统</b> · 复杂系统工程小组作业 1</div>
+    <div>任务 Mission → 体系 SoS → 整机 Vehicles → 系统 Systems → 子系统 Sub-systems → 模块 Modules</div>
+  </div>
+</footer>
+</body>
+</html>
