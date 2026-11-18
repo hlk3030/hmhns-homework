@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人机混合神经闭环系统 · 概念定义（BRS / StRS）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%230F1A18'/%3E%3Cpath d='M6 34h10l6-14 8 26 7-18 6 8h15' fill='none' stroke='%2359C9BE' stroke-width='3.2' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+:root{
+  --paper:#F1F4F3;
+  --panel:#FBFCFB;
+  --ink:#101F1D;
+  --ink2:#3A4B48;
+  --muted:#6C7D79;
+  --line:#D5DCDA;
+  --line-strong:#B7C3C0;
+  --teal:#0D5B55;
+  --teal-2:#16827B;
+  --teal-soft:#E1EDEA;
+  --alert:#A6392A;
+  --alert-soft:#F6E4E0;
+  --amber:#8E6417;
+  --amber-soft:#F1E8D6;
+  --sans:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --serif:"Noto Serif SC","Songti SC","SimSun",serif;
+  --mono:"JetBrains Mono","Cascadia Mono",Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-weight:400;font-size:15.5px;line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(to right,rgba(16,31,29,.035) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(16,31,29,.035) 1px,transparent 1px);
+  background-size:32px 32px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),rgba(0,0,0,.25));
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 36px;position:relative;z-index:1}
+a{color:var(--teal);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ===== 报头 ===== */
+.masthead{background:var(--ink);color:#EAF1EF;padding:56px 0 44px;position:relative;overflow:hidden}
+.masthead::after{
+  content:"";position:absolute;right:-40px;top:-60px;width:420px;height:420px;
+  background:radial-gradient(circle,rgba(89,201,190,.16),transparent 62%);
+}
+.mast-meta{
+  display:flex;flex-wrap:wrap;gap:10px 22px;font-family:var(--mono);
+  font-size:11.5px;letter-spacing:.08em;color:#8FB3AE;margin-bottom:30px;
+}
+.mast-meta span{white-space:nowrap}
+.mast-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.9fr);gap:56px;align-items:end}
+.kicker{
+  font-family:var(--serif);font-size:13px;letter-spacing:.34em;color:#6FC6BC;
+  margin:0 0 18px
+}
+.masthead h1{
+  font-family:var(--serif);font-weight:600;font-size:clamp(30px,4.4vw,54px);
+  line-height:1.25;margin:0;letter-spacing:.01em
+}
+.masthead h1 em{font-style:normal;color:#5FC3B8}
+.mast-sub{
+  margin:22px 0 0;max-width:38em;color:#B6CBC7;font-size:15px;line-height:1.9;font-weight:300
+}
+.mast-stats{display:flex;gap:26px;margin-top:34px;flex-wrap:wrap}
+.mast-stats div{min-width:96px}
+.mast-stats b{display:block;font-family:var(--serif);font-size:30px;font-weight:600;color:#EAF1EF;line-height:1.1}
+.mast-stats small{display:block;font-size:11.5px;color:#8FB3AE;letter-spacing:.06em;margin-top:6px}
+.loopbox{justify-self:end;width:100%;max-width:400px}
+.loopbox svg{width:100%;height:auto;display:block}
+
+/* ===== 导航 ===== */
+.nav{
+  position:sticky;top:0;z-index:20;background:rgba(241,244,243,.92);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+}
+.nav-inner{display:flex;gap:4px;overflow-x:auto;padding:9px 0;scrollbar-width:thin}
+.nav a{
+  font-size:12.5px;color:var(--ink2);padding:6px 11px;white-space:nowrap;
+  border:1px solid transparent;border-radius:2px
+}
+.nav a span{font-family:var(--mono);font-size:11px;color:var(--muted);margin-right:6px}
+.nav a:hover{background:var(--panel);border-color:var(--line);text-decoration:none;color:var(--teal)}
+
+/* ===== 章节骨架 ===== */
+.sec{display:grid;grid-template-columns:96px minmax(0,1fr);gap:34px;padding:62px 0 8px;border-top:1px solid var(--line-strong)}
+.sec:first-of-type{border-top:none}
+.sec-rail{position:relative}
+.sec-rail .num{font-family:var(--serif);font-size:52px;line-height:1;color:var(--line-strong);display:block}
+.sec-rail .tag{
+  display:block;margin-top:10px;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.14em;color:var(--muted);line-height:1.6;word-break:break-word
+}
+.sec-body{min-width:0;padding-bottom:44px}
+h2{font-family:var(--serif);font-size:29px;font-weight:600;margin:2px 0 6px;letter-spacing:.01em}
+h2 .en{font-family:var(--mono);font-size:11.5px;font-weight:400;color:var(--muted);letter-spacing:.1em;margin-left:12px}
+.lede{color:var(--ink2);font-size:15px;max-width:60em;margin:8px 0 26px}
+h3{
+  font-family:var(--serif);font-size:18px;font-weight:600;margin:40px 0 10px;
+  display:flex;align-items:baseline;gap:12px
+}
+h3::before{content:"";width:18px;height:2px;background:var(--teal);flex:0 0 auto;transform:translateY(-4px)}
+h3 .hid{font-family:var(--mono);font-size:10.5px;color:var(--muted);font-weight:400;letter-spacing:.08em}
+h4{font-family:var(--sans);font-size:14px;font-weight:500;color:var(--teal);margin:24px 0 6px;letter-spacing:.02em}
+p{margin:0 0 14px;max-width:44em}
+p.wide{max-width:none}
+.muted{color:var(--muted)}
+.small{font-size:13px;line-height:1.75}
+
+/* ===== 通用组件 ===== */
+.note{
+  background:var(--panel);border:1px solid var(--line);padding:16px 20px;
+  font-size:13.5px;line-height:1.8;color:var(--ink2);margin:22px 0
+}
+.note b{color:var(--ink)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:20px 0}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:20px 0}
+.card{background:var(--panel);border:1px solid var(--line);padding:20px 22px}
+.card h5{margin:0 0 8px;font-size:14px;font-weight:500;color:var(--ink)}
+.card p{font-size:13.5px;line-height:1.8;color:var(--ink2);margin:0}
+.card .idx{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.1em;display:block;margin-bottom:10px}
+
+/* 表格 */
+.table-wrap{overflow-x:auto;margin:15px 0 6px;border-top:2px solid var(--ink);background:var(--panel)}
+table.tbl{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px;line-height:1.72}
+table.tbl th{
+  text-align:left;font-weight:500;color:var(--ink);background:#E8EDEC;
+  padding:11px 12px;border-bottom:1px solid var(--line-strong);
+  font-size:12.5px;vertical-align:bottom
+}
+table.tbl td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink2);word-break:break-word}
+table.tbl tr:hover td{background:#F3F7F6}
+.id{font-family:var(--mono);font-size:11.5px;color:var(--teal);letter-spacing:.02em;white-space:nowrap}
+.req{color:var(--ink)}
+.chip{
+  display:inline-block;font-size:11px;padding:1px 7px;border-radius:2px;
+  font-family:var(--mono);letter-spacing:.04em;white-space:nowrap;line-height:1.7
+}
+.chip.m{background:var(--teal-soft);color:var(--teal)}
+.chip.s{background:var(--amber-soft);color:var(--amber)}
+.chip.c{background:#E7EAE9;color:#5C6B68}
+.chip.ghost{border:1px solid var(--line-strong);color:var(--ink2)}
+.vdesc{display:block;font-size:10.5px;color:var(--muted);line-height:1.55;margin-top:3px;white-space:normal}
+
+/* 流程链 */
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0}
+.chain .node{
+  background:var(--panel);border:1px solid var(--line-strong);padding:7px 12px;
+  font-size:12.5px;color:var(--ink);white-space:nowrap
+}
+.chain .node.on{border-color:var(--teal);background:var(--teal-soft);color:var(--teal)}
+.chain .arw{color:var(--muted);font-size:12px}
+
+/* 时间轴 */
+.timeline{display:grid;grid-template-columns:120px 26px minmax(0,1fr);margin:26px 0 6px}
+.tl-t{font-family:var(--mono);font-size:11px;color:var(--muted);padding:14px 10px 14px 0;text-align:right;letter-spacing:.04em}
+.tl-axis{position:relative}
+.tl-axis::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:var(--line-strong)}
+.tl-dot{position:absolute;left:50%;transform:translate(-50%,-50%);width:9px;height:9px;border-radius:50%;background:var(--teal);top:22px}
+.tl-c{padding:12px 0 18px 6px;border-bottom:1px dashed var(--line)}
+.tl-c b{font-weight:500;font-size:13.5px;display:block;margin-bottom:3px}
+.tl-c span{font-size:12.5px;color:var(--ink2);line-height:1.75;display:block;max-width:44em}
+
+/* 模式机 */
+.modes{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 0}
+.modes button{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;padding:8px 12px;
+  background:var(--panel);border:1px solid var(--line-strong);color:var(--ink2);cursor:pointer;
+  transition:background .15s,color .15s,border-color .15s
+}
+.modes button:hover{border-color:var(--teal);color:var(--teal)}
+.modes button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#EAF1EF}
+.modes button:focus-visible{outline:2px solid var(--teal-2);outline-offset:2px}
+.mode-panel{background:var(--panel);border:1px solid var(--line);padding:24px 26px;margin-top:10px}
+.mode-panel .mp-top{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.mode-panel .mp-top b{font-family:var(--serif);font-size:20px;font-weight:600}
+.mode-panel .mp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.mp-cell{min-width:0}
+.mp-cell .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted);display:block;margin-bottom:5px}
+.mp-cell p{font-size:13px;line-height:1.8;margin:0;color:var(--ink2)}
+
+/* 相关方需求表格工具条 */
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 12px}
+.toolbar .fbtn{
+  font-size:12.5px;padding:6px 11px;border:1px solid var(--line-strong);background:var(--panel);
+  color:var(--ink2);cursor:pointer
+}
+.toolbar .fbtn[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.toolbar input[type="search"]{
+  font-family:var(--sans);font-size:13px;padding:7px 11px;border:1px solid var(--line-strong);
+  background:#fff;color:var(--ink);min-width:200px;flex:1 1 180px
+}
+.toolbar .count{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-left:auto;white-space:nowrap}
+.toolbar select{
+  font-family:var(--sans);font-size:13px;padding:7px 9px;border:1px solid var(--line-strong);
+  background:#fff;color:var(--ink2)
+}
+
+/* BR 卡 */
+.brgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line-strong);border:1px solid var(--line-strong);margin:18px 0}
+.brcard{background:var(--panel);padding:20px 22px;min-width:0}
+
+footer{margin-top:40px;border-top:1px solid var(--line-strong);padding:26px 0 60px;color:var(--muted);font-size:12.5px;line-height:1.9}
+footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .wrap{padding:0 18px}
+  .sec{grid-template-columns:minmax(0,1fr);gap:12px;padding-top:44px}
+  .sec-rail .num{font-size:34px}
+  .sec-rail .tag{margin-top:4px}
+  .mast-grid{grid-template-columns:minmax(0,1fr);gap:34px}
+  .loopbox{max-width:330px;justify-self:start}
+  .grid2,.grid3,.mp-grid{grid-template-columns:minmax(0,1fr)}
+  .brgrid{grid-template-columns:minmax(0,1fr)}
+  .timeline{grid-template-columns:84px 22px minmax(0,1fr)}
+  .tl-t{font-size:10px;padding-right:6px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+}
+@media print{
+  body{background:#fff;font-size:10.5pt}
+  body::before{display:none}
+  .nav,.toolbar{display:none}
+  .masthead{background:#fff;color:var(--ink);padding:0 0 12pt}
+  .masthead h1,.masthead h1 em{color:var(--ink)}
+  .mast-sub,.mast-meta,.mast-stats small{color:var(--ink2)}
+  .mast-stats b{color:var(--ink)}
+  .sec{border-top:1px solid #999;padding-top:18pt}
+  .table-wrap,table.tbl{page-break-inside:auto}
+  table.tbl tr{page-break-inside:avoid}
+  .card,.brcard,.mode-panel,.note{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 报头 ===== -->
+<header class="masthead">
+  <div class="wrap">
+    <div class="mast-meta">
+      <span>复杂系统工程 / 小组作业 2</span>
+      <span>第 4 章 概念定义</span>
+      <span>BRS + StRS</span>
+      <span>提交节点 2026-11-18 12:00</span>
+    </div>
+    <div class="mast-grid">
+      <div>
+        <p class="kicker">概念定义 / CONCEPT DEFINITION</p>
+        <h1>人机混合神经闭环系统<br>业务需求与相关方需求</h1>
+        <p class="mast-sub">承接小组作业 1 的六层层级图谱，聚焦 LEVEL 04 选定的功能系统：把人体的意图、机器的输出与感觉反馈串成一条可运行、可验证、可追责的闭环，并把"谁需要它、为什么需要、需要到什么程度"写成可追踪的需求。</p>
+        <div class="mast-stats">
+          <div><b>12</b><small>业务需求 BR</small></div>
+          <div><b>34</b><small>相关方需求 StR</small></div>
+          <div><b>14</b><small>相关方 SH</small></div>
+          <div><b>8</b><small>运行模式</small></div>
+        </div>
+      </div>
+      <div class="loopbox" aria-hidden="true">
+        <svg viewBox="0 0 420 360" role="img">
+          <defs>
+            <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+              <path d="M0 1 L8 4.5 L0 8 z" fill="#5FC3B8"/>
+            </marker>
+          </defs>
+          <g fill="none" stroke="#5FC3B8" stroke-width="1.4" marker-end="url(#ar)" stroke-linecap="round">
+            <path d="M188 74 C 258 74, 292 108, 292 148"/>
+            <path d="M292 206 C 292 248, 258 282, 188 282"/>
+            <path d="M132 282 C 62 282, 28 248, 28 206"/>
+            <path d="M28 148 C 28 108, 62 74, 132 74"/>
+          </g>
+          <g font-family="Noto Sans SC, sans-serif" font-size="13" fill="#EAF1EF" text-anchor="middle">
+            <text x="210" y="30" fill="#8FB3AE" font-size="10.5" letter-spacing="2">CLOSED LOOP</text>
+            <text x="210" y="52">人体生物神经</text>
+          </g>
+          <g font-family="Noto Sans SC, sans-serif" font-size="12.5" text-anchor="middle">
+            <rect x="118" y="86" width="86" height="34" fill="#172926" stroke="#3E615C"/>
+            <text x="161" y="108" fill="#CFE3DF">采集</text>
+            <rect x="296" y="156" width="86" height="34" fill="#172926" stroke="#3E615C"/>
+            <text x="339" y="178" fill="#CFE3DF">解码</text>
+            <rect x="118" y="264" width="86" height="34" fill="#172926" stroke="#3E615C"/>
+            <text x="161" y="286" fill="#CFE3DF">反馈</text>
+            <rect x="32" y="156" width="86" height="34" fill="#172926" stroke="#3E615C"/>
+            <text x="75" y="178" fill="#CFE3DF">输出</text>
+          </g>
+          <path d="M40 214 h48 l7 -16 8 30 7 -22 6 8 h44" fill="none" stroke="#59C9BE" stroke-width="1.8" opacity=".55"/>
+          <text x="210" y="330" fill="#8FB3AE" font-size="10.5" letter-spacing=".5" text-anchor="middle" font-family="Noto Sans SC, sans-serif">安全监护 · 时基同步 · 数据留痕 贯穿全程</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 导航 ===== -->
+<nav class="nav" aria-label="章节导航">
+  <div class="wrap nav-inner">
+    <a href="#s0"><span>00</span>系统定位</a>
+    <a href="#s1"><span>01</span>业务与任务分析</a>
+    <a href="#s2"><span>02</span>运营概念 ConOps</a>
+    <a href="#s3"><span>03</span>运行概念 OpsCon</a>
+    <a href="#s4"><span>04</span>相关方列表</a>
+    <a href="#s5"><span>05</span>相关方需求 StRS</a>
+    <a href="#s6"><span>06</span>业务需求 BRS</a>
+    <a href="#s7"><span>07</span>追踪与一致性</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ===== 00 系统定位 ===== -->
+<section class="sec" id="s0">
+  <div class="sec-rail"><span class="num">00</span><span class="tag">SCOPE<br>系统定位与<br>作业接口</span></div>
+  <div class="sec-body">
+    <h2>先钉住"系统"是谁<span class="en">SYSTEM OF INTEREST</span></h2>
+    <p class="lede">作业 2 要求围绕小组选定的"系统"展开业务/任务分析与相关方需求分析。本文沿用作业 1 的选择：系统对象不是单台设备，而是 LEVEL 04 的<strong>人机混合神经闭环系统</strong>——它由采集、解码、输出、电源、通信、安全六类功能系统构成，向上被整机承载、被体系调度，向下由子系统与模块实现。</p>
+
+    <h3>系统边界与需求接口<span class="hid">SoI BOUNDARY</span></h3>
+    <p>把边界划清楚，是把需求写清楚的前提。系统之内是被需求约束的对象；系统之外的一切，要么是提供输入的使能系统，要么是接收输出的用户组织，它们在本轮只以接口和约束的身份出现。</p>
+
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:20%"><col style="width:38%"><col style="width:42%"></colgroup>
+        <thead><tr><th>位置</th><th>对象</th><th>在本文档中的处理方式</th></tr></thead>
+        <tbody>
+          <tr><td>系统内</td><td>六类功能系统（采集 / 解码 / 输出 / 电源 / 通信 / 安全）及其子系统、模块</td><td>本文档给出约束它们的目标与需求；具体功能分解留给作业 3 的系统需求（SyRS）</td></tr>
+          <tr><td>系统外 · 使能</td><td>云端孪生与训练平台、医院信息系统、制造与供应链、植入手术过程</td><td>作为接口与依赖项记录（IF-01～IF-08），不写入本系统需求</td></tr>
+          <tr><td>系统外 · 使用</td><td>患者、照护者、康复治疗师、临床医生、机构管理员、急救调度</td><td>作为相关方，其期望转化为 StR</td></tr>
+          <tr><td>系统外 · 治理</td><td>药品监督管理部门、伦理委员会、支付方、数据保护监管</td><td>作为约束与审批相关方，其要求转化为合规类 StR</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>与作业 1 的承接关系<span class="hid">TRACE TO HW-1</span></h3>
+    <p>作业 1 交付的是"任务—体系—整机—系统—子系统—模块"的静态分解；作业 2 要回答的是这条分解链为什么成立。下面的对应关系保证本文需求能原路挂回六层层级，而不是另起一套叙事。</p>
+
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:16%"><col style="width:26%"><col style="width:32%"><col style="width:26%"></colgroup>
+        <thead><tr><th>作业 1 层级</th><th>本文承接内容</th><th>具体落点</th><th>需求编号</th></tr></thead>
+        <tbody>
+          <tr><td class="id">LEVEL 01 任务</td><td>感知代偿、运动辅助、双向闭环、状态监护、安全隐私</td><td>业务目标 O1–O5、业务需求 BR-01～BR-12</td><td class="id">BR-01 / 02 / 04 / 05</td></tr>
+          <tr><td class="id">LEVEL 02 体系</td><td>装备、边缘终端、云端、临床康复、家庭监护、监管六类成员系统</td><td>相关方列表 SH-01～SH-14、跨机构协同需求</td><td class="id">BR-06 / 07 / 10</td></tr>
+          <tr><td class="id">LEVEL 03 整机</td><td>手环、头环、AR 眼镜、听觉处理器、义肢外骨骼、植入体、边缘主机</td><td>ConOps 场景 S1–S6 的物理载体、接口 IF-01～IF-08</td><td class="id">StR-PT-01 / EN-01</td></tr>
+          <tr><td class="id">LEVEL 04 系统</td><td>六类功能系统的功能划分</td><td>OpsCon 运行模式、时延预算、故障降级</td><td class="id">StR-PT-03 / 04、REG-01</td></tr>
+          <tr><td class="id">LEVEL 05 子系统</td><td>电极阵列、模拟前端、意图分类、刺激波形、急停保护等 18 个子系统</td><td>StR 的验证方法与接口边界；SyRS 的分解输入</td><td class="id">StR-EN-03、RT-03</td></tr>
+          <tr><td class="id">LEVEL 06 模块</td><td>电极、放大、滤波、ADC、推理、急停、加密等 18 个模块</td><td>可维护性与诊断粒度要求</td><td class="id">StR-EN-01 / EN-03</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <b>需求来源与写法约定。</b>本文的条目由小组讨论与 AI 问答共同生成，经合并、去重、冲突消解后成文。全部需求采用"主体 + shall + 动作 + 对象 + 条件 + 限度"的单句结构，每条只表达一个可验证的意图；编号规则为 <span class="id">BR-xx</span>（业务层）、<span class="id">StR-&lt;相关方组&gt;-xx</span>（相关方层）。文中出现的量化阈值是概念定义阶段的<strong>工程假设</strong>，用于让需求可验证，不作为已确认的临床或注册指标，需在 StRS 评审与临床调研中复核。
+    </div>
+  </div>
+</section>
+
+<!-- ===== 01 业务与任务分析 ===== -->
+<section class="sec" id="s1">
+  <div class="sec-rail"><span class="num">01</span><span class="tag">BUSINESS<br>&amp; TASK<br>ANALYSIS</span></div>
+  <div class="sec-body">
+    <h2>业务/任务分析<span class="en">BUSINESS &amp; TASK ANALYSIS</span></h2>
+    <p class="lede">业务分析回答"这门生意为什么值得做"，任务分析回答"为了做成它，人和系统每天到底要干哪些活"。两者合起来构成 BRS 的问题域输入，也是后续每一条相关方需求的出处。</p>
+
+    <h3>业务背景：四个环节之间的断裂<span class="hid">CONTEXT</span></h3>
+    <p>康复与辅助器具业务的基本链路是"评估—处方—训练—复评"。问题不在环节缺失，而在环节之间的信息断裂：评估依赖量表与治疗师观察，处方依赖经验，训练发生在治疗室内的有限时段，复评往往要等下一次门诊。患者回到家里之后，训练做了什么、做了多少、做得好不好，临床上基本不可见。神经接口类设备本可以补上这段数据，但多数产品把信号留在设备里，没有回流到临床决策，形成了"设备能用、业务不通"的局面。</p>
+    <p>另一个断裂发生在辅助环节本身。传统义肢与外骨骼是被动执行器：人给指令，机器执行，人不接收机器的反馈。把意图解码与感觉反馈接进来之后，辅助才从"替人做"变成"与人一起做"，但随之而来的是安全责任、数据责任和临床责任的新界面——这三类责任必须在业务层先定义清楚，否则系统做得再精细也无法交付。</p>
+
+    <h3>业务问题与影响<span class="hid">PROBLEMS</span></h3>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:9%"><col style="width:30%"><col style="width:31%"><col style="width:30%"></colgroup>
+        <thead><tr><th>编号</th><th>问题</th><th>对业务的影响</th><th>对系统的直接要求</th></tr></thead>
+        <tbody>
+          <tr><td class="id">BP-1</td><td>居家训练不可观测：训练时长、强度、完成质量无客观记录，依从性只能靠患者自述</td><td>治疗师无法据此调整处方，训练效果与"是否训练"混为一谈，疗效证据难以积累</td><td>训练过程须自动记录关键指标并回流（BR-01 / BR-03）</td></tr>
+          <tr><td class="id">BP-2</td><td>辅助器具被动：无意图识别、无感觉反馈，动作与人体的自然控制节律脱节</td><td>患者弃用率高，辅助动作生硬，长时间使用易造成代偿性损伤</td><td>闭环辅助须在人体动作时间尺度内完成（BR-02）</td></tr>
+          <tr><td class="id">BP-3</td><td>评估主观且周期长：量表受评估者影响，复评要等门诊，趋势判断滞后</td><td>处方调整慢半拍，康复窗口期被浪费，机构产能受限于人力</td><td>连续客观评估与复评准备自动化（BR-03）</td></tr>
+          <tr><td class="id">BP-4</td><td>设备与临床系统割裂：数据留在厂商云或本地，不进电子病历，随访靠手工转录</td><td>跨机构转诊时档案断裂，重复评估，责任界面不清</td><td>标准化接口与患者主索引（BR-06 / BR-08）</td></tr>
+          <tr><td class="id">BP-5</td><td>安全与隐私责任模糊：异常事件由谁判定、数据归谁所有、出事谁负责，合同里写不清</td><td>机构不敢采购，患者不敢长期佩戴，产品难以进入支付目录</td><td>分级安全与数据主权定义（BR-04 / BR-05）</td></tr>
+          <tr><td class="id">BP-6</td><td>部署与运维成本高：每台设备现场调试、版本分散、故障只能返厂</td><td>规模化复制困难，社区与家庭场景难以覆盖</td><td>批量部署、远程诊断与可回滚升级（BR-07 / BR-12）</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>业务目标与成功度量<span class="hid">GOALS &amp; MOEs</span></h3>
+    <p>目标写成"可被否证"的形式：每个目标配一个度量、一个阈值、一个采集方式。阈值是小组在概念阶段设定的工作目标，用于对齐讨论，不代表临床结论。</p>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:7%"><col style="width:29%"><col style="width:26%"><col style="width:19%"><col style="width:19%"></colgroup>
+        <thead><tr><th>编号</th><th>业务目标</th><th>成功度量（MOE）</th><th>阈值（暂定）</th><th>采集方式</th></tr></thead>
+        <tbody>
+          <tr><td class="id">O1</td><td>让居家训练成为可计量、可随访的临床行为</td><td>周计划完成率；单次有效闭环时长</td><td>≥70%；≥20 min</td><td>训练日志自动统计</td></tr>
+          <tr><td class="id">O2</td><td>使辅助动作进入人体自然动作的时间尺度</td><td>意图→输出端到端时延；非意图触发率</td><td>P50 ≤50 ms；≤1 次/h</td><td>时基打点回放 + 事件日志</td></tr>
+          <tr><td class="id">O3</td><td>把周期性主观评估变成连续客观评估</td><td>复评准备时间；指标覆盖率</td><td>≤10 min；≥3 类指标</td><td>报告生成耗时、指标清单核对</td></tr>
+          <tr><td class="id">O4</td><td>守住"失效即安全"的底线</td><td>急停可达率；异常→安全状态时间；可容许伤害事件</td><td>100%；≤100 ms；0 起/年</td><td>安全测试、事件复盘</td></tr>
+          <tr><td class="id">O5</td><td>形成可复制的交付与运维模式</td><td>单套部署时长；OTA 成功率；年维护工时</td><td>≤2 h；≥99%；≤4 h/台</td><td>部署记录、版本后台</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>任务分析：一天里到底发生什么<span class="hid">TASK ANALYSIS</span></h3>
+    <p>任务分析的粒度取"一个角色在一段时间内为完成一个可交付结果所做的连续动作"。九个任务覆盖从入组到退役的完整链路，每个任务都标出主责角色、支撑系统与成功准则——这三列后面会直接变成 StRS 的验证准则。</p>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:8%"><col style="width:22%"><col style="width:13%"><col style="width:19%"><col style="width:19%"><col style="width:19%"></colgroup>
+        <thead><tr><th>编号</th><th>任务</th><th>主责</th><th>输入</th><th>输出</th><th>成功准则</th></tr></thead>
+        <tbody>
+          <tr><td class="id">T1</td><td>入组筛查与基线评估</td><td>临床医生 / 治疗师</td><td>诊断、病程、量表、影像</td><td>基线档案、适应证判定</td><td>判定依据可追溯，24 h 内可查</td></tr>
+          <tr><td class="id">T2</td><td>设备适配与电极定位</td><td>治疗师 / 现场工程师</td><td>体型、皮肤条件、解剖标记</td><td>电极点位图、阻抗结果</td><td>各通道阻抗在可用区间</td></tr>
+          <tr><td class="id">T3</td><td>个体化标定</td><td>系统 + 治疗师确认</td><td>静息/最大用力样本、动作范式</td><td>阈值、增益、分类器参数</td><td>标定耗时 ≤10 min，误触发达标</td></tr>
+          <tr><td class="id">T4</td><td>处方与训练计划配置</td><td>治疗师</td><td>基线档案、标定结果</td><td>训练任务卡、强度与阈值</td><td>计划可在患者端正确还原</td></tr>
+          <tr><td class="id">T5</td><td>居家训练执行（闭环）</td><td>患者</td><td>训练任务、实时信号</td><td>训练记录、完成度、主观感受</td><td>任务完成率、无伤害事件</td></tr>
+          <tr><td class="id">T6</td><td>训练过程监护与异常处置</td><td>照护者 / 系统</td><td>设备状态、生理指标、告警</td><td>处置记录、降级或停机</td><td>异常识别到处置有闭环记录</td></tr>
+          <tr><td class="id">T7</td><td>数据回传与随访复评</td><td>治疗师</td><td>训练指标、事件日志</td><td>趋势报告、处方调整建议</td><td>复评准备 ≤10 min，变更留痕</td></tr>
+          <tr><td class="id">T8</td><td>参数与模型更新</td><td>算法工程师 / 治疗师批准</td><td>回流数据、版本包</td><td>新参数/模型、回滚点</td><td>可回滚，更新后安全自检通过</td></tr>
+          <tr><td class="id">T9</td><td>维护、备件与退役</td><td>运维工程师</td><td>故障码、寿命计数</td><td>维修记录、数据清除证明</td><td>模块更换 ≤15 min，数据彻底清除</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>典型任务流：从处方到复评</h4>
+    <div class="chain" aria-label="任务流">
+      <span class="node on">T4 处方配置</span><span class="arw">→</span>
+      <span class="node">T5 居家训练</span><span class="arw">→</span>
+      <span class="node">T6 监护与处置</span><span class="arw">→</span>
+      <span class="node">T7 数据回传</span><span class="arw">→</span>
+      <span class="node">T7 复评</span><span class="arw">→</span>
+      <span class="node on">T4 处方调整</span>
+    </div>
+    <p class="small muted">这条流每循环一次，构成一个"训练周期"。系统的时间常数应当是"天"，而不是"次门诊"——这是 O3 与 BR-03 的来源。</p>
+
+    <h3>业务过程<span class="hid">BUSINESS PROCESSES</span></h3>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:9%"><col style="width:19%"><col style="width:16%"><col style="width:28%"><col style="width:28%"></colgroup>
+        <thead><tr><th>编号</th><th>业务过程</th><th>周期性</th><th>关键活动</th><th>业务产出</th></tr></thead>
+        <tbody>
+          <tr><td class="id">P1</td><td>入组与基线建档</td><td>一次性 + 变更时</td><td>筛查、知情同意、基线测量、设备适配</td><td>可被全链路引用的患者基线档案</td></tr>
+          <tr><td class="id">P2</td><td>居家训练闭环</td><td>每日</td><td>佩戴自检、训练执行、过程监护、训练后小结</td><td>结构化训练记录与依从性数据</td></tr>
+          <tr><td class="id">P3</td><td>随访与复评</td><td>每 1–2 周</td><td>数据回看、趋势判断、处方调整、患者沟通</td><td>复评报告与变更后的处方</td></tr>
+          <tr><td class="id">P4</td><td>异常与应急</td><td>事件驱动</td><td>告警分级、降级、急停、家属/急救联动、事件复盘</td><td>事件记录与根因分析</td></tr>
+          <tr><td class="id">P5</td><td>维护与迭代</td><td>季度 / 按需</td><td>远程诊断、备件更换、OTA 升级、模型校准</td><td>设备健康档案、版本基线</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 02 运营概念 ConOps ===== -->
+<section class="sec" id="s2">
+  <div class="sec-rail"><span class="num">02</span><span class="tag">ConOps<br>运营概念<br>组织视角</span></div>
+  <div class="sec-body">
+    <h2>运营概念 ConOps<span class="en">CONCEPT OF OPERATIONS</span></h2>
+    <p class="lede">ConOps 是组织视角的叙事：一家医院、一个社区康复站或一个家庭，怎样把这套系统嵌入现有的班次、角色和流程里，用它在真实环境中完成使命。它描述"谁—何时—何地—做什么—靠什么协同"，不描述系统内部的模式与时序。</p>
+
+    <h3>使用情境与运行环境<span class="hid">CONTEXTS</span></h3>
+    <p>同一套系统在四种环境里的约束完全不同：医院有稳定的电源与网络、有专业人员在场，但空间拥挤、患者周转快；家庭有充足的佩戴时长，但网络、照明、照护者能力都不稳定；社区与户外则把安全边界推到最大。场景设计必须覆盖这四种环境的最差组合，而不是按最好的那种设计。</p>
+    <div class="grid2">
+      <div class="card">
+        <span class="idx">ENV-1 / 医院康复科</span>
+        <h5>高强度、短周期、强监督</h5>
+        <p>患者在治疗师视线内训练 30–60 分钟，设备每日多患者轮用，要求快速消杀与快速换人；网络与电源稳定，数据需当日进入病历。</p>
+      </div>
+      <div class="card">
+        <span class="idx">ENV-2 / 社区康复站</span>
+        <h5>中等强度、弱专业支持</h5>
+        <p>由康复指导员协助，专业判断能力弱于医院；设备数量少、维护半径大，故障必须能远程定位。</p>
+      </div>
+      <div class="card">
+        <span class="idx">ENV-3 / 家庭</span>
+        <h5>长时间佩戴、弱网、照护者非专业</h5>
+        <p>每日佩戴数小时，训练与日常生活混在一起；网络时断时续，夜间告警必须本地可见、可听、可触达。</p>
+      </div>
+      <div class="card">
+        <span class="idx">ENV-4 / 社区与户外</span>
+        <h5>移动、不可预测、安全优先级最高</h5>
+        <p>地面材质变化、人流、上下台阶、强光与噪声都会干扰信号与反馈可辨识度；跌倒风险与设备脱落风险同时上升。</p>
+      </div>
+    </div>
+
+    <h3>角色、职责与协同<span class="hid">ROLES</span></h3>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:16%"><col style="width:14%"><col style="width:40%"><col style="width:16%"><col style="width:14%"></colgroup>
+        <thead><tr><th>角色</th><th>所属</th><th>在运营中的职责</th><th>出现场景</th><th>可替代性</th></tr></thead>
+        <tbody>
+          <tr><td>患者（使用者）</td><td>家庭</td><td>佩戴、执行训练、自主决定是否开启辅助、可随时急停、反馈不适</td><td class="id">S1–S5</td><td>不可替代</td></tr>
+          <tr><td>照护者 / 家属</td><td>家庭</td><td>协助佩戴、夜间响应告警、紧急呼救、转述主观状态</td><td class="id">S2 / S5</td><td>可短期缺位，需系统兜底</td></tr>
+          <tr><td>康复治疗师</td><td>医院 / 社区</td><td>基线评估、处方配置、参数调整、复评解读、患者宣教</td><td class="id">S1 / S4</td><td>远程可部分替代</td></tr>
+          <tr><td>临床医生</td><td>医院</td><td>适应证判定、处方审核、异常事件医学判断、病历签署</td><td class="id">S1 / S4 / S5</td><td>不可替代</td></tr>
+          <tr><td>机构管理员</td><td>医院 / 社区</td><td>设备台账、账号与权限、批量部署、数据合规责任</td><td class="id">S6</td><td>可由 IT 兼任</td></tr>
+          <tr><td>现场 / 运维工程师</td><td>厂商或第三方</td><td>安装调试、备件更换、远程诊断、版本升级与回滚</td><td class="id">S1 / S6</td><td>可外包</td></tr>
+          <tr><td>算法工程师</td><td>厂商</td><td>模型训练、版本发布、回流数据治理；不直接接触患者</td><td class="id">S6（后台）</td><td>不可见角色</td></tr>
+          <tr><td>急救调度</td><td>公共急救</td><td>接收结构化事件包、回拨确认、派出车辆</td><td class="id">S5</td><td>外部系统</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>运营场景<span class="hid">OPERATIONAL SCENARIOS</span></h3>
+    <p>六个场景覆盖"配置—日常—随行—复评—应急—退役"的完整运营周期。每个场景都写明触发条件、主流程、异常分支与后置状态；异常分支不是附注，它是安全类需求的主要来源。</p>
+
+    <div class="grid2">
+      <div class="card">
+        <span class="idx">S1 · 首次 90 分钟 / 医院</span>
+        <h5>入组与基线标定</h5>
+        <p><b>触发</b>　门诊评估通过并签署知情同意。<br>
+        <b>主流程</b>　基线量表与运动功能评估 → 电极点位选择与阻抗检查 → 静息与最大自主收缩采样 → 阈值与分类器标定 → 试戴验收与宣教。<br>
+        <b>异常</b>　阻抗不达标则更换点位重测；标定不收敛则回退保守默认参数并标记"待复标"。<br>
+        <b>后置</b>　基线档案、设备配置版本 v1、患者端账号就绪。<br>
+        <b>承接</b>　T1–T4，<span class="id">StR-RT-01 / RT-03 / PT-05</span></p>
+      </div>
+      <div class="card">
+        <span class="idx">S2 · 每个训练日 / 家庭</span>
+        <h5>居家训练闭环</h5>
+        <p><b>触发</b>　患者按计划开机，或治疗师推送了新任务。<br>
+        <b>主流程</b>　佩戴自检（阻抗、电量、时基）→ 任务引导与动作示范 → 多组闭环辅助训练（组间休息）→ 训练后小结（完成率、辅助占比、主观用力）→ 本地留存并在联网时回传。<br>
+        <b>异常</b>　自检不通过引导重戴；置信度持续偏低转监护模式；患者不适立即暂停并记录。<br>
+        <b>后置</b>　训练记录入库，次日计划微调。<br>
+        <b>承接</b>　T5，<span class="id">StR-PT-05 / PT-06 / RT-01 / RT-02</span></p>
+      </div>
+      <div class="card">
+        <span class="idx">S3 · 白天不定时 / 社区与户外</span>
+        <h5>随行辅助</h5>
+        <p><b>触发</b>　患者主动开启辅助，或按场景预设自动切换。<br>
+        <b>主流程</b>　场景选择（平地 / 上下楼 / 坐站 / 抓握）→ 连续意图解码与助力输出 → 感觉反馈按接触强度分级 → 疲劳与姿态监测 → 结束回传当日累计。<br>
+        <b>异常</b>　检测到跨越障碍或跌倒风险时提升刚度并语音提示；连续过载时限幅并降级。<br>
+        <b>后置</b>　辅助日志与疲劳指数更新。<br>
+        <b>承接</b>　T5–T6，<span class="id">StR-PT-03 / PT-04 / PT-06</span></p>
+      </div>
+      <div class="card">
+        <span class="idx">S4 · 每 1–2 周 / 治疗师工作站</span>
+        <h5>随访复评</h5>
+        <p><b>触发</b>　周期到达，或指标异常触发提醒。<br>
+        <b>主流程</b>　打开趋势视图（依从率、辅助占比、异常事件）→ 与基线及上次对比 → 调整处方或参数（草稿→确认）→ 推送患者端 → 生成复评摘要写入病历。<br>
+        <b>异常</b>　数据缺失时标注缺失原因而不臆测趋势；参数冲突阻断并要求临床确认。<br>
+        <b>后置</b>　新处方版本与复评记录。<br>
+        <b>承接</b>　T7，<span class="id">StR-RT-02 / RT-03 / RT-05 / MD-01 / MD-02</span></p>
+      </div>
+      <div class="card">
+        <span class="idx">S5 · 夜间 / 家庭</span>
+        <h5>异常与应急</h5>
+        <p><b>触发</b>　跌倒、电极脱落、刺激过流、心率异常，或患者主动呼救。<br>
+        <b>主流程</b>　系统分级判定（关注 / 处置 / 紧急）→ 紧急级立即切断输出并本地声光提示 → 通知照护者与家属 → 按预案呼叫急救并上报位置与状态 → 事件留痕待复盘。<br>
+        <b>异常</b>　网络中断时本地告警并用短信/电话兜底；误报可一键取消并标注样本。<br>
+        <b>后置</b>　事件报告，设备停留在安全状态等待确认。<br>
+        <b>承接</b>　<span class="id">StR-CG-01 / CG-03 / EMR-01 / REG-01</span></p>
+      </div>
+      <div class="card">
+        <span class="idx">S6 · 季度或按需 / 机构</span>
+        <h5>维护、升级与退役</h5>
+        <p><b>触发</b>　版本发布、故障码上报、寿命计数到限，或患者退出。<br>
+        <b>主流程</b>　远程诊断读取故障码与健康度 → 备件更换或分阶段 OTA → 升级后自检与回滚点确认 → 退役时导出个人数据并彻底清除 → 归档设备履历。<br>
+        <b>异常</b>　升级失败自动回滚上一稳定版本；数据清除失败则阻止设备流转并告警。<br>
+        <b>后置</b>　版本基线与清除证明。<br>
+        <b>承接</b>　T8–T9，<span class="id">StR-EN-01 / EN-02 / EN-03 / ADM-02 / REG-04</span></p>
+      </div>
+    </div>
+
+    <h3>生命周期阶段<span class="hid">LIFE CYCLE</span></h3>
+    <p>ConOps 不只看"用起来的时候"。部署、支持与退役同样消耗相关方的时间与信任，也最容易在需求阶段被漏掉。</p>
+    <div class="timeline">
+      <div class="tl-t">阶段 1</div><div class="tl-axis"><span class="tl-dot"></span></div>
+      <div class="tl-c"><b>开发与设计确认</b><span>厂商主导，临床与患者代表参与评审；产出可验证的原型与安全论证，机构不承担使用风险。</span></div>
+      <div class="tl-t">阶段 2</div><div class="tl-axis"><span class="tl-dot"></span></div>
+      <div class="tl-c"><b>部署与配置</b><span>现场工程师安装、管理员建账、治疗师完成首例标定；目标单套 ≤2 h，且不依赖厂商常驻。</span></div>
+      <div class="tl-t">阶段 3</div><div class="tl-axis"><span class="tl-dot"></span></div>
+      <div class="tl-c"><b>日常使用</b><span>患者在家庭与社区中训练与随行辅助，照护者响应告警，治疗师按周期复评；系统的时间常数是"天"。</span></div>
+      <div class="tl-t">阶段 4</div><div class="tl-axis"><span class="tl-dot"></span></div>
+      <div class="tl-c"><b>支持与维护</b><span>远程诊断、备件更换、分阶段升级与模型校准；故障定位要到子系统/模块粒度，避免整机返厂。</span></div>
+      <div class="tl-t">阶段 5</div><div class="tl-axis"><span class="tl-dot"></span></div>
+      <div class="tl-c"><b>退役与数据清除</b><span>导出个人数据、彻底清除设备内数据、回收含植入件的处置路径；清除需留下可审计证明。</span></div>
+    </div>
+
+    <h3>ConOps 层面的度量<span class="hid">USER-VIEW MEASURES</span></h3>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:26%"><col style="width:34%"><col style="width:20%"><col style="width:20%"></colgroup>
+        <thead><tr><th>用户可感知的度量</th><th>定义</th><th>目标</th><th>测量方式</th></tr></thead>
+        <tbody>
+          <tr><td>首次成功使用时间</td><td>从开机到独立完成一次训练（含引导）</td><td>≤15 min</td><td>首次使用观察记录</td></tr>
+          <tr><td>日常操作步数</td><td>开机到开始训练的交互步数</td><td>≤3 步</td><td>界面走查</td></tr>
+          <tr><td>告警可理解率</td><td>照护者能正确区分三级告警的比例</td><td>≥90%</td><td>情景模拟测试</td></tr>
+          <tr><td>长期弃用率</td><td>入组 6 个月后不再使用的比例</td><td>≤20%</td><td>随访统计</td></tr>
+          <tr><td>主观可用性</td><td>患者与治疗师对可用性的问卷评分</td><td>≥4 / 5</td><td>标准化问卷</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 03 运行概念 OpsCon ===== -->
+<section class="sec" id="s3">
+  <div class="sec-rail"><span class="num">03</span><span class="tag">OpsCon<br>运行概念<br>系统视角</span></div>
+  <div class="sec-body">
+    <h2>运行概念 OpsCon<span class="en">OPERATIONAL CONCEPT</span></h2>
+    <p class="lede">如果说 ConOps 讲"这家机构怎么开展工作"，OpsCon 讲"这台系统怎么跑起来"：它有哪些运行模式、模式之间靠什么条件迁移、一次闭环要花多少毫秒、故障时退到哪个安全状态。这一层直接约束架构与人机功能分配，也是作业 3 系统需求的直接上游。</p>
+
+    <h3>ConOps 与 OpsCon 的分工<span class="hid">WHO DOES WHAT</span></h3>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:16%"><col style="width:32%"><col style="width:32%"><col style="width:20%"></colgroup>
+        <thead><tr><th>维度</th><th>ConOps（运营概念）</th><th>OpsCon（运行概念）</th><th>本文落点</th></tr></thead>
+        <tbody>
+          <tr><td>视角主体</td><td>组织与角色：医院、社区、家庭、急救</td><td>系统：模式、状态、时序、接口</td><td class="id">02 / 03</td></tr>
+          <tr><td>回答的问题</td><td>谁在什么环境下按什么流程完成使命</td><td>系统在每种情况下以什么状态、什么时序运行</td><td class="id">S1–S6 / M0–M7</td></tr>
+          <tr><td>时间尺度</td><td>天、周、月，覆盖整个生命周期</td><td>毫秒到小时，覆盖一次运行与一次故障</td><td class="id">P1–P5 / 时延预算</td></tr>
+          <tr><td>典型产物</td><td>场景叙事、角色职责、服务模式</td><td>模式机、接口清单、故障响应、功能分配</td><td class="id">StR 与 SyRS 的桥梁</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted">两者的边界不是文档边界，而是责任边界：ConOps 决定"该不该做"，OpsCon 决定"做的时候系统允许什么、禁止什么"。</p>
+
+    <h3>系统边界与外部接口<span class="hid">INTERFACES</span></h3>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:8%"><col style="width:20%"><col style="width:8%"><col style="width:26%"><col style="width:20%"><col style="width:18%"></colgroup>
+        <thead><tr><th>编号</th><th>接口对象</th><th>方向</th><th>交换内容与指标</th><th>协议 / 载体</th><th>失效影响</th></tr></thead>
+        <tbody>
+          <tr><td class="id">IF-01</td><td>人体组织（电极—皮肤 / 皮层）</td><td>双向</td><td>μV–mV 级神经与肌电信号；刺激电流/电荷；采样 250–2000 Hz，链路时延 &lt;5 ms</td><td>干/湿电极、植入阵列</td><td>信号丢失或刺激异常，直接触及安全</td></tr>
+          <tr><td class="id">IF-02</td><td>患者端 App</td><td>双向</td><td>状态、训练任务、记录；指令往返 ≤50 ms</td><td>BLE 5.x</td><td>断连时设备须能本地继续</td></tr>
+          <tr><td class="id">IF-03</td><td>照护者端与告警通道</td><td>单向推送</td><td>三级事件、处置提示；≤5 s 送达</td><td>推送 + 短信/电话兜底</td><td>告警不可达，夜间风险放大</td></tr>
+          <tr><td class="id">IF-04</td><td>云端孪生与训练平台</td><td>双向</td><td>训练批次、指标、脱敏特征、模型包；分钟级批传</td><td>TLS 1.3，断网缓存 ≥7 天</td><td>数据延迟，不影响本地闭环</td></tr>
+          <tr><td class="id">IF-05</td><td>医院 EMR / 康复系统</td><td>双向</td><td>患者主索引、评估报告、处方、随访记录</td><td>FHIR R4 / HL7 v2</td><td>需手工转录，业务闭环退化</td></tr>
+          <tr><td class="id">IF-06</td><td>急救调度系统</td><td>单向上报</td><td>结构化事件包：时间、位置、设备状态、最近摘要；≤10 s</td><td>HTTPS / 专线网关</td><td>应急响应时间不可控</td></tr>
+          <tr><td class="id">IF-07</td><td>充电与供电</td><td>单向输入</td><td>无线或有线充电，2 h 充至 80%；异物检测</td><td>Qi 类感应 / USB-C</td><td>续航不足，训练中断</td></tr>
+          <tr><td class="id">IF-08</td><td>维护终端与产线工具</td><td>双向</td><td>诊断、日志导出、版本包、校准数据</td><td>USB / 近场，人工触发</td><td>只能返厂，运维成本上升</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>运行模式与状态迁移<span class="hid">MODES &amp; TRANSITIONS</span></h3>
+    <p>八种模式的设计原则只有一条：<strong>任何不确定都退到输出更少的那个状态</strong>。模式不是界面皮肤，而是软件与硬件的联合状态——每个模式都明确允许做什么、禁止做什么，以及谁能把它迁出去。</p>
+
+    <div class="modes" id="modeStrip" role="group" aria-label="运行模式选择"></div>
+    <div class="mode-panel" id="modePanel" aria-live="polite"></div>
+
+    <div class="table-wrap" style="margin-top:22px">
+      <table class="tbl">
+        <colgroup><col style="width:16%"><col style="width:40%"><col style="width:44%"></colgroup>
+        <thead><tr><th>迁移</th><th>触发条件</th><th>迁移动作与约束</th></tr></thead>
+        <tbody>
+          <tr><td class="id">M0 → M1</td><td>上电 / 复位</td><td>执行上电自检（电极阻抗、电池、时基、存储），≤10 s；自检期间输出回路物理断开</td></tr>
+          <tr><td class="id">M1 → M2</td><td>首次使用、配置变更、重戴后</td><td>进入标定，驱动端机械锁止；标定结果写入配置版本</td></tr>
+          <tr><td class="id">M1 → M3</td><td>自检通过、未开启辅助</td><td>默认落在监护态——这是系统的安全基态</td></tr>
+          <tr><td class="id">M2 → M3</td><td>标定收敛且阻抗达标</td><td>加载参数，进入监护；未收敛则保持保守默认参数并标记待复标</td></tr>
+          <tr><td class="id">M3 → M4</td><td>患者开启辅助，且置信度与阻抗均达标</td><td>启用完整闭环；安全系统开始逐周期监视</td></tr>
+          <tr><td class="id">M4 → M3</td><td>患者关闭辅助 / 训练任务结束</td><td>平滑撤力，避免突然失去支撑</td></tr>
+          <tr><td class="id">M3 / M4 → M5</td><td>阻抗漂移、置信度持续低、电量 &lt;15%、链路中断</td><td>限幅或仅监护，明确告知用户能力已下降</td></tr>
+          <tr><td class="id">M5 → M3</td><td>条件恢复且自检通过</td><td>逐步恢复能力，不做一次性跳变</td></tr>
+          <tr><td class="id">任意 → M6</td><td>急停按钮、过流、跌倒判定、主动呼救</td><td>硬件切断输出回路，仅保留采集与告警；需人工复位</td></tr>
+          <tr><td class="id">M6 → M1</td><td>人工复位</td><td>复位后必须重跑自检，不复用故障前参数</td></tr>
+          <tr><td class="id">M3 → M7</td><td>维护指令，且患者不在训练中</td><td>关闭输出，允许升级与数据导出</td></tr>
+          <tr><td class="id">M7 → M1</td><td>升级完成或失败回滚</td><td>强制自检；失败自动回到上一稳定版本</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>闭环时序与时间预算<span class="hid">TIMING BUDGET</span></h3>
+    <p>闭环的时间预算不能"事后凑"：先由人的动作节律倒推端到端时延上限，再把它切成若干段，每段归属一个子系统。下面这组数字是概念阶段的分配方案，用于在作业 3 中转化为可验证的性能需求。</p>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:24%"><col style="width:12%"><col style="width:38%"><col style="width:26%"></colgroup>
+        <thead><tr><th>环节</th><th>预算</th><th>依据与说明</th><th>归属子系统（作业 1）</th></tr></thead>
+        <tbody>
+          <tr><td>采样与缓冲</td><td class="id">10 ms</td><td>20 ms 分析窗、50% 重叠</td><td>数据采样子系统</td></tr>
+          <tr><td>预处理与滤波</td><td class="id">8 ms</td><td>50 Hz 陷波 + 带通 + 伪迹抑制</td><td>模拟前端 / 预处理</td></tr>
+          <tr><td>特征提取</td><td class="id">6 ms</td><td>滑动窗时域、频域与波形特征</td><td>特征提取子系统</td></tr>
+          <tr><td>意图推理</td><td class="id">12 ms</td><td>轻量模型单次前向，端侧执行</td><td>意图分类推理子系统</td></tr>
+          <tr><td>指令与驱动</td><td class="id">6 ms</td><td>轨迹/力矩环，含限幅与斜坡</td><td>运动驱动子系统</td></tr>
+          <tr><td>反馈再现</td><td class="id">8 ms</td><td>触觉刷新与视觉叠加</td><td>触觉反馈再现子系统</td></tr>
+          <tr><td><b>端到端合计</b></td><td class="id"><b>≤50 ms</b></td><td>意图产生到辅助输出生效；P95 ≤80 ms</td><td>跨子系统合成指标</td></tr>
+          <tr><td>安全切断</td><td class="id">≤10 ms</td><td>硬件回路，不经软件判定</td><td>急停保护子系统</td></tr>
+          <tr><td>软件异常判定</td><td class="id">≤100 ms</td><td>检测—判定—降级</td><td>异常检测子系统</td></tr>
+          <tr><td>时基同步误差</td><td class="id">±1 ms</td><td>采样打时间戳，跨设备对齐</td><td>时间同步子系统</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted">时延预算与 O2、StR-PT-03 直接对应；若后续为提升精度而加大窗口或模型规模，必须先在这张表上交换预算，而不是默认放宽端到端指标。</p>
+
+    <h3>故障响应与降级<span class="hid">FAULT RESPONSE</span></h3>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:20%"><col style="width:20%"><col style="width:26%"><col style="width:19%"><col style="width:15%"></colgroup>
+        <thead><tr><th>故障模式</th><th>检测手段</th><th>系统响应</th><th>降级后能力</th><th>恢复条件</th></tr></thead>
+        <tbody>
+          <tr><td>电极脱落 / 阻抗超限</td><td>每 10 s 阻抗巡检</td><td>停止辅助，转监护并提示重戴</td><td>仅监护与告警</td><td>重戴并通过自检</td></tr>
+          <tr><td>无线链路中断</td><td>心跳超时 200 ms</td><td>本地继续闭环，暂停云端回传</td><td>本地闭环可用</td><td>链路恢复后补传</td></tr>
+          <tr><td>解码置信度持续偏低</td><td>连续 3 s 低于阈值</td><td>降级为监护或限幅辅助</td><td>限幅辅助 / 仅监护</td><td>重新标定并通过验收</td></tr>
+          <tr><td>电量不足</td><td>电量计与电压趋势</td><td>&lt;15% 限幅提示，&lt;5% 有序关机</td><td>仅监护</td><td>充电至 ≥30%</td></tr>
+          <tr><td>刺激过流 / 电荷超限</td><td>硬件限流 + 独立看门狗</td><td>硬件切断，进入急停</td><td>无输出</td><td>人工复位并排查</td></tr>
+          <tr><td>主控死机或任务阻塞</td><td>外部看门狗计时</td><td>500 ms 内复位并切断输出</td><td>安全态</td><td>复位后自检通过</td></tr>
+          <tr><td>日志或存储写入异常</td><td>写入校验与容量水位</td><td>告警并保护既有数据，停止覆盖</td><td>采集受限</td><td>维护介入导出</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>人机功能分配<span class="hid">FUNCTION ALLOCATION</span></h3>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:24%"><col style="width:26%"><col style="width:26%"><col style="width:24%"></colgroup>
+        <thead><tr><th>功能</th><th>人</th><th>系统</th><th>分配理由</th></tr></thead>
+        <tbody>
+          <tr><td>意图产生</td><td>完全承担</td><td>不可参与</td><td>意图是人的主体性，机器只做解读</td></tr>
+          <tr><td>意图解码</td><td>监督与纠错</td><td>执行并给出置信度</td><td>端侧实时性要求高，人无法逐周期干预</td></tr>
+          <tr><td>辅助幅度</td><td>可调、可否决</td><td>限幅执行</td><td>安全上限由系统守住，舒适度由人决定</td></tr>
+          <tr><td>安全判定</td><td>确认与复位</td><td>检测并自主切断</td><td>紧急场景下人的反应时间不可靠</td></tr>
+          <tr><td>训练计划</td><td>完全承担</td><td>提供数据与模板</td><td>处方属于临床判断</td></tr>
+          <tr><td>数据解释</td><td>主导</td><td>提示异常与趋势</td><td>避免算法结论直接替代临床结论</td></tr>
+          <tr><td>参数与模型变更</td><td>批准</td><td>执行、留痕、可回滚</td><td>变更责任必须落到人</td></tr>
+          <tr><td>设备维护</td><td>执行</td><td>诊断与引导</td><td>维修动作涉及物理风险</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>运行约束与合规基线<span class="hid">CONSTRAINTS</span></h3>
+    <div class="grid3">
+      <div class="card"><span class="idx">POWER</span><h5>功耗与续航</h5><p>整机运行 ≤3.5 W；训练日续航 ≥8 h；低电量按分级降级而非直接停机。</p></div>
+      <div class="card"><span class="idx">COMPUTE</span><h5>端侧算力</h5><p>推理预算 12 ms，端侧完成；云端只做训练与仿真，不得进入闭环控制路径。</p></div>
+      <div class="card"><span class="idx">DATA</span><h5>存储与断网</h5><p>本地保留 ≥7 天原始数据与 ≥90 天指标；断网状态下闭环能力不降级。</p></div>
+      <div class="card"><span class="idx">SAFETY</span><h5>安全独立性</h5><p>安全系统独立于主链路供电与时钟，可随时切断输出；急停不依赖操作系统。</p></div>
+      <div class="card"><span class="idx">REGULATORY</span><h5>器械与软件</h5><p>IEC 60601-1、60601-1-2（EMC）、60601-2-10（神经肌肉刺激）、ISO 14971、IEC 62304。</p></div>
+      <div class="card"><span class="idx">PRIVACY</span><h5>数据合规</h5><p>敏感个人信息单独同意、最小必要、可撤回可删除；日志留存与审计满足监管要求。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 04 相关方列表 ===== -->
+<section class="sec" id="s4">
+  <div class="sec-rail"><span class="num">04</span><span class="tag">STAKEHOLDER<br>LIST</span></div>
+  <div class="sec-body">
+    <h2>相关方列表<span class="en">STAKEHOLDERS</span></h2>
+    <p class="lede">相关方识别不是列名单，而是判定"谁有权提出要求、谁承担后果、谁能否决"。判据有三条：是否直接使用或受影响、是否掌握资源或审批权、是否在生命周期某一阶段承担支持责任。三条中任一成立即入列，并在"影响与权力"列标出它说话的分量。</p>
+
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:6%"><col style="width:17%"><col style="width:10%"><col style="width:27%"><col style="width:10%"><col style="width:17%"><col style="width:13%"></colgroup>
+        <thead><tr><th>编号</th><th>相关方</th><th>类别</th><th>最关注的问题</th><th>影响与权力</th><th>参与方式</th><th>生命周期阶段</th></tr></thead>
+        <tbody id="shBody"></tbody>
+      </table>
+    </div>
+    <p class="small muted">权力分级：<strong>高</strong>＝可以否决方案或决定采购；<strong>中</strong>＝能显著影响设计但无法单方否决；<strong>低</strong>＝承受结果但缺少正式渠道，需要通过代理角色（治疗师、照护者）表达。低权力相关方恰恰是易被漏掉的那一群，本表将其显式列出。</p>
+  </div>
+</section>
+
+<!-- ===== 05 相关方需求 StRS ===== -->
+<section class="sec" id="s5">
+  <div class="sec-rail"><span class="num">05</span><span class="tag">StRS<br>相关方需求<br>规格说明</span></div>
+  <div class="sec-body">
+    <h2>相关方需求 StRS<span class="en">STAKEHOLDER REQUIREMENTS SPECIFICATION</span></h2>
+    <p class="lede">StRS 是问题域的最后一站：它把各相关方的期望写成可验证的陈述，仍不谈系统怎么实现。它上承 BRS 的业务目标与约束，下启作业 3 的系统需求（SyRS）——本文写"要什么程度"，SyRS 才写"由哪个子系统、用什么指标实现"。</p>
+
+    <div class="grid3">
+      <div class="card"><span class="idx">PRIORITY</span><h5>优先级口径</h5><p><span class="chip m">M</span> 必须满足，缺失即不可交付；<span class="chip s">S</span> 应该满足，可在首版降级；<span class="chip c">C</span> 可以考虑，用于后续版本取舍。</p></div>
+      <div class="card"><span class="idx">VERIFICATION</span><h5>验证方法</h5><p><span class="chip ghost">T</span> 测试　<span class="chip ghost">A</span> 分析　<span class="chip ghost">I</span> 检查　<span class="chip ghost">D</span> 演示。概念阶段先定方法，避免后期为"无法验证"的需求补造证据。</p></div>
+      <div class="card"><span class="idx">SCOPE</span><h5>范围与非目标</h5><p>本文只写相关方视角的需求与约束；不写功能分解、接口协议、软件架构与选型，这些属于 SyRS 与设计阶段。</p></div>
+    </div>
+
+    <div class="toolbar" id="strToolbar">
+      <button class="fbtn" data-g="all" aria-pressed="true">全部</button>
+      <button class="fbtn" data-g="pc" aria-pressed="false">患者与照护者</button>
+      <button class="fbtn" data-g="ci" aria-pressed="false">临床与机构</button>
+      <button class="fbtn" data-g="ir" aria-pressed="false">产业与监管</button>
+      <button class="fbtn" data-g="pe" aria-pressed="false">支付与应急</button>
+      <select id="priFilter" aria-label="按优先级筛选">
+        <option value="all">全部优先级</option>
+        <option value="M">仅 M（必须）</option>
+        <option value="S">仅 S（应该）</option>
+        <option value="C">仅 C（可以）</option>
+      </select>
+      <input type="search" id="strSearch" placeholder="搜索需求、相关方或编号，如“急停”" aria-label="搜索需求">
+      <span class="count" id="strCount"></span>
+    </div>
+
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:10%"><col style="width:10%"><col style="width:41%"><col style="width:6%"><col style="width:16%"><col style="width:17%"></colgroup>
+        <thead><tr><th>编号</th><th>相关方</th><th>需求陈述（含理由）</th><th>优先级</th><th>验证</th><th>追踪</th></tr></thead>
+        <tbody id="strBody"></tbody>
+      </table>
+    </div>
+    <p class="small muted" id="strEmpty" style="display:none">没有匹配的需求，换一个筛选条件试试。</p>
+
+    <h3>StRS 的结构完整性<span class="hid">FRAMEWORK CHECK</span></h3>
+    <p>按教材表 4-5 的内容框架逐条自查，确保输出的是"规格说明"而不是一堆零散期望。标为"精简"的条目在本文合并处理，理由一并注明。</p>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:6%"><col style="width:30%"><col style="width:40%"><col style="width:24%"></colgroup>
+        <thead><tr><th>序号</th><th>表 4-5 条目</th><th>本文落点</th><th>处理说明</th></tr></thead>
+        <tbody>
+          <tr><td class="id">1</td><td>StRS 概述</td><td>05 引言与本页说明</td><td>—</td></tr>
+          <tr><td class="id">2</td><td>相关方目的</td><td>01 业务目标 O1–O5</td><td>—</td></tr>
+          <tr><td class="id">3</td><td>相关方范围</td><td>00 系统边界、05 非目标</td><td>—</td></tr>
+          <tr><td class="id">4</td><td>概述</td><td>00 系统定位</td><td>—</td></tr>
+          <tr><td class="id">5</td><td>相关方</td><td>04 相关方列表</td><td>—</td></tr>
+          <tr><td class="id">6</td><td>业务环境</td><td>02 使用情境 ENV-1～4</td><td>—</td></tr>
+          <tr><td class="id">7</td><td>使命、目标与目的</td><td>01 业务目标</td><td>—</td></tr>
+          <tr><td class="id">8</td><td>业务模型</td><td>01 业务过程 P1–P5</td><td>服务与付费模式未定，列入 A6</td></tr>
+          <tr><td class="id">9</td><td>信息环境</td><td>03 接口 IF-04 / IF-05</td><td>—</td></tr>
+          <tr><td class="id">10</td><td>系统过程</td><td>01 任务 T1–T9</td><td>—</td></tr>
+          <tr><td class="id">11</td><td>系统运行策略与规则</td><td>03 模式机与安全规则</td><td>—</td></tr>
+          <tr><td class="id">12</td><td>运行约束</td><td>03 运行约束</td><td>—</td></tr>
+          <tr><td class="id">13</td><td>系统运行模式与状态</td><td>03 M0–M7</td><td>—</td></tr>
+          <tr><td class="id">14</td><td>系统运行质量</td><td>02 ConOps 度量、03 时间预算</td><td>—</td></tr>
+          <tr><td class="id">15</td><td>用户需求</td><td>05 需求表 StR 全量</td><td>本文核心输出</td></tr>
+          <tr><td class="id">16</td><td>运行概念</td><td>02 / 03</td><td>ConOps 与 OpsCon 分列</td></tr>
+          <tr><td class="id">17</td><td>运行场景</td><td>02 场景 S1–S6</td><td>—</td></tr>
+          <tr><td class="id">18</td><td>拟议系统的其他详细概念</td><td>03 时序预算、故障响应、功能分配</td><td>—</td></tr>
+          <tr><td class="id">19</td><td>项目约束</td><td>07 假设与待确认 A1–A8</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 06 业务需求 BRS ===== -->
+<section class="sec" id="s6">
+  <div class="sec-rail"><span class="num">06</span><span class="tag">BRS<br>业务需求<br>规格说明</span></div>
+  <div class="sec-body">
+    <h2>业务需求 BRS<span class="en">BUSINESS REQUIREMENTS SPECIFICATION</span></h2>
+    <p class="lede">BRS 站在出资方与运营方的位置，说清楚"这门业务必须成立的条件"。它不承诺任何技术方案，只承诺成效、约束与责任：一条业务需求若不能被业务侧单方面验收，就说明它写成了系统需求，应当往下走一层。</p>
+
+    <h3>BRS 的结构完整性<span class="hid">FRAMEWORK CHECK</span></h3>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:6%"><col style="width:30%"><col style="width:40%"><col style="width:24%"></colgroup>
+        <thead><tr><th>序号</th><th>表 4-1 条目</th><th>本文落点</th><th>处理说明</th></tr></thead>
+        <tbody>
+          <tr><td class="id">1</td><td>BRS 概述</td><td>06 引言</td><td>—</td></tr>
+          <tr><td class="id">2</td><td>业务目的</td><td>01 业务背景</td><td>—</td></tr>
+          <tr><td class="id">3</td><td>业务范围</td><td>00 系统边界</td><td>—</td></tr>
+          <tr><td class="id">4</td><td>业务概述</td><td>01 业务问题 BP-1～BP-6</td><td>—</td></tr>
+          <tr><td class="id">5</td><td>主要相关方</td><td>04 相关方列表</td><td>—</td></tr>
+          <tr><td class="id">6</td><td>业务环境</td><td>02 ENV-1～4</td><td>—</td></tr>
+          <tr><td class="id">7</td><td>使命、目标与目的</td><td>01 O1–O5</td><td>—</td></tr>
+          <tr><td class="id">8</td><td>业务模型</td><td>01 P1–P5</td><td>付费模型待定（A6）</td></tr>
+          <tr><td class="id">9</td><td>信息环境</td><td>03 IF-04 / IF-05 / IF-06</td><td>—</td></tr>
+          <tr><td class="id">10</td><td>业务过程</td><td>01 业务过程 P1–P5</td><td>—</td></tr>
+          <tr><td class="id">11</td><td>业务运行策略与规则</td><td>03 模式机、BR-04</td><td>—</td></tr>
+          <tr><td class="id">12</td><td>业务运行约束</td><td>03 运行约束、07 假设</td><td>—</td></tr>
+          <tr><td class="id">13</td><td>业务运行模式</td><td>02 场景态（门诊 / 居家 / 随访 / 应急 / 维护）</td><td>与 03 的系统模式区分表述</td></tr>
+          <tr><td class="id">14</td><td>业务运行质量</td><td>01 MOE、02 ConOps 度量</td><td>—</td></tr>
+          <tr><td class="id">15</td><td>业务结构</td><td>04 相关方与机构关系</td><td>—</td></tr>
+          <tr><td class="id">16</td><td>高层运行概念</td><td>02</td><td>—</td></tr>
+          <tr><td class="id">17</td><td>高层运行场景</td><td>02 S1–S6</td><td>—</td></tr>
+          <tr><td class="id">18</td><td>其他高层生命周期概念</td><td>02 生命周期五阶段</td><td>—</td></tr>
+          <tr><td class="id">19</td><td>项目约束</td><td>07 A1–A8</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>十二条业务需求<span class="hid">BUSINESS REQUIREMENTS</span></h3>
+    <div class="brgrid" id="brGrid"></div>
+    <p class="small muted">每条业务需求都配一个"成功准则"，它是业务侧验收的最小单元；卡片底部的编号指向支撑它的相关方需求，反向追踪见 07 章。</p>
+  </div>
+</section>
+
+<!-- ===== 07 追踪与一致性 ===== -->
+<section class="sec" id="s7">
+  <div class="sec-rail"><span class="num">07</span><span class="tag">TRACE<br>CONSISTENCY<br>&amp; ASSUMPTIONS</span></div>
+  <div class="sec-body">
+    <h2>追踪、一致性与待确认<span class="en">TRACEABILITY &amp; CONSISTENCY</span></h2>
+    <p class="lede">需求文档最容易出问题的地方不是漏写，而是写完之后各部分互相矛盾、又没人能追到源头。本章给出三个体检：正向追踪、冲突消解、假设清单。</p>
+
+    <h3>正向追踪矩阵<span class="hid">TRACE MATRIX</span></h3>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:9%"><col style="width:30%"><col style="width:15%"><col style="width:13%"><col style="width:33%"></colgroup>
+        <thead><tr><th>业务需求</th><th>相关方需求</th><th>运营场景</th><th>运行模式</th><th>作业 1 层级归属</th></tr></thead>
+        <tbody id="traceBody"></tbody>
+      </table>
+    </div>
+
+    <h3>需求之间的冲突与决策<span class="hid">CONFLICTS</span></h3>
+    <p>冲突不是文档缺陷，而是设计约束的显性化。下面五组冲突在小组讨论中被反复提出，处理原则统一为"先定安全与合规的硬边界，再在边界内做性能与成本的交换"。</p>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:7%"><col style="width:26%"><col style="width:39%"><col style="width:28%"></colgroup>
+        <thead><tr><th>编号</th><th>冲突</th><th>决策</th><th>涉及需求</th></tr></thead>
+        <tbody>
+          <tr><td class="id">C-1</td><td>时延 vs 精度：提高分类精度倾向更长分析窗与更大模型，直接挤压 50 ms 预算</td><td>端侧轻量模型 + 云端离线训练；窗口与模型规模变更必须显式交换时间预算；禁止云端推理进入闭环控制路径</td><td class="id">StR-PT-03 / ALG-01</td></tr>
+          <tr><td class="id">C-2</td><td>隐私 vs 数据回流：最优迭代想要原始数据，合规要求最小必要</td><td>默认本地处理与特征级回流；原始数据仅在单独同意并去标识化后回流；建立用途白名单与访问审计</td><td class="id">StR-PT-07 / REG-03 / ALG-01</td></tr>
+          <tr><td class="id">C-3</td><td>安全 vs 可用性：频繁降级最安全，但会摧毁体验与依从性</td><td>分级降级（限幅 → 仅监护 → 急停）而非一刀切停机；夜间误报预算 ≤1 次；误报可一键取消并沉淀为负样本</td><td class="id">StR-PT-04 / CG-01</td></tr>
+          <tr><td class="id">C-4</td><td>成本 vs 性能：医疗级传感器与双源器件推高单套成本</td><td>分级配置：采集与刺激链路用高规格，非关键链路降规；以模块化更换代替整机返厂</td><td class="id">StR-PT-08 / EN-04 / EN-01</td></tr>
+          <tr><td class="id">C-5</td><td>临床标准化 vs 个体化：统一指标便于比较，个体参数提升效果</td><td>指标层统一、参数层个体化；配置版本化并随患者档案流转，任何个体化不得改变指标定义</td><td class="id">StR-RT-03 / MD-01 / MD-03</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>假设与待确认项<span class="hid">ASSUMPTIONS</span></h3>
+    <p>概念定义阶段必须把"还没确认的事"写出来，否则它们会以隐性假设的形式进入设计。以下八项需在小组评审与临床调研中逐条关闭。</p>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:7%"><col style="width:45%"><col style="width:26%"><col style="width:22%"></colgroup>
+        <thead><tr><th>编号</th><th>假设 / 待确认</th><th>影响</th><th>关闭方式</th></tr></thead>
+        <tbody>
+          <tr><td class="id">A1</td><td>目标人群以卒中后偏瘫与脊髓损伤为主，截肢与视听代偿为扩展场景</td><td>决定 StR 的优先排序与整机形态组合</td><td>小组定稿 + 临床访谈</td></tr>
+          <tr><td class="id">A2</td><td>使用以家庭与社区为主，医院承担评估与复评，机构不常驻专业人员</td><td>决定居家自立类需求的严格程度</td><td>场景走查</td></tr>
+          <tr><td class="id">A3</td><td>网络按"弱网可用、断网可运行"设计，不假设 5G 全覆盖</td><td>决定本地算力与缓存容量</td><td>现场网络勘测</td></tr>
+          <tr><td class="id">A4</td><td>端侧算力与功耗按消费级边缘芯片估算，尚未选型</td><td>时延与续航指标的可行性</td><td>原型验证</td></tr>
+          <tr><td class="id">A5</td><td>量化阈值（50 ms、8 h、≤1 次/h 等）为工程假设</td><td>全部性能类需求的验收基线</td><td>临床与注册确认</td></tr>
+          <tr><td class="id">A6</td><td>付费模式（设备+服务订阅 / 机构采购 / 医保）未定</td><td>BR-07 与 BR-10 的成立方式</td><td>商业模式分析</td></tr>
+          <tr><td class="id">A7</td><td>植入式接口按三类医疗器械路径规划</td><td>周期、成本与证据要求显著高于可穿戴路径</td><td>注册路径咨询</td></tr>
+          <tr><td class="id">A8</td><td>需求由小组讨论与 AI 问答生成，尚未经过真实患者与治疗师访谈</td><td>相关方需求的代表性与措辞准确性</td><td>补充访谈与可用性测试</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>需求质量自检<span class="hid">QUALITY CHECK</span></h3>
+    <div class="table-wrap">
+      <table class="tbl">
+        <colgroup><col style="width:14%"><col style="width:34%"><col style="width:52%"></colgroup>
+        <thead><tr><th>特性</th><th>检验问题</th><th>本次抽检结果</th></tr></thead>
+        <tbody>
+          <tr><td>必要性</td><td>每条是否都能追到业务问题或某个场景？</td><td>全部可回溯到 BP 或 S 编号；无来源条目已删除</td></tr>
+          <tr><td>单一性</td><td>一条是否只表达一个意图？</td><td>REG-03 原含四项并列约束，已拆为同意、最小必要、境内存储、可删除四条</td></tr>
+          <tr><td>无歧义</td><td>术语是否全文一致？</td><td>"辅助输出"与"刺激输出"已在 03 章区分；"辅助占比"在 02 章给出定义</td></tr>
+          <tr><td>可验证</td><td>是否给出度量、条件与判定方法？</td><td>多数条目带阈值或判定方法；PT-08、EN-04、REG-02、ADM-01 以检查/分析为主，已标注</td></tr>
+          <tr><td>可行性</td><td>是否超出当前可得技术？</td><td>50 ms 端到端与 8 h 续航需原型验证（A4）</td></tr>
+          <tr><td>可追踪</td><td>是否双向可追？</td><td>全部 StR 挂接到 BR，12 条 BR 均至少被一条 StR 支撑</td></tr>
+          <tr><td>一致性</td><td>是否存在互相矛盾的条目？</td><td>识别 5 组冲突并给出决策（C-1～C-5）</td></tr>
+          <tr><td>完整性</td><td>生命周期各阶段是否都覆盖？</td><td>覆盖部署、使用、维护、退役；培训与付费细节仍缺失（A8 / A6）</td></tr>
+          <tr><td>简洁</td><td>是否残留"尽可能""先进的"等不可判定修饰？</td><td>已清除；保留的"可"字仅出现在优先级 C 的条目中</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <b>下一步（作业 3）。</b>本文档的相关方需求将作为系统需求（SyRS）的输入：按作业 1 的六类功能系统做功能分解，为每条 StR 指派承担子系统，并转化为带指标、带验证方法、带接口的系统需求。需要特别注意的是，StR 中"用户可感知"的指标（时延、误报、续航）必须在 SyRS 中拆成子系统级预算，不能原样下传——预算表已在 03 章给出起点。
+    </div>
+  </div>
+</section>
+
+</main>
+<footer>
+  <div class="wrap">
+    <div class="footrow">
+      <div>人机混合神经闭环系统 · 概念定义（BRS + StRS）<br>复杂系统工程 · 小组作业 2 · 承接小组作业 1 六层层级图谱</div>
+      <div style="text-align:right">提交节点 2026-11-18 12:00<br>形式：HTML 网页推送</div>
+    </div>
+    <div class="footrow" style="margin-top:18px">
+      <div>小组成员与分工：待小组补充。需求条目经小组讨论与 AI 问答生成，量化阈值为概念阶段工程假设。</div>
+      <div>v1.0 / 2026-11-17</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ===== 数据：相关方 ===== */
+const STAKEHOLDERS=[
+{id:"SH-01",name:"患者（卒中后偏瘫 / 脊髓损伤 / 截肢）",type:"使用者 · 受益者",focus:"辅助是否真的有用、佩戴是否舒适、能不能随时停下、费用能不能承受",power:"高",way:"试用、深度访谈、需求评审",phase:"全周期"},
+{id:"SH-02",name:"家属与照护者",type:"使用者",focus:"夜间告警是否可靠、操作是否简单、出事时知道该做什么",power:"中",way:"情景模拟测试",phase:"使用 / 应急"},
+{id:"SH-03",name:"康复治疗师",type:"操作者",focus:"处方是否可控、数据能否直接用于复评、每次随访要花多少时间",power:"高",way:"每周需求评审",phase:"评估 / 训练 / 复评"},
+{id:"SH-04",name:"临床医生（康复科 / 神经科）",type:"操作者",focus:"适应证边界、医疗责任如何划分、报告是否可信",power:"高",way:"季度评审、处方审核",phase:"评估 / 复评"},
+{id:"SH-05",name:"医院与康复机构管理者",type:"客户 · 采购方",focus:"采购成本、治疗师产能、合规责任、出事故谁担",power:"高",way:"立项与采购评审",phase:"采购 / 运营"},
+{id:"SH-06",name:"机构 IT 与信息安全",type:"使能",focus:"网络接入、账号体系、审计留痕、等保合规",power:"中",way:"接口与安全评审",phase:"部署 / 运维"},
+{id:"SH-07",name:"设备厂商（整机与算法）",type:"供方",focus:"可制造、可注册、可维护、单套成本",power:"高",way:"设计评审",phase:"开发 / 维护"},
+{id:"SH-08",name:"器件与供应链",type:"供方",focus:"双源、交期、批次一致性",power:"中",way:"物料评审",phase:"开发"},
+{id:"SH-09",name:"现场与运维工程师",type:"操作者",focus:"故障能否远程定位、备件是否通用、升级会不会把设备搞坏",power:"中",way:"现场试用",phase:"部署 / 维护"},
+{id:"SH-10",name:"药品监督管理部门",type:"监管",focus:"安全有效性证据、注册资料完整性、质量体系",power:"高",way:"注册审评",phase:"上市前"},
+{id:"SH-11",name:"伦理委员会",type:"治理",focus:"知情同意是否充分、弱势群体保护、风险收益比",power:"高",way:"伦理审查",phase:"临床前 / 研究"},
+{id:"SH-12",name:"数据保护与网络安全监管",type:"监管",focus:"敏感个人信息处理、境内存储、留存与删除",power:"中",way:"合规评审",phase:"全周期"},
+{id:"SH-13",name:"支付方（医保 / 商保 / 机构预算）",type:"客户",focus:"成本效果、疗效证据是否标准化",power:"中",way:"卫生技术评估",phase:"采购 / 支付"},
+{id:"SH-14",name:"急救调度与社区应急",type:"外部",focus:"事件包能否直接解析、位置是否准确、误报是否可控",power:"中",way:"联合调试",phase:"应急"}
+];
+
+/* ===== 数据：相关方需求 ===== */
+const STRS=[
+{id:"StR-PT-01",sh:"SH-01",g:"pc",text:"系统在连续佩戴模式下，应保证 8 h 内电极接触部位皮肤温升不超过 2 ℃、压痕可逆，且不产生持续疼痛。",why:"长期佩戴是居家训练成立的前提，皮肤问题是弃用首因。",pri:"M",vm:"T · 热成像与皮肤评估",br:["BR-01"],sc:"S2",md:"M3 / M4"},
+{id:"StR-PT-02",sh:"SH-01",g:"pc",text:"系统应提供患者可直接触及的急停装置，触发后 100 ms 内切断全部辅助与刺激输出，复位需明确的人工操作。",why:"患者必须保有最终控制权，且该权力不能被软件代理。",pri:"M",vm:"T / D · 急停响应测试",br:["BR-04"],sc:"S5",md:"M6"},
+{id:"StR-PT-03",sh:"SH-01",g:"pc",text:"系统应在患者产生明确运动意图后 50 ms 内（P50）输出辅助动作，P95 不超过 80 ms。",why:"超过人体动作节律的辅助会被感知为迟滞，反而干扰运动。",pri:"M",vm:"T · 时基打点回放",br:["BR-02"],sc:"S2 / S3",md:"M4"},
+{id:"StR-PT-04",sh:"SH-01",g:"pc",text:"系统在无非意图动作的条件下，每小时产生的辅助输出不超过 1 次，单次输出不超过配置上限的 120%。",why:"误动作是致伤主因，必须在输出端设硬限幅。",pri:"M",vm:"T · 长时间连续测试",br:["BR-02","BR-04"],sc:"S3",md:"M4"},
+{id:"StR-PT-05",sh:"SH-01",g:"pc",text:"患者应能在无专业人员在场时独立完成佩戴、开机自检与日常复校，全流程不超过 5 min。",why:"居家场景没有治疗师，自立性决定训练频次。",pri:"M",vm:"D · 无引导可用性测试",br:["BR-01"],sc:"S2",md:"M1 / M2"},
+{id:"StR-PT-06",sh:"SH-01",g:"pc",text:"系统应提供强度可调的感觉反馈通道，在 70 dB 噪声与强光环境下患者对反馈的辨识正确率不低于 90%。",why:"没有反馈的辅助只是单向执行，无法形成闭环。",pri:"S",vm:"T · 环境干扰下辨识测试",br:["BR-02"],sc:"S3",md:"M4"},
+{id:"StR-PT-07",sh:"SH-01",g:"pc",text:"系统应默认在本地完成神经与生理数据的处理与存储，任何上传需单独授权，可随时撤回并在 7 天内完成云端删除。",why:"神经数据属敏感个人信息，默认上传会直接摧毁信任。",pri:"M",vm:"I / A · 数据流审计",br:["BR-05"],sc:"S2",md:"M3"},
+{id:"StR-PT-08",sh:"SH-01",g:"pc",text:"系统应以家庭常规预算可承受的成本提供，耗材年支出不超过整机价格的 10%。",why:"可负担性决定渗透率，也决定长期依从。",pri:"S",vm:"A · 成本模型分析",br:["BR-07"],sc:"—",md:"—"},
+{id:"StR-CG-01",sh:"SH-02",g:"pc",text:"系统应将告警划分为关注、处置、紧急三级，并以可区分的声光与文案呈现，夜间误报不超过 1 次。",why:"照护者不是专业人员，告警必须能瞬间分级而非逐条阅读。",pri:"M",vm:"T / D · 情景模拟",br:["BR-04"],sc:"S5",md:"M5 / M6"},
+{id:"StR-CG-02",sh:"SH-02",g:"pc",text:"照护者应能在单一界面查看当日训练完成情况、设备状态与待处理事件，无需跨应用切换。",why:"照护者的注意力是稀缺资源，多入口等于无入口。",pri:"S",vm:"D · 界面走查",br:["BR-01","BR-06"],sc:"S2",md:"M3"},
+{id:"StR-CG-03",sh:"SH-02",g:"pc",text:"紧急事件发生时，系统应在 10 s 内向家属与急救调度推送含时间、位置、设备状态与最近生理摘要的事件包；网络不可用时切换电话或短信兜底。",why:"应急链路的最后一公里不能依赖单一通道。",pri:"M",vm:"T · 端到端告警演练",br:["BR-04"],sc:"S5",md:"M6"},
+{id:"StR-CG-04",sh:"SH-02",g:"pc",text:"非专业照护者应能在 30 min 培训后独立完成佩戴协助、告警响应与呼救，日常操作不超过 3 步。",why:"培训成本直接折算为机构的服务成本。",pri:"S",vm:"D · 培训后操作考核",br:["BR-12"],sc:"S2 / S5",md:"M1"},
+{id:"StR-RT-01",sh:"SH-03",g:"ci",text:"治疗师应能按任务类型、时长、强度与阈值配置训练处方，并在患者端 1:1 还原。",why:"处方是临床判断的载体，任何失真都等于改了处方。",pri:"M",vm:"T · 配置一致性比对",br:["BR-01"],sc:"S1 / S2",md:"M3"},
+{id:"StR-RT-02",sh:"SH-03",g:"ci",text:"系统应在训练结束后 5 min 内自动生成含完成率、辅助占比、异常事件与趋势对比的摘要。",why:"复评时间必须从小时级压到分钟级，否则数据等于没有。",pri:"M",vm:"T · 报告生成耗时",br:["BR-01","BR-03"],sc:"S4",md:"M3"},
+{id:"StR-RT-03",sh:"SH-03",g:"ci",text:"治疗师应能在不中断训练的情况下调整辅助强度与灵敏度，每次变更记录操作者、时间、旧值与新值。",why:"个体化必须可调，但可调必须留痕，否则责任无法追溯。",pri:"M",vm:"I / T · 变更审计",br:["BR-03"],sc:"S4",md:"M3 / M4"},
+{id:"StR-RT-04",sh:"SH-03",g:"ci",text:"系统应支持处方模板与批量下发，单次可覆盖不少于 20 名患者。",why:"机构产能受限于重复劳动，批量能力决定可服务人数。",pri:"S",vm:"T · 批量下发测试",br:["BR-06"],sc:"S4",md:"—"},
+{id:"StR-RT-05",sh:"SH-03",g:"ci",text:"系统应支持异步复评：治疗师可离线查看数据并留言，不要求与患者实时同时在线。",why:"治疗师与患者的时间窗几乎不重叠，实时要求会杀死流程。",pri:"S",vm:"D · 流程演示",br:["BR-06"],sc:"S4",md:"—"},
+{id:"StR-MD-01",sh:"SH-04",g:"ci",text:"系统应输出含基线对比、趋势与异常事件的结构化评估报告，可导出 PDF 并保留版本。",why:"报告是医生签字与病历归档的对象，必须稳定可存。",pri:"M",vm:"T · 报告结构与导出",br:["BR-03","BR-10"],sc:"S4",md:"—"},
+{id:"StR-MD-02",sh:"SH-04",g:"ci",text:"系统应通过标准接口与医院 EMR 交换患者主索引、报告与处方，不要求人工转录。",why:"数据不进病历就不进临床决策，业务闭环断在这里。",pri:"M",vm:"T / I · 接口联调",br:["BR-06","BR-08"],sc:"S4",md:"—"},
+{id:"StR-MD-03",sh:"SH-04",g:"ci",text:"系统应保证任何处方与参数变更可追溯到操作者、时间、依据与版本，并可回滚到上一已批准版本。",why:"医疗行为的责任必须落到具体的人与具体版本。",pri:"M",vm:"I · 版本与审计核对",br:["BR-03"],sc:"S4",md:"M7"},
+{id:"StR-ADM-01",sh:"SH-06",g:"ci",text:"系统应按角色实施最小权限与分级授权，任何对患者数据的访问需留痕。",why:"机构内越权访问是最常见也最难发现的数据风险。",pri:"M",vm:"I · 权限矩阵检查",br:["BR-05"],sc:"—",md:"—"},
+{id:"StR-ADM-02",sh:"SH-05",g:"ci",text:"管理员应能在一屏内查看设备台账、固件版本、在线状态与告警，并支持一次部署不少于 20 台。",why:"没有批量视图就没有规模化运维。",pri:"S",vm:"D / T · 批量部署演练",br:["BR-07","BR-08"],sc:"S6",md:"—"},
+{id:"StR-ADM-03",sh:"SH-06",g:"ci",text:"系统在网络中断时应保持本地闭环与记录不少于 24 h，恢复后自动补传且不产生重复数据。",why:"家庭弱网是常态，不能用稳定网络做假设。",pri:"M",vm:"T · 断网续传测试",br:["BR-06","BR-07"],sc:"S2",md:"M3 / M4"},
+{id:"StR-EN-01",sh:"SH-09",g:"ir",text:"电极、电池与主机模块应可由受训人员在 15 min 内更换，更换后无需返厂校准。",why:"返厂即断供，模块化是可维护性的底线。",pri:"M",vm:"D · 更换实操计时",br:["BR-07"],sc:"S6",md:"M7"},
+{id:"StR-EN-02",sh:"SH-07",g:"ir",text:"系统升级应支持分阶段推送与失败自动回滚，回滚过程不得影响安全输出与既有数据。",why:"一次失败的全量升级可以毁掉一个机构的信任。",pri:"M",vm:"T · 升级故障注入",br:["BR-09"],sc:"S6",md:"M7"},
+{id:"StR-EN-03",sh:"SH-09",g:"ir",text:"系统故障码应定位到子系统或模块层级，并在维护终端给出可执行的排查步骤。",why:"定位粒度决定维修是换模块还是换整机。",pri:"S",vm:"I / D · 故障注入与诊断核对",br:["BR-07"],sc:"S6",md:"M7"},
+{id:"StR-EN-04",sh:"SH-08",g:"ir",text:"关键器件应具备双源或可替代方案，替换后不改变已验证的安全与性能指标。",why:"供应链中断会直接切断交付，替代件必须免重验证。",pri:"S",vm:"A / I · 替代件评估",br:["BR-08"],sc:"—",md:"—"},
+{id:"StR-REG-01",sh:"SH-10",g:"ir",text:"系统应符合 IEC 60601-1、60601-1-2 与 60601-2-10 的安全与电磁兼容要求，并按 ISO 14971 完成风险管理文档。",why:"注册路径由标准决定，标准不满足则一切设计归零。",pri:"M",vm:"T / I · 型式试验与文档审查",br:["BR-04"],sc:"—",md:"—"},
+{id:"StR-REG-02",sh:"SH-11",g:"ir",text:"系统在人体使用前应取得书面知情同意，允许随时无代价退出，退出后数据按约定处置。",why:"涉及人体与弱势群体，同意不是一次签字而是持续状态。",pri:"M",vm:"I · 流程与记录检查",br:["BR-05"],sc:"S1 / S5",md:"—"},
+{id:"StR-REG-03",sh:"SH-12",g:"ir",text:"系统应按敏感个人信息要求处理神经数据：单独同意、最小必要、境内存储、可删除。",why:"四项要求是并列的合规门槛，缺一项即不合规。",pri:"M",vm:"I / A · 合规审计",br:["BR-05"],sc:"—",md:"—"},
+{id:"StR-REG-04",sh:"SH-10",g:"ir",text:"系统应保存操作、参数变更、数据访问与安全事件日志不少于 5 年，且不可篡改。",why:"审计与不良事件复盘都依赖长周期日志。",pri:"M",vm:"I · 日志留存与完整性检查",br:["BR-04","BR-09"],sc:"—",md:"—"},
+{id:"StR-PAY-01",sh:"SH-13",g:"pe",text:"系统应能按标准结果指标（如 FMA、ARAT、10 米步行）导出结构化数据，用于支付与卫生技术评估。",why:"没有标准化结果，就没有可比的价格与支付依据。",pri:"S",vm:"D · 指标导出演示",br:["BR-10"],sc:"S4",md:"—"},
+{id:"StR-EMR-01",sh:"SH-14",g:"pe",text:"系统上报的紧急事件包应包含时间、位置、设备状态与最近 10 min 摘要，格式可被调度系统直接解析。",why:"急救链路不接受需要人工翻译的数据格式。",pri:"M",vm:"T · 调度端解析联调",br:["BR-04"],sc:"S5",md:"M6"},
+{id:"StR-ALG-01",sh:"SH-07",g:"pe",text:"系统应支持去标识化训练数据导出，保留采样率、时基与设备配置等元数据，并记录导出授权与用途。",why:"模型迭代需要数据，但元数据缺失的数据无法用于跨设备训练。",pri:"S",vm:"I · 数据包与授权核对",br:["BR-09"],sc:"S6",md:"M7"}
+];
+
+/* ===== 数据：业务需求 ===== */
+const BRS=[
+{id:"BR-01",pri:"M",title:"连续照护闭环",st:"业务应建立覆盖评估—处方—训练—复评的连续闭环，使居家训练成为可计量、可随访的临床行为。",kpi:"入组 4 周内周均完成 ≥3 次训练的患者比例 ≥70%；每次训练生成可追溯记录",sc:["S1","S2","S4"],md:["M2","M3","M4"],lv:"LEVEL 01 任务 / LEVEL 04 系统"},
+{id:"BR-02",pri:"M",title:"意图驱动的双向辅助",st:"业务应以意图解码驱动辅助输出，并在同一闭环内向患者回传感觉反馈，替代传统辅具的单向执行。",kpi:"辅助模式下任务完成率较基线提升 ≥20%；端到端时延 P50 ≤50 ms",sc:["S2","S3"],md:["M4"],lv:"LEVEL 01 任务 / LEVEL 04 系统"},
+{id:"BR-03",pri:"M",title:"连续客观评估",st:"业务应以连续运行数据支撑评估与处方调整，把复评准备从小时级压缩到分钟级。",kpi:"复评准备 ≤10 min；报告覆盖 ≥3 类指标；处方调整留痕率 100%",sc:["S4"],md:["M3","M4"],lv:"LEVEL 01 任务 / LEVEL 05 子系统"},
+{id:"BR-04",pri:"M",title:"失效即安全",st:"业务应建立分级安全与应急体系，保证任何单点失效都退到输出更少的安全状态。",kpi:"急停可达率 100%；异常→安全状态 ≤100 ms；可容许伤害事件 0 起/年",sc:["S3","S5"],md:["M5","M6"],lv:"LEVEL 04 系统 / LEVEL 05 安全子系统"},
+{id:"BR-05",pri:"M",title:"数据主权与合规",st:"业务应明确神经数据的所有权、授权与删除机制，满足敏感个人信息合规要求。",kpi:"单独同意覆盖率 100%；删除请求 7 日内完成；越权访问 0 次",sc:["S1","S2"],md:["M3","M7"],lv:"LEVEL 02 体系 / LEVEL 05 安全子系统"},
+{id:"BR-06",pri:"M",title:"三级连续照护",st:"业务应支撑医院—社区—家庭三级连续照护，使同一患者档案跨机构流转、各角色权限分离。",kpi:"转诊档案完整率 ≥95%；跨机构调阅平均 ≤1 个工作日",sc:["S1","S4"],md:["M3"],lv:"LEVEL 02 体系"},
+{id:"BR-07",pri:"S",title:"规模化与低成本运维",st:"业务应支持批量部署与远程运维，把单套交付与年度维护成本压到可复制的水平。",kpi:"单套部署 ≤2 h；OTA 成功率 ≥99%；年维护 ≤4 h/台",sc:["S6"],md:["M7"],lv:"LEVEL 02 体系 / LEVEL 06 模块"},
+{id:"BR-08",pri:"S",title:"开放接口与模块化",st:"业务应采用开放接口与模块化架构，允许关键器件与第三方系统替换而不重做验证。",kpi:"接口文档完备率 100%；关键模块替换后免整机重验",sc:["S1","S4","S6"],md:["M7"],lv:"LEVEL 02 体系 / LEVEL 06 模块"},
+{id:"BR-09",pri:"S",title:"受控数据回流",st:"业务应建立运行数据到模型校准与算法迭代的受控回流通道，回流范围与用途可审计。",kpi:"回流数据脱敏率 100%；模型版本可回滚至上一稳定版",sc:["S6"],md:["M7"],lv:"LEVEL 02 体系 / LEVEL 05 解码子系统"},
+{id:"BR-10",pri:"S",title:"疗效与成本证据",st:"业务应持续产出面向监管、支付与采购的疗效与成本证据。",kpi:"标准结果指标 ≥3 项；季度证据报告可自动导出",sc:["S4"],md:["M3"],lv:"LEVEL 01 任务 / LEVEL 02 体系"},
+{id:"BR-11",pri:"C",title:"长期可演进",st:"业务应保证系统在 3–5 年生命周期内可演进，新增感知模态不改变已验证的安全链路。",kpi:"新增模态接入不改动安全链路；架构支持 ≥2 类新传感器",sc:["S6"],md:["M7"],lv:"LEVEL 01 任务 / LEVEL 03 整机"},
+{id:"BR-12",pri:"S",title:"全周期服务与培训",st:"业务应提供覆盖部署、培训、维护与退役的服务体系，使非专业用户可独立完成日常操作。",kpi:"首次培训 ≤30 min；工作日支持响应 ≤4 h；退役数据清除率 100%",sc:["S1","S2","S6"],md:["M1","M7"],lv:"LEVEL 02 体系 / LEVEL 03 整机"}
+];
+
+/* ===== 数据：运行模式 ===== */
+const MODES=[
+{id:"M0",name:"关机 / 运输",en:"OFF",sum:"输出回路物理断开，设备处于可运输状态。",allow:"无（仅可上电）",deny:"全部采集、输出与无线广播",entry:"运输、长期停用、维修等待",exit:"上电或接入维护终端"},
+{id:"M1",name:"待机自检",en:"STANDBY",sum:"上电后执行自检，任何输出保持切断。",allow:"电极阻抗、电池、时基、存储自检（≤10 s）",deny:"辅助输出与刺激输出",entry:"上电、复位、升级完成",exit:"自检通过后进入标定或监护"},
+{id:"M2",name:"标定",en:"CALIBRATION",sum:"采集标定样本并拟合个体参数，执行端机械锁止。",allow:"采集静息与最大自主收缩样本、写入参数",deny:"驱动与刺激输出",entry:"首次使用、配置变更、重戴后",exit:"标定收敛且阻抗达标"},
+{id:"M3",name:"监护",en:"MONITOR",sum:"系统的安全基态：只采集与记录，不提供辅助。",allow:"采集、记录、告警、数据回传",deny:"辅助驱动与刺激输出",entry:"自检通过但未开启辅助；患者关闭辅助",exit:"开启辅助且条件达标，或进入维护"},
+{id:"M4",name:"闭环辅助",en:"ASSIST",sum:"完整闭环：采集→解码→驱动→反馈，安全系统逐周期监视。",allow:"辅助输出、感觉反馈、实时安全判定",deny:"超出限幅的力矩/电流；无安全监视的运行",entry:"患者开启辅助且置信度、阻抗达标",exit:"患者关闭、任务结束、异常触发降级"},
+{id:"M5",name:"安全降级",en:"DEGRADED",sum:"部分能力受限，以限幅或仅监护方式维持可用性。",allow:"限幅辅助、仅监护、告警、明示能力下降",deny:"满幅输出、未经确认的模式恢复",entry:"阻抗漂移、置信度持续低、电量 <15%、链路中断",exit:"条件恢复并通过自检"},
+{id:"M6",name:"急停",en:"EMERGENCY STOP",sum:"硬件切断输出回路，仅保留采集与告警。",allow:"本地告警、事件上报、状态显示",deny:"全部辅助与刺激输出",entry:"急停按钮、过流、跌倒判定、主动呼救",exit:"人工复位并重跑自检"},
+{id:"M7",name:"维护 / 升级",en:"MAINTENANCE",sum:"输出关闭，允许诊断、导出与版本变更。",allow:"诊断、日志导出、OTA、参数迁移",deny:"患者训练与辅助输出",entry:"维护指令且患者不在训练中",exit:"升级完成或自动回滚后自检"}
+];
+
+/* ===== 渲染：相关方 ===== */
+const PWR={"高":"chip m","中":"chip s","低":"chip c"};
+document.getElementById("shBody").innerHTML=STAKEHOLDERS.map(s=>`
+<tr>
+  <td class="id">${s.id}</td>
+  <td>${s.name}</td>
+  <td>${s.type}</td>
+  <td>${s.focus}</td>
+  <td><span class="${PWR[s.power]}">${s.power}</span></td>
+  <td>${s.way}</td>
+  <td>${s.phase}</td>
+</tr>`).join("");
+
+/* ===== 渲染：StRS + 筛选 ===== */
+const PRIC={"M":"chip m","S":"chip s","C":"chip c"};
+const strBody=document.getElementById("strBody");
+const strCount=document.getElementById("strCount");
+const strEmpty=document.getElementById("strEmpty");
+let curG="all",curP="all",curQ="";
+
+function renderStrs(){
+  const q=curQ.trim().toLowerCase();
+  const rows=STRS.filter(r=>{
+    if(curG!=="all"&&r.g!==curG)return false;
+    if(curP!=="all"&&r.pri!==curP)return false;
+    if(q){
+      const hay=(r.id+r.text+r.why+r.sh+r.vm+r.br.join(" ")+r.sc+r.md).toLowerCase();
+      if(!hay.includes(q))return false;
+    }
+    return true;
+  });
+  strBody.innerHTML=rows.map(r=>{
+    const sh=STAKEHOLDERS.find(s=>s.id===r.sh);
+    return `<tr>
+      <td class="id">${r.id}</td>
+      <td>${sh?sh.name.split("（")[0]:"—"}</td>
+      <td><p class="req" style="margin:0">${r.text}</p><p class="small muted" style="margin:4px 0 0">理由：${r.why}</p></td>
+      <td><span class="${PRIC[r.pri]}">${r.pri}</span></td>
+      <td>${r.vm.split(" · ").map((p,i)=>i===0?`<span class="chip ghost">${p}</span>`:`<span class="vdesc">${p}</span>`).join("")}</td>
+      <td><span class="id">${r.br.join(" / ")}</span><br><span class="small muted">${r.sc} · ${r.md}</span></td>
+    </tr>`;
+  }).join("");
+  strCount.textContent=`显示 ${rows.length} / ${STRS.length} 条`;
+  strEmpty.style.display=rows.length?"none":"block";
+}
+document.querySelectorAll("#strToolbar .fbtn").forEach(b=>{
+  b.addEventListener("click",()=>{
+    curG=b.dataset.g;
+    document.querySelectorAll("#strToolbar .fbtn").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+    renderStrs();
+  });
+});
+document.getElementById("priFilter").addEventListener("change",e=>{curP=e.target.value;renderStrs();});
+document.getElementById("strSearch").addEventListener("input",e=>{curQ=e.target.value;renderStrs();});
+renderStrs();
+
+/* ===== 渲染：BRS ===== */
+document.getElementById("brGrid").innerHTML=BRS.map(b=>{
+  const links=STRS.filter(r=>r.br.includes(b.id)).map(r=>`<span class="chip ghost">${r.id.replace("StR-","")}</span>`).join("");
+  return `<div class="bcard" style="background:var(--panel);padding:20px 22px;min-width:0">
+    <div class="top" style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px"><span class="id" style="font-size:12.5px">${b.id}</span><span class="${PRIC[b.pri]}">${b.pri}</span></div>
+    <h5 style="margin:0 0 8px;font-size:14px;font-weight:500;color:var(--teal)">${b.title}</h5>
+    <p class="st" style="font-size:13.5px;line-height:1.8;color:var(--ink);margin:0 0 12px">${b.st}</p>
+    <div class="kv" style="font-size:12px;color:var(--ink2);line-height:1.75;padding-top:8px;border-top:1px dashed var(--line)"><b style="color:var(--muted);font-weight:400;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;margin-right:6px">成功准则</b>${b.kpi}</div>
+    <div class="kv" style="font-size:12px;color:var(--ink2);line-height:1.75;padding-top:6px"><b style="color:var(--muted);font-weight:400;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;margin-right:6px">场景/模式</b>${b.sc.join(" ")} · ${b.md.join(" ")}</div>
+    <div class="tr" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:5px">${links}</div>
+  </div>`;
+}).join("");
+
+/* ===== 渲染：追踪矩阵 ===== */
+document.getElementById("traceBody").innerHTML=BRS.map(b=>{
+  const rs=STRS.filter(r=>r.br.includes(b.id)).map(r=>`<span class="chip ghost" style="margin:0 4px 4px 0;display:inline-block">${r.id.replace("StR-","")}</span>`).join("");
+  return `<tr>
+    <td class="id">${b.id}</td>
+    <td style="white-space:normal;word-break:normal">${rs||"—"}</td>
+    <td>${b.sc.join(" / ")}</td>
+    <td>${b.md.join(" / ")}</td>
+    <td>${b.lv}</td>
+  </tr>`;
+}).join("");
+
+/* ===== 渲染：模式机 ===== */
+const strip=document.getElementById("modeStrip");
+const panel=document.getElementById("modePanel");
+let curM=3;
+const MODESCENE={M0:"S6",M1:"S1 / S2",M2:"S1 / S2",M3:"S2 / S4",M4:"S2 / S3",M5:"S3 / S5",M6:"S5",M7:"S6"};
+function renderModes(){
+  strip.innerHTML=MODES.map((m,i)=>`<button data-i="${i}" aria-pressed="${i===curM}">${m.id} ${m.en}</button>`).join("");
+  const m=MODES[curM];
+  panel.innerHTML=`
+    <div class="mp-top"><span class="id">${m.id}</span><b>${m.name}</b><span style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted)">${m.en}</span></div>
+    <p style="margin:0 0 18px;max-width:52em">${m.sum}</p>
+    <div class="mp-grid">
+      <div class="mp-cell"><span class="lbl">允许</span><p>${m.allow}</p></div>
+      <div class="mp-cell"><span class="lbl">禁止</span><p>${m.deny}</p></div>
+      <div class="mp-cell"><span class="lbl">进入条件</span><p>${m.entry}</p></div>
+    </div>
+    <div class="mp-grid" style="margin-top:16px">
+      <div class="mp-cell"><span class="lbl">退出条件</span><p>${m.exit}</p></div>
+      <div class="mp-cell"><span class="lbl">安全含义</span><p>${m.id==="M4"?"能力最强、约束最严：任意异常都先降级再解释":"输出不增，只减；宁可少帮，不可错帮"}</p></div>
+      <div class="mp-cell"><span class="lbl">对应场景</span><p>${MODESCENE[m.id]}</p></div>
+    </div>`;
+  strip.querySelectorAll("button").forEach(b=>{
+    b.addEventListener("click",()=>{curM=Number(b.dataset.i);renderModes();});
+  });
+}
+renderModes();
+
+/* ===== 导航高亮 ===== */
+const navLinks=[...document.querySelectorAll(".nav a")];
+const secs=[...document.querySelectorAll("section.sec")];
+if("IntersectionObserver" in window){
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        navLinks.forEach(a=>a.style.background="");
+        const a=navLinks.find(x=>x.getAttribute("href")==="#"+e.target.id);
+        if(a)a.style.background="var(--teal-soft)";
+      }
+    });
+  },{rootMargin:"-45% 0px -50% 0px"});
+  secs.forEach(s=>io.observe(s));
+}
+</script>
+</body>
+</html>
