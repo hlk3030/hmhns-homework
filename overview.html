@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>两次作业 · 总列表｜复杂系统工程</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%2316181A'/%3E%3Cg stroke='%23E8EDEA' stroke-width='3'%3E%3Cpath d='M18 18h28M18 32h28M18 46h28'/%3E%3C/g%3E%3Ccircle cx='46' cy='46' r='6' fill='%230D5B55'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#FAFAF8; --panel:#FFFFFF;
+  --ink:#16181A; --ink2:#3D4441; --muted:#7C8481;
+  --line:#E3E5E1; --line2:#C9CDC6;
+  --c1:#23439B;  /* 作业一：钴蓝 */
+  --c1-soft:#E7ECFA;
+  --c2:#0D5B55;  /* 作业二：青绿 */
+  --c2-soft:#E1EFEC;
+  --serif:"Noto Serif SC",Songti SC,SimSun,serif;
+  --sans:"Noto Sans SC",system-ui,-apple-system,"Microsoft YaHei",sans-serif;
+  --mono:"JetBrains Mono","SFMono-Regular",Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:400;
+  font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:32px 32px;background-position:-1px -1px;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 32px}
+a{color:inherit}
+
+/* ===== 报头 ===== */
+header.top{padding:52px 0 34px;border-bottom:2px solid var(--ink);background:rgba(250,250,248,.92)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:26px}
+.meta .sep{color:var(--line2)}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,4.2vw,50px);line-height:1.22;letter-spacing:.01em;margin:0 0 20px}
+h1 small{display:block;font-family:var(--sans);font-weight:300;font-size:15px;color:var(--ink2);line-height:1.9;margin-top:16px;max-width:44em}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.chips span{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;padding:3px 10px;border:1px solid var(--line2);color:var(--ink2);background:var(--panel)}
+.chips .l1{color:var(--c1);border-color:#B9C4E4;background:var(--c1-soft)}
+.chips .l2{color:var(--c2);border-color:#AFCFC9;background:var(--c2-soft)}
+
+/* ===== 搜索 + 导航 ===== */
+.bar{position:sticky;top:0;z-index:20;background:rgba(250,250,248,.96);border-bottom:1px solid var(--line2);backdrop-filter:blur(6px)}
+.bar .wrap{display:flex;align-items:center;gap:18px;padding-top:11px;padding-bottom:11px;flex-wrap:wrap}
+nav.sx{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--ink2)}
+nav.sx a{text-decoration:none;padding-bottom:2px;border-bottom:1px solid transparent}
+nav.sx a:hover{border-bottom-color:var(--line2)}
+nav.sx b{color:var(--muted);font-weight:400;margin-right:4px}
+.search{margin-left:auto;display:flex;align-items:center;gap:10px}
+.search input{
+  width:250px;font-family:var(--sans);font-size:13px;color:var(--ink);background:var(--panel);
+  border:1px solid var(--line2);padding:6px 12px;outline:none
+}
+.search input:focus{border-color:var(--ink)}
+.search .n{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
+
+/* ===== 章节 ===== */
+section{padding:56px 0 12px;border-top:1px solid var(--line)}
+section:first-of-type{border-top:none}
+.sec-head{display:grid;grid-template-columns:88px minmax(0,1fr);gap:22px;align-items:baseline;margin-bottom:26px}
+.sec-head .no{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);border-top:2px solid var(--ink);padding-top:8px}
+.sec-head h2{font-family:var(--serif);font-size:26px;font-weight:700;margin:0;line-height:1.4}
+.sec-head h2 em{font-family:var(--mono);font-style:normal;font-size:11.5px;letter-spacing:.1em;color:var(--muted);margin-left:12px;vertical-align:middle}
+.lede{color:var(--ink2);font-size:14px;max-width:62em;margin:-6px 0 30px 110px}
+
+/* ===== 概览表 ===== */
+table{width:100%;min-width:640px;border-collapse:collapse;table-layout:fixed;font-size:13.5px;background:var(--panel)}
+th{text-align:left;font-weight:500;font-size:12px;color:var(--muted);letter-spacing:.06em;padding:10px 14px;border-bottom:1px solid var(--line2);background:#F3F4F1}
+td{padding:14px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink2)}
+td.id{font-family:var(--mono);font-size:12px;color:var(--ink)}
+td strong{color:var(--ink);font-weight:500}
+.tag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;padding:1px 7px;border:1px solid var(--line2);color:var(--ink2);margin-right:5px}
+.tag.a{color:var(--c1);border-color:#B9C4E4;background:var(--c1-soft)}
+.tag.b{color:var(--c2);border-color:#AFCFC9;background:var(--c2-soft)}
+
+/* ===== 作业一：六层 ===== */
+.level{border-top:1px solid var(--line2);padding:22px 0 24px}
+.level:first-child{border-top:2px solid var(--ink)}
+.level .rh{display:grid;grid-template-columns:150px minmax(0,1fr);gap:22px;margin-bottom:14px}
+.level .lh{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--c1);line-height:1.9}
+.level .lh b{display:block;font-family:var(--serif);font-size:26px;letter-spacing:.02em;color:var(--ink);margin-top:2px}
+.level .lh i{display:block;font-style:normal;font-size:11px;color:var(--muted);letter-spacing:.08em}
+.level .desc{color:var(--ink2);font-size:13.5px;max-width:52em;margin:0}
+.level .desc b{color:var(--ink);font-weight:500}
+.items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 26px;margin:4px 0 0}
+.items.tri{grid-template-columns:repeat(3,minmax(0,1fr))}
+.it{display:flex;gap:9px;padding:4px 0;font-size:13px;color:var(--ink2);border-bottom:1px dotted var(--line)}
+.it .k{font-family:var(--mono);font-size:10.5px;color:var(--muted);min-width:20px;padding-top:3px}
+.it b{color:var(--ink);font-weight:400}
+
+/* ===== 作业二：八章 ===== */
+.chap{display:grid;grid-template-columns:150px minmax(0,1fr);gap:22px;padding:20px 0;border-top:1px solid var(--line)}
+.chap:first-child{border-top:2px solid var(--ink)}
+.chap .ch{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--c2);line-height:1.9}
+.chap .ch b{display:block;font-family:var(--serif);font-size:19px;color:var(--ink);margin-top:2px;letter-spacing:.01em;font-weight:600}
+.chap .ch i{display:block;font-style:normal;font-size:10.5px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.chap ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 26px}
+.chap li{padding:3px 0;font-size:13px;color:var(--ink2);border-bottom:1px dotted var(--line)}
+.chap li::before{content:"—";color:var(--line2);margin-right:8px;font-family:var(--mono);font-size:10px}
+.chap li b{color:var(--ink);font-weight:400}
+
+/* ===== 衔接表 ===== */
+.note{border-left:2px solid var(--c2);padding:14px 0 14px 18px;margin:26px 0 8px;color:var(--ink2);font-size:13.5px;max-width:60em}
+.note b{color:var(--ink);font-weight:500}
+
+footer{margin-top:40px;border-top:2px solid var(--ink);padding:22px 0 64px;font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:var(--muted)}
+footer .row{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:3px 0}
+footer a{text-decoration:none;border-bottom:1px solid var(--line2);color:var(--ink2);padding-bottom:1px}
+footer a:hover{color:var(--c2);border-bottom-color:var(--c2)}
+
+[hidden]{display:none!important}
+.dim{opacity:.35}
+@media (max-width:900px){
+  .wrap{padding:0 20px}
+  .sec-head,.level .rh,.chap{grid-template-columns:minmax(0,1fr);gap:8px}
+  .lede{margin-left:0}
+  .items,.items.tri,.chap ul{grid-template-columns:minmax(0,1fr)}
+  .level{padding:18px 0 20px}
+  .level .lh,.chap .ch{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;line-height:1.5}
+  .level .lh b,.chap .ch b{display:inline;margin-top:0}
+  .level .lh b{font-size:23px}
+  .chap .ch b{font-size:19px}
+  .level .lh i,.chap .ch i{display:inline}
+  .search{margin-left:0;width:100%}
+  .search input{width:100%}
+  table{font-size:12.5px}
+  .scroller{overflow-x:auto}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{
+  body{background:#fff;background-image:none;font-size:10pt}
+  .bar{position:static}
+  .search{display:none}
+  section{page-break-inside:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="meta">
+      <span>复杂系统工程</span><span class="sep">／</span>
+      <span>小组作业 1 &amp; 2</span><span class="sep">／</span>
+      <span>总列表</span><span class="sep">／</span>
+      <span>2026-11-18</span>
+    </div>
+    <h1>两次作业 · 总列表
+      <small>把作业 1 的六层层级图谱与作业 2 的概念定义排进同一份清单：每一层回答什么问题、每一条需求落在哪一章、两个页面在哪里接上，按编号即可查到。</small>
+    </h1>
+    <div class="chips">
+      <span class="l1">作业 1 · 6 层 / 62 条目</span>
+      <span class="l2">作业 2 · 8 章 / 12 BR · 34 StR</span>
+      <span>系统对象 · 人机混合神经闭环系统</span>
+      <span>hlk3030.github.io/hmhns-homework</span>
+    </div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <nav class="sx">
+      <a href="#s1"><b>01</b>概览</a>
+      <a href="#s2"><b>02</b>作业一·六层</a>
+      <a href="#s3"><b>03</b>作业二·八章</a>
+      <a href="#s4"><b>04</b>两页衔接</a>
+    </nav>
+    <div class="search">
+      <input id="q" type="search" placeholder="搜索条目：急停、模块、StR、ConOps…" aria-label="搜索条目">
+      <span class="n" id="qn">全部 96 项</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 01 概览 ===== -->
+<section id="s1">
+  <div class="wrap">
+    <div class="sec-head"><div class="no">SECTION 01</div><h2>两次作业在同一张表上<em>OVERVIEW</em></h2></div>
+    <p class="lede">作业 1 回答“这个系统由哪些层级构成”，作业 2 回答“谁需要它、为什么需要、需要到什么程度”。两次作业共用同一个系统对象，所以用同一套编号体系就能互相定位。</p>
+
+    <div class="scroller">
+      <table>
+        <colgroup><col style="width:9%"><col style="width:27%"><col style="width:26%"><col style="width:22%"><col style="width:16%"></colgroup>
+        <thead><tr><th>编号</th><th>作业</th><th>回答的问题</th><th>结构与规模</th><th>在线页面</th></tr></thead>
+        <tbody>
+          <tr data-item>
+            <td class="id"><span class="tag a">01</span></td>
+            <td><strong>机器增强的人机混合神经系统<br>六层层级图谱与闭环链路</strong></td>
+            <td>系统由哪几个层级组成，每层的职责、成员与上下承接关系</td>
+            <td>6 层 · 62 个条目<br>任务 / 体系 / 整机 / 系统 / 子系统 / 模块</td>
+            <td><a href="index.html">index.html</a></td>
+          </tr>
+          <tr data-item>
+            <td class="id"><span class="tag b">02</span></td>
+            <td><strong>人机混合神经闭环系统<br>概念定义（BRS + StRS）</strong></td>
+            <td>业务为什么成立、相关方要什么、到什么程度才算满足</td>
+            <td>8 章 · 12 条 BR · 34 条 StR<br>14 个相关方 · 8 个运行模式</td>
+            <td><a href="homework2.html">homework2.html</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note"><b>阅读顺序。</b>先看第 02 节的六层，确认系统对象与功能边界；再看第 03 节的八章，确认需求从业务层一路收敛到相关方层；最后看第 04 节，理解两次作业在哪一层对接、作业 3 该从哪里接手。</div>
+  </div>
+</section>
+
+<!-- ===== 02 作业一 ===== -->
+<section id="s2">
+  <div class="wrap">
+    <div class="sec-head"><div class="no">SECTION 02</div><h2>作业一：六层层级图谱<em>HIERARCHY · 6 LEVELS</em></h2></div>
+    <p class="lede">自上而下是需求分解，自下而上是集成验证，神经信号在人体与机器之间形成持续双向闭环。以下六层共 62 个条目。</p>
+
+    <!-- L1 -->
+    <div class="level" data-block>
+      <div class="rh">
+        <div class="lh">LEVEL 01<b>任务</b><i>Mission</i></div>
+        <p class="desc">体系存在的目的与边界：<b>为谁解决什么问题、在何种约束下达成什么成效</b>，是全部分解的出发点。上承社会与医疗康复需求，下接体系层的成员系统与接口标准。</p>
+      </div>
+      <div class="items">
+        <div class="it" data-item><span class="k">1</span><span><b>感知代偿与增强</b>　视觉、听觉、触觉信号的采集、补偿与再现</span></div>
+        <div class="it" data-item><span class="k">2</span><span><b>运动辅助与重建</b>　依意图驱动义肢与外骨骼，完成抓握、行走</span></div>
+        <div class="it" data-item><span class="k">3</span><span><b>双向神经闭环</b>　采集→解码→输出→感觉反馈的持续回路</span></div>
+        <div class="it" data-item><span class="k">4</span><span><b>状态监护与预警</b>　接口、设备与生理指标的漂移与异常干预</span></div>
+        <div class="it" data-item><span class="k">5</span><span><b>安全、隐私与伦理</b>　加密、脱敏、知情同意与可追溯</span></div>
+        <div class="it" data-item><span class="k">6</span><span><b>长期可用与可演进</b>　长时佩戴、模型可校准、硬件可维护</span></div>
+      </div>
+    </div>
+
+    <!-- L2 -->
+    <div class="level" data-block>
+      <div class="rh">
+        <div class="lh">LEVEL 02<b>体系</b><i>SoS</i></div>
+        <p class="desc">多个独立可运行、通过标准接口互操作的成员系统组成，<b>整体能力在跨系统协同中涌现</b>，而非来自单台设备。</p>
+      </div>
+      <div class="items">
+        <div class="it" data-item><span class="k">1</span><span><b>神经接口装备系统</b>　植入与穿戴装备集群，直接接触人体</span></div>
+        <div class="it" data-item><span class="k">2</span><span><b>个人边缘计算终端</b>　本地实时处理、意图推理与设备联动</span></div>
+        <div class="it" data-item><span class="k">3</span><span><b>云端孪生与训练平台</b>　模型训练、个性化校准、数字孪生</span></div>
+        <div class="it" data-item><span class="k">4</span><span><b>医疗与康复系统</b>　评估、训练、随访与病历数据闭环</span></div>
+        <div class="it" data-item><span class="k">5</span><span><b>家庭 / 社区监护系统</b>　居家监测、远程随访、紧急呼叫联动</span></div>
+        <div class="it" data-item><span class="k">6</span><span><b>安全与伦理监管系统</b>　访问控制、数据审计、伦理与合规留痕</span></div>
+      </div>
+    </div>
+
+    <!-- L3 -->
+    <div class="level" data-block>
+      <div class="rh">
+        <div class="lh">LEVEL 03<b>整机</b><i>Vehicles</i></div>
+        <p class="desc">系统能力的物理载体，按<b>穿戴、植入、便携</b>三种形态划分，是人体与机器之间发生信号与能量交换的直接界面。</p>
+      </div>
+      <div class="items">
+        <div class="it" data-item><span class="k">1</span><span><b>智能神经手环 / 腕带</b>　外周神经与肌电采集，振动与电刺激反馈</span></div>
+        <div class="it" data-item><span class="k">2</span><span><b>头戴式神经头环 / 脑电帽</b>　脑电采集与头戴处理，认知状态与意图识别</span></div>
+        <div class="it" data-item><span class="k">3</span><span><b>AR 神经视觉眼镜</b>　视觉代偿与增强信息叠加</span></div>
+        <div class="it" data-item><span class="k">4</span><span><b>耳后式听觉处理器</b>　人工耳蜗 / 骨传导，听觉重建与声反馈</span></div>
+        <div class="it" data-item><span class="k">5</span><span><b>智能义肢与动力外骨骼</b>　抓握、支撑、行走的执行终端</span></div>
+        <div class="it" data-item><span class="k">6</span><span><b>植入式神经接口体</b>　皮层 / 外周电极阵列与闭环刺激器</span></div>
+        <div class="it" data-item><span class="k">7</span><span><b>便携边缘计算主机</b>　多设备汇聚、本地推理、通信与供电</span></div>
+        <div class="it" data-item><span class="k">8</span><span><b>床旁 / 桌面康复终端</b>　训练任务、可视化反馈与过程记录</span></div>
+      </div>
+    </div>
+
+    <!-- L4 -->
+    <div class="level" data-block>
+      <div class="rh">
+        <div class="lh">LEVEL 04<b>系统</b><i>Systems</i></div>
+        <p class="desc">整机内部按功能划分的系统集合。<b>本两次作业选定的核心系统即「人机混合神经闭环系统」</b>，向下分解为六类功能系统。</p>
+      </div>
+      <div class="items">
+        <div class="it" data-item><span class="k">1</span><span><b>神经信号采集系统</b>　放大、滤波、模数转换与信号质量评估</span></div>
+        <div class="it" data-item><span class="k">2</span><span><b>意图解码与识别系统</b>　特征提取、意图分类与指令输出</span></div>
+        <div class="it" data-item><span class="k">3</span><span><b>机器增强输出系统</b>　刺激波形、驱动指令与感觉反馈</span></div>
+        <div class="it" data-item><span class="k">4</span><span><b>能量与电源管理系统</b>　供电、无线充电、功耗调度与安全降级</span></div>
+        <div class="it" data-item><span class="k">5</span><span><b>通信与时间同步系统</b>　加密链路与全系统统一时基</span></div>
+        <div class="it" data-item><span class="k">6</span><span><b>安全监护与容错系统</b>　异常检测、故障隔离、急停与审计</span></div>
+      </div>
+    </div>
+
+    <!-- L5 -->
+    <div class="level" data-block>
+      <div class="rh">
+        <div class="lh">LEVEL 05<b>子系统</b><i>Sub-systems</i></div>
+        <p class="desc">把六类功能系统继续拆成<b>可独立设计、独立验证</b>的环节，每个子系统承担明确的信号流或控制流。共 18 个子系统。</p>
+      </div>
+      <div class="scroller">
+        <table>
+          <colgroup><col style="width:6%"><col style="width:38%"><col style="width:56%"></colgroup>
+          <thead><tr><th>序</th><th>子系统</th><th>归属系统与职责</th></tr></thead>
+          <tbody>
+            <tr data-item><td class="id">1</td><td>电极阵列子系统</td><td>采集系统 · 电极点位布置与组织电气耦合</td></tr>
+            <tr data-item><td class="id">2</td><td>模拟前端子系统</td><td>采集系统 · 微弱信号放大、滤波与阻抗检测</td></tr>
+            <tr data-item><td class="id">3</td><td>数据采样子系统</td><td>采集系统 · 模数转换、采样率控制与缓冲上传</td></tr>
+            <tr data-item><td class="id">4</td><td>特征提取子系统</td><td>解码系统 · 时域、频域与波形特征形成特征向量</td></tr>
+            <tr data-item><td class="id">5</td><td>意图分类推理子系统</td><td>解码系统 · 轻量模型推理，输出类别与置信度</td></tr>
+            <tr data-item><td class="id">6</td><td>模型更新与校准子系统</td><td>解码系统 · 在线 / 离线校准与个体化参数适配</td></tr>
+            <tr data-item><td class="id">7</td><td>刺激波形生成子系统</td><td>输出系统 · 幅度、脉宽、频率可调的电 / 光刺激</td></tr>
+            <tr data-item><td class="id">8</td><td>运动驱动子系统</td><td>输出系统 · 意图指令转轨迹与力矩控制</td></tr>
+            <tr data-item><td class="id">9</td><td>触觉反馈再现子系统</td><td>输出系统 · 振动、电刺激或压力回传接触信息</td></tr>
+            <tr data-item><td class="id">10</td><td>无线充电子系统</td><td>电源系统 · 无线能量接收、充电管理与异物检测</td></tr>
+            <tr data-item><td class="id">11</td><td>电池管理子系统</td><td>电源系统 · 电量估算、均衡、过充过放保护</td></tr>
+            <tr data-item><td class="id">12</td><td>功耗调度子系统</td><td>电源系统 · 按任务优先级分配算力与功耗</td></tr>
+            <tr data-item><td class="id">13</td><td>体内-体外近场通信子系统</td><td>通信系统 · 植入体与体外设备的短距无线链路</td></tr>
+            <tr data-item><td class="id">14</td><td>加密链路子系统</td><td>通信系统 · 加密传输、身份认证与数据脱敏</td></tr>
+            <tr data-item><td class="id">15</td><td>时间同步子系统</td><td>通信系统 · 统一时基，保证采集与输出对齐</td></tr>
+            <tr data-item><td class="id">16</td><td>异常检测子系统</td><td>安全系统 · 信号质量、设备状态与行为边界监测</td></tr>
+            <tr data-item><td class="id">17</td><td>急停保护子系统</td><td>安全系统 · 触发急停、切断危险输出并切换安全态</td></tr>
+            <tr data-item><td class="id">18</td><td>数据加密与隐私子系统</td><td>安全系统 · 加密存储、访问授权与隐私脱敏审计</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- L6 -->
+    <div class="level" data-block>
+      <div class="rh">
+        <div class="lh">LEVEL 06<b>模块</b><i>Modules</i></div>
+        <p class="desc">层级体系最底层：<b>可独立设计、采购、制造与测试</b>的硬件 / 软件模块，是子系统功能的物理与算法载体。共 18 个模块。</p>
+      </div>
+      <div class="scroller">
+        <table>
+          <colgroup><col style="width:6%"><col style="width:38%"><col style="width:56%"></colgroup>
+          <thead><tr><th>序</th><th>模块</th><th>功能</th></tr></thead>
+          <tbody>
+            <tr data-item><td class="id">1</td><td>电极模块</td><td>干 / 湿 / 植入电极阵列，完成人体—电路电气耦合</td></tr>
+            <tr data-item><td class="id">2</td><td>模拟放大模块</td><td>仪表放大器，微伏级神经信号低噪声前置放大</td></tr>
+            <tr data-item><td class="id">3</td><td>滤波模块</td><td>带通滤波与 50 Hz 工频陷波</td></tr>
+            <tr data-item><td class="id">4</td><td>ADC 采样模块</td><td>高精度模数转换与采样率控制</td></tr>
+            <tr data-item><td class="id">5</td><td>信号预处理模块</td><td>去伪迹、重参考、归一化与质量评估</td></tr>
+            <tr data-item><td class="id">6</td><td>特征提取模块</td><td>时域、频域、波形特征计算</td></tr>
+            <tr data-item><td class="id">7</td><td>神经网络推理模块</td><td>轻量分类模型本地推理</td></tr>
+            <tr data-item><td class="id">8</td><td>刺激波形生成模块</td><td>幅度、脉宽、频率可调的刺激波形发生</td></tr>
+            <tr data-item><td class="id">9</td><td>功率驱动模块</td><td>刺激电流 / 电机功率放大与安全限幅</td></tr>
+            <tr data-item><td class="id">10</td><td>触觉再现模块</td><td>振动马达、电刺激或压力单元再现接触</td></tr>
+            <tr data-item><td class="id">11</td><td>无线充电模块</td><td>谐振接收线圈与充电整流电路</td></tr>
+            <tr data-item><td class="id">12</td><td>电源管理模块</td><td>PMIC：多路稳压、电量计与充放电保护</td></tr>
+            <tr data-item><td class="id">13</td><td>近场通信模块</td><td>体内外短距无线收发电路与协议栈</td></tr>
+            <tr data-item><td class="id">14</td><td>加密模块</td><td>密钥管理、数据加解密与完整性校验</td></tr>
+            <tr data-item><td class="id">15</td><td>故障自检模块</td><td>上电自检、周期巡检与故障码上报</td></tr>
+            <tr data-item><td class="id">16</td><td>急停模块</td><td>硬件急停回路与输出切断执行器</td></tr>
+            <tr data-item><td class="id">17</td><td>状态显示模块</td><td>电量、连接、工作状态与告警的本地指示</td></tr>
+            <tr data-item><td class="id">18</td><td>存储与日志模块</td><td>运行数据、模型版本与审计日志本地留存</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 03 作业二 ===== -->
+<section id="s3">
+  <div class="wrap">
+    <div class="sec-head"><div class="no">SECTION 03</div><h2>作业二：概念定义八章<em>BRS + StRS · 8 CHAPTERS</em></h2></div>
+    <p class="lede">从系统定位到需求自检的八章，所有条目均可在作业 2 页面内按编号检索；本节只列每章的骨架与关键数字。</p>
+
+    <div class="chap" data-block>
+      <div class="ch">CH.00<i>system of interest</i><b>系统定位</b></div>
+      <ul>
+        <li data-item><b>系统边界表</b>：边界内对象、边界外使能系统与用户组织</li>
+        <li data-item><b>作业 1 六层 → 本文需求编号</b>的承接映射</li>
+        <li data-item>为什么选 LEVEL 04 的系统而不是整机</li>
+      </ul>
+    </div>
+
+    <div class="chap" data-block>
+      <div class="ch">CH.01<i>business &amp; task</i><b>业务与任务分析</b></div>
+      <ul>
+        <li data-item><b>BP-1 ~ BP-6</b>：业务问题与对系统的直接要求</li>
+        <li data-item><b>O1 ~ O5</b>：业务目标与成效度量</li>
+        <li data-item><b>P1 ~ P5</b>：入组建档、居家训练、随访复评、异常应急、维护退役</li>
+        <li data-item><b>T1 ~ T9</b>：角色、输入、输出与失败代价</li>
+      </ul>
+    </div>
+
+    <div class="chap" data-block>
+      <div class="ch">CH.02<i>concept of operations</i><b>运营概念 ConOps</b></div>
+      <ul>
+        <li data-item><b>ENV-1 ~ ENV-4</b>：医院、社区、家庭、户外四类环境</li>
+        <li data-item><b>8 个角色</b>与职责、出现场景、可替代性</li>
+        <li data-item><b>S1 ~ S6</b>：六个运营场景叙事</li>
+        <li data-item><b>5 阶段</b>生命周期与 <b>5 项用户可感知度量</b></li>
+      </ul>
+    </div>
+
+    <div class="chap" data-block>
+      <div class="ch">CH.03<i>operational concept</i><b>运行概念 OpsCon</b></div>
+      <ul>
+        <li data-item><b>ConOps / OpsCon 分工</b>对照表</li>
+        <li data-item><b>IF-01 ~ IF-08</b>：人体、App、告警、云端、EMR、急救、供电、维护</li>
+        <li data-item><b>M0 ~ M7</b>：八个运行模式与 <b>12 条状态迁移</b></li>
+        <li data-item><b>50 ms 端到端时延预算</b>与 7 条故障降级、8 条人机功能分配</li>
+      </ul>
+    </div>
+
+    <div class="chap" data-block>
+      <div class="ch">CH.04<i>stakeholders</i><b>相关方列表</b></div>
+      <ul>
+        <li data-item><b>SH-01 ~ SH-14</b>：患者、照护者、治疗师、医生、机构、监管、支付方等</li>
+        <li data-item>每个相关方的最关注问题、影响与权力、参与方式、生命周期阶段</li>
+        <li data-item>低权力相关方（患者本人）通过代理角色表达的处理说明</li>
+      </ul>
+    </div>
+
+    <div class="chap" data-block>
+      <div class="ch">CH.05<i>stakeholder requirements</i><b>相关方需求 StRS</b></div>
+      <ul>
+        <li data-item><b>34 条 StR</b>：PT 8 · CG 4 · RT 5 · MD 3 · ADM 3 · EN 4 · REG 4 · PAY 1 · EMR 1 · ALG 1</li>
+        <li data-item>每条含相关方、陈述与理由、优先级 M/S/C、验证方法 T/A/I/D</li>
+        <li data-item><b>表 4-5</b> 内容框架 19 条逐项自查</li>
+      </ul>
+    </div>
+
+    <div class="chap" data-block>
+      <div class="ch">CH.06<i>business requirements</i><b>业务需求 BRS</b></div>
+      <ul>
+        <li data-item><b>BR-01 ~ BR-12</b>：连续照护闭环、双向辅助、客观评估、失效即安全等</li>
+        <li data-item>每条带成功准则 KPI、场景与模式、作业 1 层级归属</li>
+        <li data-item><b>表 4-1</b> 内容框架 19 条逐项自查</li>
+      </ul>
+    </div>
+
+    <div class="chap" data-block>
+      <div class="ch">CH.07<i>traceability</i><b>追踪与一致性</b></div>
+      <ul>
+        <li data-item><b>正向追踪矩阵</b>：12 条 BR 到 StR、场景、模式与层级</li>
+        <li data-item><b>C-1 ~ C-5</b>：时延/精度、隐私/回流、安全/可用、成本/性能、标准化/个体化</li>
+        <li data-item><b>A1 ~ A8</b> 假设清单与 <b>9 项需求质量自检</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 04 衔接 ===== -->
+<section id="s4">
+  <div class="wrap">
+    <div class="sec-head"><div class="no">SECTION 04</div><h2>两页如何接上<em>HANDOFF · LEVEL ↔ CHAPTER</em></h2></div>
+    <p class="lede">同一套编号让两次作业互相定位：作业 1 的层，对应作业 2 的章；作业 2 的每条需求，都能挂回某一层。</p>
+
+    <div class="scroller">
+      <table>
+        <colgroup><col style="width:20%"><col style="width:30%"><col style="width:50%"></colgroup>
+        <thead><tr><th>作业 1 的层</th><th>作业 2 的章</th><th>承接关系</th></tr></thead>
+        <tbody>
+          <tr data-item><td><span class="tag a">LEVEL 01</span>任务</td><td>01 业务与任务分析</td><td>使命与成效 → 业务问题 BP、目标 O、任务 T；任务层条目直接成为业务需求的来源</td></tr>
+          <tr data-item><td><span class="tag a">LEVEL 02</span>体系</td><td>02 ConOps · 04 相关方</td><td>成员系统与协同关系 → 机构、角色与场景；体系的六个成员系统对应 ConOps 的四类环境与八角色</td></tr>
+          <tr data-item><td><span class="tag a">LEVEL 03</span>整机</td><td>03 OpsCon</td><td>穿戴 / 植入 / 便携形态 → 运行模式、外部接口与部署约束</td></tr>
+          <tr data-item><td><span class="tag a">LEVEL 04</span>系统</td><td>06 BRS · 05 StRS</td><td>六类功能系统 → 业务需求与相关方需求的落点；选定系统即本文的分析对象</td></tr>
+          <tr data-item><td><span class="tag a">LEVEL 05</span>子系统</td><td>03 时延预算 · 05 追踪</td><td>子系统划分承担 50 ms 预算的分配；每条 StR 在作业 3 指派到具体子系统</td></tr>
+          <tr data-item><td><span class="tag a">LEVEL 06</span>模块</td><td>07 假设 · EN 类需求</td><td>模块的可维护性、双源与更换时间，对应 EN-01 ~ EN-04 与 A4、A7 假设</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note"><b>下一步。</b>作业 3 的 SyRS 从 LEVEL 04 的功能分解出系统需求，把 34 条 StR 指派到六类功能系统，并把“用户可感知”的指标拆成子系统级预算——预算起点在第 03 章。</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <span>复杂系统工程 · 小组作业 1 &amp; 2 · 总列表</span>
+      <span>2026-11-18 · v1.0</span>
+    </div>
+    <div class="row">
+      <span>作业 1：<a href="index.html">机器增强的人机混合神经系统 · 六层层级图谱</a></span>
+      <span>作业 2：<a href="homework2.html">人机混合神经闭环系统 · 概念定义（BRS + StRS）</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var q = document.getElementById('q');
+  var qn = document.getElementById('qn');
+  var items = Array.prototype.slice.call(document.querySelectorAll('[data-item]'));
+  var blocks = Array.prototype.slice.call(document.querySelectorAll('[data-block]'));
+  function run(){
+    var s = q.value.trim().toLowerCase();
+    var hit = 0;
+    items.forEach(function(el){
+      var match = !s || el.textContent.toLowerCase().indexOf(s) > -1;
+      el.hidden = !match;
+      if(match) hit++;
+    });
+    blocks.forEach(function(b){
+      var left = b.querySelectorAll('[data-item]:not([hidden])').length;
+      b.classList.toggle('dim', !!s && left === 0);
+    });
+    qn.textContent = s ? ('命中 ' + hit + ' / ' + items.length + ' 项') : ('全部 ' + items.length + ' 项');
+  }
+  q.addEventListener('input', run);
+  run();
+})();
+</script>
+</body>
+</html>
