@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人机混合神经闭环系统 · 系统需求规格书与初始架构（SyRS）｜复杂系统工程 作业3</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%230D5B55'/%3E%3Cg stroke='%23EAF2F0' stroke-width='3' fill='none'%3E%3Ccircle cx='32' cy='32' r='13'/%3E%3Cpath d='M32 19v-6M45 32h6M32 45v6M19 32h6'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;700&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F6F5F1;--panel:#FFFFFF;--ink:#15191B;--ink2:#3E4644;--muted:#828A86;
+  --line:#E2E4DF;--line2:#C6CBC4;
+  --teal:#0D5B55;--teal2:#6FC6BC;--teal-soft:#E4EFEC;
+  --blue:#23439B;--blue-soft:#E8ECF8;
+  --amber:#8A5A12;--amber-soft:#F4EBD8;
+  --red:#9B3226;--red-soft:#F4E3E0;
+  --serif:"Noto Serif SC",Songti SC,SimSun,serif;
+  --sans:"Noto Sans SC",system-ui,-apple-system,"Microsoft YaHei",sans-serif;
+  --mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14.5px;line-height:1.8;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1060px;margin:0 auto;padding:0 30px}
+
+/* masthead */
+.mast{background:#0B2E2B;color:#EAF2F0;padding:46px 0 36px}
+.mast .back{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--teal2);text-decoration:none;border-bottom:1px solid rgba(111,198,188,.4);padding-bottom:1px;display:inline-block;margin-bottom:22px}
+.mast-meta{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;color:#9FC4BE;margin-bottom:24px}
+.mast h1{font-family:var(--serif);font-weight:700;font-size:clamp(24px,3.4vw,38px);line-height:1.35;margin:0 0 14px}
+.mast .sub{max-width:58em;color:#CFE2DE;font-weight:300;font-size:14px;margin:0}
+.mast-stats{display:flex;flex-wrap:wrap;gap:14px 34px;margin-top:26px}
+.mast-stats div{text-align:left}
+.mast-stats b{display:block;font-family:var(--serif);font-size:30px;font-weight:700;color:#fff}
+.mast-stats small{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#9FC4BE}
+
+/* nav */
+nav.chap{position:sticky;top:0;z-index:20;background:rgba(246,245,241,.96);border-bottom:1px solid var(--line2);backdrop-filter:blur(6px)}
+nav.chap .wrap{display:flex;gap:18px;overflow-x:auto;padding-top:10px;padding-bottom:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:var(--ink2)}
+nav.chap a{text-decoration:none;white-space:nowrap}
+nav.chap a:hover{color:var(--teal)}
+nav.chap b{color:var(--muted);font-weight:400;margin-right:5px}
+
+/* sections */
+section{padding:44px 0 8px}
+.sh{display:grid;grid-template-columns:96px minmax(0,1fr);gap:20px;align-items:baseline;margin-bottom:22px}
+.sh .no{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);border-top:2px solid var(--ink);padding-top:8px}
+.sh h2{font-family:var(--serif);font-size:24px;font-weight:700;margin:0;line-height:1.4}
+.sh h2 em{font-family:var(--mono);font-style:normal;font-size:11px;letter-spacing:.1em;color:var(--muted);margin-left:10px}
+h3{font-family:var(--serif);font-size:17px;font-weight:700;margin:30px 0 12px;padding-left:12px;border-left:3px solid var(--teal)}
+p.lead{color:var(--ink2);font-weight:300;max-width:64em;margin:8px 0 18px}
+p.note{font-size:12.5px;color:var(--muted);margin:12px 0 0}
+
+/* tables */
+.table-wrap{overflow-x:auto}
+table{width:100%;min-width:680px;border-collapse:collapse;table-layout:fixed;font-size:13px;background:var(--panel)}
+th{text-align:left;font-weight:500;font-size:11.5px;color:var(--muted);letter-spacing:.05em;padding:9px 12px;border-bottom:1px solid var(--line2);background:#F1F2EE}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink2)}
+td.id{font-family:var(--mono);font-size:11.5px;color:var(--teal);white-space:nowrap}
+td.src{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+tr:hover td{background:#FAFAF7}
+.tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.04em;padding:1px 7px;border:1px solid var(--line2);color:var(--ink2);margin-right:4px}
+.tag.fr{color:var(--blue);border-color:#BCC7E4;background:var(--blue-soft)}
+.tag.pr{color:var(--teal);border-color:#A9CEC7;background:var(--teal-soft)}
+.tag.ir{color:var(--amber);border-color:#DCC59A;background:var(--amber-soft)}
+.tag.sr{color:var(--red);border-color:#DDB3AC;background:var(--red-soft)}
+.tag.cn{color:var(--muted)}
+
+/* cards / lists */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:16px 0}
+.card{background:var(--panel);border:1px solid var(--line);padding:18px 20px}
+.card h5{margin:0 0 8px;font-family:var(--serif);font-size:15px}
+.card p{margin:0;font-size:13px;color:var(--ink2);font-weight:300}
+ul.tight{margin:8px 0;padding-left:20px}
+ul.tight li{padding:3px 0;font-size:13.5px;color:var(--ink2)}
+ul.tight li b{color:var(--ink);font-weight:500}
+
+/* figure */
+figure{margin:22px 0;background:var(--panel);border:1px solid var(--line);padding:20px}
+figure svg{width:100%;height:auto}
+figcaption{font-size:12px;color:var(--muted);margin-top:10px;font-family:var(--mono);letter-spacing:.04em}
+
+footer{margin-top:44px;border-top:2px solid var(--ink);padding:20px 0 60px;font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:var(--muted);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{color:var(--ink2);text-decoration:none;border-bottom:1px solid var(--line2)}
+footer a:hover{color:var(--teal)}
+
+@media(max-width:900px){
+  .wrap{padding:0 18px}
+  .sh{grid-template-columns:1fr;gap:6px}
+  .grid2{grid-template-columns:1fr}
+  table{font-size:12.5px;min-width:560px}
+  .mast{padding:34px 0 26px}
+}
+@media print{body{background:#fff;font-size:10pt}.mast{background:#fff;color:#000;nav.chap{position:static}}section{page-break-inside:auto}}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <a class="back" href="index.html">← 主页</a>
+    <div class="mast-meta">
+      <span>复杂系统工程 / 小组作业 3</span>
+      <span>SyRS · 初始系统架构 · 控制框图 · 安全架构</span>
+      <span>ISO/IEC/IEEE 29148:2018 表 5-1</span>
+      <span>2026-11-25</span>
+    </div>
+    <h1>人机混合神经闭环系统<br>系统需求规格书与初始系统架构</h1>
+    <p class="sub">承接作业 2 的 12 条业务需求（BR）与 34 条相关方需求（StR），在 LEVEL 04 系统层把它们落成可验证的系统需求（SyRS），据此给出功能架构、闭环控制框图，并完成危险分析、安全需求与安全架构。</p>
+    <div class="mast-stats">
+      <div><b>22</b><small>SYSTEM REQUIREMENTS</small></div>
+      <div><b>6</b><small>FUNCTIONAL SUBSYSTEMS</small></div>
+      <div><b>10</b><small>SAFETY REQUIREMENTS</small></div>
+      <div><b>8</b><small>HAZARDS ANALYZED</small></div>
+    </div>
+  </div>
+</header>
+
+<nav class="chap">
+  <div class="wrap">
+    <a href="#s0"><b>00</b>定位</a>
+    <a href="#s1"><b>01</b>系统需求规格书</a>
+    <a href="#s2"><b>02</b>初始系统架构</a>
+    <a href="#s3"><b>03</b>系统控制框图</a>
+    <a href="#s4"><b>04</b>安全需求与安全架构</a>
+    <a href="#s5"><b>05</b>追踪与自检</a>
+  </div>
+</nav>
+
+<!-- ===== CH.00 ===== -->
+<section id="s0"><div class="wrap">
+  <div class="sh"><div class="no">SECTION 00</div><h2>定位、范围与方法<em>SCOPE &amp; METHOD</em></h2></div>
+  <p class="lead">本页是作业 3 的交付物。需求来源是作业 2 已经评审过的业务需求 BRS（BR-01～BR-12）与相关方需求 StRS（StR-PT/CG/RT/MD/ADM/EN/REG/PAY/EMR/ALG）；作业 1 的六层层级图谱提供系统分解骨架。本文按 ISO/IEC/IEEE 29148:2018 第 5 章表 5-1 的 SyRS 范例组织：每条系统需求含编号、陈述、理由、验证方法、优先级与来源追踪。</p>
+  <div class="grid2">
+    <div class="card"><h5>本页回答什么</h5><p>系统应当做什么（功能需求 FR）、做到什么程度（性能需求 PR）、与外部如何交接（接口需求 IR）、受什么约束（CN）；这些需求按功能分配到六个子系统，形成初始架构；最后给出危险分析、安全需求 SR 与独立安全架构。</p></div>
+    <div class="card"><h5>本页不回答什么</h5><p>不做详细硬件选型、电路图与软件设计；不重新论证业务价值（作业 2 已完成）；模型精度与训练策略只给约束，不展开算法细节。下一层（设计阶段）从 FR/PR 的分配结果进入。</p></div>
+  </div>
+  <p class="note">编号约定：FR-x 功能需求 · PR-x 性能需求 · IR-x 接口需求 · CN-x 设计与合规约束 · SR-x 安全需求 · HZ-x 危险源。验证方法沿用作业 2：T 测试 · A 分析 · I 检查 · D 演示。优先级 M 必须 / S 重要 / C 可选。</p>
+</div></section>
+
+<!-- ===== CH.01 SyRS ===== -->
+<section id="s1"><div class="wrap">
+  <div class="sh"><div class="no">SECTION 01</div><h2>系统需求规格书 SyRS<em>SYSTEM REQUIREMENTS SPECIFICATION</em></h2></div>
+
+  <h3>1.1 功能需求 FR<em style="font-family:var(--mono);font-size:11px;color:var(--muted)">FUNCTIONAL</em></h3>
+  <div class="table-wrap">
+    <table>
+      <colgroup><col style="width:9%"><col style="width:34%"><col style="width:26%"><col style="width:13%"><col style="width:9%"><col style="width:9%"></colgroup>
+      <thead><tr><th>编号</th><th>需求陈述</th><th>理由</th><th>验证</th><th>优先级</th><th>来源</th></tr></thead>
+      <tbody>
+        <tr><td class="id">FR-01</td><td>系统应采集 μV–mV 级神经与肌电信号，采样率 250–2000 Hz 可配置，并每 10 s 巡检电极阻抗；阻抗超限时停止辅助并提示重戴。</td><td>信号质量是闭环成立的前提，阻抗漂移是最常见的误动作诱因。</td><td>T · 阻抗注入测试</td><td>M</td><td class="src">StR-PT-01 / IF-01</td></tr>
+        <tr><td class="id">FR-02</td><td>系统应在端侧以轻量模型完成意图分类，同时输出类别与置信度；连续 3 s 置信度低于阈值时，降级为限幅辅助或仅监护。</td><td>云端推理不得进入闭环路径，低置信度必须让位给安全。</td><td>T · 置信度故障注入</td><td>M</td><td class="src">StR-PT-04 / ALG-01 / C-1</td></tr>
+        <tr><td class="id">FR-03</td><td>系统应按解码结果驱动执行器（义肢、外骨骼、刺激器），输出幅度受硬限幅电路约束，不超过配置上限的 120%。</td><td>解码错误不能转化为过量输出，软件失效也不能突破上限。</td><td>T · 过量指令注入</td><td>M</td><td class="src">StR-PT-04 / BR-02</td></tr>
+        <tr><td class="id">FR-04</td><td>系统应提供强度可调的感觉反馈通道（触觉振动 / 电刺激 / 听觉），使患者在 70 dB 噪声与强光环境下辨识正确率不低于 90%。</td><td>没有反馈就没有闭环，单向辅助会被人体感知为异物。</td><td>T · 干扰下辨识测试</td><td>S</td><td class="src">StR-PT-06</td></tr>
+        <tr><td class="id">FR-05</td><td>系统应将告警分为关注、处置、紧急三级，以可区分的声光与文案呈现；夜间误报不超过 1 次/h。</td><td>照护者不是专业人员，分级比细节更重要。</td><td>T/D · 情景模拟</td><td>M</td><td class="src">StR-CG-01</td></tr>
+        <tr><td class="id">FR-06</td><td>系统应本地记录训练全过程，训练结束 5 min 内生成含完成率、辅助占比、异常事件与趋势对比的摘要，并可导出 PDF 版本化报告。</td><td>复评从小时级压到分钟级，报告是归档对象。</td><td>T · 报告耗时与结构检查</td><td>M</td><td class="src">StR-RT-02 / MD-01 / BR-03</td></tr>
+        <tr><td class="id">FR-07</td><td>系统应支持治疗师按任务、时长、强度、阈值配置处方并在患者端 1:1 还原；任何参数变更记录操作者、时间、旧值、新值，可回滚至上一已批准版本。</td><td>处方是临床判断，失真即改处方；变更必须可追责。</td><td>I/T · 配置一致性与审计</td><td>M</td><td class="src">StR-RT-01 / RT-03 / MD-03</td></tr>
+        <tr><td class="id">FR-08</td><td>紧急事件发生后，系统应在 10 s 内向上报家属与急救调度推送结构化事件包（时间、位置、设备状态、最近 10 min 摘要）；网络不可用时切换短信 / 电话兜底。</td><td>应急链路最后一公里不能依赖单一通道。</td><td>T · 端到端演练</td><td>M</td><td class="src">StR-CG-03 / EMR-01 / BR-04</td></tr>
+        <tr><td class="id">FR-09</td><td>系统应支持单批部署不少于 20 台、OTA 分阶段推送与失败自动回滚；故障码定位到子系统 / 模块并给出排查步骤。</td><td>规模化运维与模块化更换是可复制的前提。</td><td>D/T · 批量部署演练</td><td>S</td><td class="src">StR-ADM-02 / EN-02 / EN-03 / BR-07</td></tr>
+        <tr><td class="id">FR-10</td><td>断网状态下系统应保持本地闭环与记录不少于 24 h，链路恢复后自动补传且不产生重复数据。</td><td>家庭弱网是常态，不能用稳定网络做假设。</td><td>T · 断网续传测试</td><td>M</td><td class="src">StR-ADM-03</td></tr>
+        <tr><td class="id">FR-11</td><td>神经与生理数据默认在本地处理与存储；任何上传需单独授权，可随时撤回，撤回后 7 天内完成云端删除。</td><td>默认上传会直接摧毁对神经数据的信任。</td><td>I/A · 数据流审计</td><td>M</td><td class="src">StR-PT-07 / REG-03 / BR-05</td></tr>
+        <tr><td class="id">FR-12</td><td>患者端应提供可直接触及的急停装置；触发后 100 ms 内切断全部辅助与刺激输出，复位必须是明确的人工操作。</td><td>患者保有最终控制权，该权力不能被软件代理。</td><td>T/D · 急停响应测试</td><td>M</td><td class="src">StR-PT-02 / BR-04</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>1.2 性能需求 PR<em style="font-family:var(--mono);font-size:11px;color:var(--muted)">PERFORMANCE</em></h3>
+  <div class="table-wrap">
+    <table>
+      <colgroup><col style="width:9%"><col style="width:38%"><col style="width:22%"><col style="width:13%"><col style="width:9%"><col style="width:9%"></colgroup>
+      <thead><tr><th>编号</th><th>指标与数值</th><th>依据</th><th>验证</th><th>优先级</th><th>来源</th></tr></thead>
+      <tbody>
+        <tr><td class="id">PR-01</td><td>意图产生到辅助输出生效：P50 ≤50 ms，P95 ≤80 ms；云端不进入该路径。</td><td>超过人体动作节律即被感知为迟滞。</td><td>T · 时基打点回放</td><td>M</td><td class="src">StR-PT-03 / BR-02</td></tr>
+        <tr><td class="id">PR-02</td><td>硬件急停回路切断输出 ≤10 ms，不经软件判定；软件异常判定降级 ≤100 ms。</td><td>紧急场景人的反应时间不可靠。</td><td>T · 示波器测量</td><td>M</td><td class="src">StR-PT-02 / BR-04</td></tr>
+        <tr><td class="id">PR-03</td><td>无非意图动作条件下，每小时误输出 ≤1 次；单次输出 ≤配置上限 120%。</td><td>误动作是致伤主因。</td><td>T · 长时间连续测试</td><td>M</td><td class="src">StR-PT-04</td></tr>
+        <tr><td class="id">PR-04</td><td>连续佩戴 8 h 内电极接触皮肤温升 ≤2 ℃、压痕可逆、无持续疼痛。</td><td>皮肤问题是长期佩戴弃用首因。</td><td>T · 热成像与皮肤评估</td><td>M</td><td class="src">StR-PT-01</td></tr>
+        <tr><td class="id">PR-05</td><td>无专业人员在场时，佩戴、开机自检与日常复校全流程 ≤5 min。</td><td>居家场景没有治疗师。</td><td>D · 无引导可用性测试</td><td>M</td><td class="src">StR-PT-05</td></tr>
+        <tr><td class="id">PR-06</td><td>整机功耗 ≤3.5 W；训练日续航 ≥8 h；无线充电 2 h 充至 80%。</td><td>佩戴全天与补能效率。</td><td>T · 功耗与充电曲线</td><td>M</td><td class="src">约束 / IF-07</td></tr>
+        <tr><td class="id">PR-07</td><td>告警送达 ≤5 s；紧急事件包上报 ≤10 s。</td><td>分级告警与急救链路时限。</td><td>T · 端到端计时</td><td>M</td><td class="src">StR-CG-03 / EMR-01</td></tr>
+        <tr><td class="id">PR-08</td><td>训练报告生成 ≤5 min；复评准备 ≤10 min；处方批量下发 ≥20 名患者。</td><td>机构产能与复评效率。</td><td>T · 报告与批量测试</td><td>S</td><td class="src">StR-RT-02 / RT-04 / BR-03</td></tr>
+        <tr><td class="id">PR-09</td><td>本地留存 ≥7 天原始数据、≥90 天指标；操作与安全日志 ≥5 年且不可篡改。</td><td>复盘、审计与监管留痕。</td><td>I · 留存与完整性检查</td><td>M</td><td class="src">StR-REG-04 / 约束</td></tr>
+        <tr><td class="id">PR-10</td><td>端侧单次推理 ≤12 ms；跨设备时基同步误差 ±1 ms。</td><td>预算分配由 50 ms 总指标倒推。</td><td>T · 打点与同步测量</td><td>M</td><td class="src">时延预算 / C-1</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>1.3 接口需求 IR<em style="font-family:var(--mono);font-size:11px;color:var(--muted)">INTERFACE</em></h3>
+  <div class="table-wrap">
+    <table>
+      <colgroup><col style="width:9%"><col style="width:20%"><col style="width:9%"><col style="width:38%"><col style="width:24%"></colgroup>
+      <thead><tr><th>编号</th><th>接口对象</th><th>方向</th><th>交换内容与指标</th><th>协议 / 载体与失效行为</th></tr></thead>
+      <tbody>
+        <tr><td class="id">IR-01</td><td>人体组织（电极—皮肤 / 皮层）</td><td>双向</td><td>μV–mV 神经 / 肌电信号；刺激电流与电荷；采样 250–2000 Hz，链路时延 &lt;5 ms。</td><td>干 / 湿电极、植入阵列；信号丢失即转监护。</td></tr>
+        <tr><td class="id">IR-02</td><td>患者端 App</td><td>双向</td><td>状态、训练任务、记录；指令往返 ≤50 ms。</td><td>BLE 5.x；断连时设备本地继续闭环。</td></tr>
+        <tr><td class="id">IR-03</td><td>照护者端与告警通道</td><td>单向推送</td><td>三级事件与处置提示；≤5 s 送达。</td><td>推送 + 短信 / 电话兜底，不依赖单一通道。</td></tr>
+        <tr><td class="id">IR-04</td><td>云端孪生与训练平台</td><td>双向</td><td>训练批次、脱敏特征、模型包；分钟级批传；断网缓存 ≥7 天。</td><td>TLS 1.3；云端只做训练，不进入闭环。</td></tr>
+        <tr><td class="id">IR-05</td><td>医院 EMR / 康复系统</td><td>双向</td><td>患者主索引、评估报告、处方、随访记录。</td><td>FHIR R4 / HL7 v2；不要求人工转录。</td></tr>
+        <tr><td class="id">IR-06</td><td>急救调度系统</td><td>单向上报</td><td>结构化事件包：时间、位置、设备状态、最近 10 min 摘要；≤10 s。</td><td>HTTPS / 专线网关，格式可被直接解析。</td></tr>
+        <tr><td class="id">IR-07</td><td>充电与供电</td><td>单向输入</td><td>2 h 充至 80%，异物检测。</td><td>Qi 类感应 / USB-C；低电量分级降级。</td></tr>
+        <tr><td class="id">IR-08</td><td>维护终端与产线工具</td><td>双向</td><td>诊断、日志导出、版本包、校准数据。</td><td>USB / 近场，人工触发。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>1.4 设计与合规约束 CN<em style="font-family:var(--mono);font-size:11px;color:var(--muted)">CONSTRAINTS</em></h3>
+  <div class="table-wrap">
+    <table>
+      <colgroup><col style="width:9%"><col style="width:44%"><col style="width:38%"><col style="width:9%"></colgroup>
+      <thead><tr><th>编号</th><th>约束内容</th><th>理由</th><th>来源</th></tr></thead>
+      <tbody>
+        <tr><td class="id">CN-01</td><td>符合 IEC 60601-1、60601-1-2、60601-2-10 的安全与电磁兼容要求，按 ISO 14971 完成风险管理文档。</td><td>注册路径由标准决定，不满足则设计归零。</td><td class="src">StR-REG-01</td></tr>
+        <tr><td class="id">CN-02</td><td>神经数据单独同意、最小必要、境内存储、可删除；操作与安全日志 ≥5 年防篡改。</td><td>敏感个人信息合规门槛。</td><td class="src">StR-REG-02 / 03 / 04</td></tr>
+        <tr><td class="id">CN-03</td><td>闭环控制路径只在端侧；云端训练与仿真不得进入实时控制环。</td><td>时延与安全边界（C-1）。</td><td class="src">C-1 / StR-ALG-01</td></tr>
+        <tr><td class="id">CN-04</td><td>安全子系统独立于主链路供电与时钟，急停不依赖操作系统与主 MCU。</td><td>主链路失效时安全必须仍然有效。</td><td class="src">作业 2 安全约束</td></tr>
+        <tr><td class="id">CN-05</td><td>关键器件双源或可替代，替换后不改变已验证的安全与性能指标；模块 15 min 内可更换。</td><td>供应链与可维护性底线。</td><td class="src">StR-EN-01 / EN-04</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div></section>
+
+<!-- ===== CH.02 初始系统架构 ===== -->
+<section id="s2"><div class="wrap">
+  <div class="sh"><div class="no">SECTION 02</div><h2>初始系统架构<em>INITIAL SYSTEM ARCHITECTURE</em></h2></div>
+  <p class="lead">把 22 条系统需求按功能分配到六个子系统：采集、解码、输出、电源、通信、安全；平台服务（记录报告、处方、运维、数据主权）横向贯穿。云端只作旁路，不进入闭环。</p>
+
+  <h3>2.1 功能架构与需求分配</h3>
+  <figure>
+    <svg viewBox="0 0 1000 620" role="img" aria-label="功能架构图：六个子系统与平台服务">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5A6662"/></marker>
+      </defs>
+      <!-- 平台服务横带 -->
+      <rect x="40" y="30" width="920" height="86" rx="4" fill="#E4EFEC" stroke="#0D5B55" stroke-dasharray="6 4"/>
+      <text x="60" y="58" font-family="JetBrains Mono,monospace" font-size="13" fill="#0D5B55">平台服务层（横向） · PLATFORM SERVICES</text>
+      <g font-family="Noto Sans SC,sans-serif" font-size="13" fill="#15191B">
+        <rect x="60" y="70" width="200" height="34" rx="3" fill="#fff" stroke="#A9CEC7"/><text x="160" y="92" text-anchor="middle">记录与报告 FR-06</text>
+        <rect x="285" y="70" width="200" height="34" rx="3" fill="#fff" stroke="#A9CEC7"/><text x="385" y="92" text-anchor="middle">处方与审计 FR-07</text>
+        <rect x="510" y="70" width="200" height="34" rx="3" fill="#fff" stroke="#A9CEC7"/><text x="610" y="92" text-anchor="middle">远程运维 FR-09</text>
+        <rect x="735" y="70" width="200" height="34" rx="3" fill="#fff" stroke="#A9CEC7"/><text x="835" y="92" text-anchor="middle">数据主权 FR-11</text>
+      </g>
+      <!-- 六个子系统 -->
+      <g font-family="Noto Sans SC,sans-serif" font-size="14" fill="#15191B">
+        <rect x="60" y="170" width="270" height="120" rx="4" fill="#fff" stroke="#23439B" stroke-width="1.5"/>
+        <text x="195" y="200" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="17" font-weight="700">A 采集子系统</text>
+        <text x="195" y="228" text-anchor="middle" font-size="12.5" fill="#3E4644">电极阵列 · 模拟前端 · ADC · 预处理</text>
+        <text x="195" y="252" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#23439B">FR-01 · PR-04 · IR-01</text>
+        <text x="195" y="275" text-anchor="middle" font-size="12" fill="#828A86">阻抗巡检 10 s · 250–2000 Hz</text>
+
+        <rect x="365" y="170" width="270" height="120" rx="4" fill="#fff" stroke="#23439B" stroke-width="1.5"/>
+        <text x="500" y="200" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="17" font-weight="700">B 解码子系统</text>
+        <text x="500" y="228" text-anchor="middle" font-size="12.5" fill="#3E4644">特征提取 · 意图分类 · 置信度 · 校准</text>
+        <text x="500" y="252" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#23439B">FR-02 · PR-10 · IR-04（旁路）</text>
+        <text x="500" y="275" text-anchor="middle" font-size="12" fill="#828A86">端侧推理 ≤12 ms · 不接云端闭环</text>
+
+        <rect x="670" y="170" width="270" height="120" rx="4" fill="#fff" stroke="#23439B" stroke-width="1.5"/>
+        <text x="805" y="200" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="17" font-weight="700">C 输出子系统</text>
+        <text x="805" y="228" text-anchor="middle" font-size="12.5" fill="#3E4644">刺激波形 · 运动驱动 · 触觉反馈</text>
+        <text x="805" y="252" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#23439B">FR-03 · FR-04 · PR-01</text>
+        <text x="805" y="275" text-anchor="middle" font-size="12" fill="#828A86">硬限幅 120% · 反馈辨识 ≥90%</text>
+
+        <rect x="60" y="350" width="270" height="110" rx="4" fill="#fff" stroke="#0D5B55" stroke-width="1.5"/>
+        <text x="195" y="380" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="17" font-weight="700">D 电源子系统</text>
+        <text x="195" y="406" text-anchor="middle" font-size="12.5" fill="#3E4644">无线充电 · 电池管理 · 功耗调度</text>
+        <text x="195" y="432" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#0D5B55">PR-06 · IR-07</text>
+        <text x="195" y="452" text-anchor="middle" font-size="12" fill="#828A86">≤3.5 W · 续航 8 h · 分级降级</text>
+
+        <rect x="365" y="350" width="270" height="110" rx="4" fill="#fff" stroke="#0D5B55" stroke-width="1.5"/>
+        <text x="500" y="380" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="17" font-weight="700">E 通信子系统</text>
+        <text x="500" y="406" text-anchor="middle" font-size="12.5" fill="#3E4644">近场链路 · 加密 · 时间同步 · 断网缓存</text>
+        <text x="500" y="432" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#0D5B55">FR-10 · IR-02~06 · PR-07/09</text>
+        <text x="500" y="452" text-anchor="middle" font-size="12" fill="#828A86">本地闭环 24 h · 补传去重</text>
+
+        <rect x="670" y="350" width="270" height="110" rx="4" fill="#fff" stroke="#9B3226" stroke-width="1.8"/>
+        <text x="805" y="380" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="17" font-weight="700">F 安全子系统</text>
+        <text x="805" y="406" text-anchor="middle" font-size="12.5" fill="#3E4644">异常检测 · 急停回路 · 隐私审计（独立供电时钟）</text>
+        <text x="805" y="432" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#9B3226">FR-05 · FR-08 · FR-12 · PR-02 · SR</text>
+        <text x="805" y="452" text-anchor="middle" font-size="12" fill="#828A86">硬件切断 ≤10 ms · 不依赖主 MCU</text>
+      </g>
+      <!-- 流箭头 -->
+      <g stroke="#5A6662" stroke-width="1.6" fill="none" marker-end="url(#arr)">
+        <path d="M330 230 L363 230"/>
+        <path d="M635 230 L668 230"/>
+        <path d="M805 290 L805 348"/>
+        <path d="M60 230 L40 230 L40 405 L58 405"/>
+      </g>
+      <!-- 云端旁路 -->
+      <rect x="365" y="520" width="270" height="70" rx="4" fill="#F4EBD8" stroke="#8A5A12" stroke-dasharray="6 4"/>
+      <text x="500" y="548" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="15" font-weight="700" fill="#8A5A12">云端训练平台（旁路）</text>
+      <text x="500" y="574" text-anchor="middle" font-size="12.5" fill="#3E4644">离线训练 · 模型包下发 · 不进入实时控制环（CN-03）</text>
+      <path d="M500 462 L500 518" stroke="#8A5A12" stroke-width="1.6" stroke-dasharray="5 4" fill="none" marker-end="url(#arr)"/>
+    </svg>
+    <figcaption>图 2-1　功能架构：A 采集 → B 解码 → C 输出构成主闭环；D 电源、E 通信支撑；F 安全独立旁路；云端仅离线训练。</figcaption>
+  </figure>
+
+  <h3>2.2 需求—子系统分配矩阵（摘要）</h3>
+  <div class="table-wrap">
+    <table>
+      <colgroup><col style="width:18%"><col style="width:42%"><col style="width:40%"></colgroup>
+      <thead><tr><th>子系统</th><th>承接的需求</th><th>主要外部接口 / 模式</th></tr></thead>
+      <tbody>
+        <tr><td class="id">A 采集</td><td>FR-01，PR-04，PR-10（采样段）</td><td>IR-01；M2 标定 / M4 闭环</td></tr>
+        <tr><td class="id">B 解码</td><td>FR-02，PR-10（推理 12 ms）</td><td>IR-04 旁路；M4 闭环 / M5 降级</td></tr>
+        <tr><td class="id">C 输出</td><td>FR-03，FR-04，PR-01（驱动 + 反馈）</td><td>IR-01；M4 闭环 / M6 切断</td></tr>
+        <tr><td class="id">D 电源</td><td>PR-06，CN-05</td><td>IR-07；M5 低电量降级</td></tr>
+        <tr><td class="id">E 通信</td><td>FR-10，PR-07，PR-09，IR-02~06</td><td>IR-02 / 03 / 04 / 05 / 06；断网自治</td></tr>
+        <tr><td class="id">F 安全</td><td>FR-05，FR-08，FR-12，PR-02，SR-01~10</td><td>IR-03 / 06；M5 限幅 / M6 急停</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div></section>
+
+<!-- ===== CH.03 控制框图 ===== -->
+<section id="s3"><div class="wrap">
+  <div class="sh"><div class="no">SECTION 03</div><h2>系统控制框图<em>CLOSED-LOOP CONTROL DIAGRAM</em></h2></div>
+  <p class="lead">主闭环是一个典型的“感知—决策—执行—反馈”负反馈环；安全监视是与主环并行的第二通道，不经过主 MCU，直接作用于输出切断。各段标注的时间预算之和即 PR-01 的 50 ms。</p>
+  <figure>
+    <svg viewBox="0 0 1000 600" role="img" aria-label="闭环控制框图">
+      <defs>
+        <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#3E4644"/></marker>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9B3226"/></marker>
+      </defs>
+      <!-- 人体 -->
+      <rect x="40" y="230" width="110" height="110" rx="55" fill="#E8ECF8" stroke="#23439B" stroke-width="1.5"/>
+      <text x="95" y="278" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="15" font-weight="700">人体</text>
+      <text x="95" y="302" text-anchor="middle" font-size="11.5" fill="#3E4644">意图 · 执行 · 感受</text>
+      <!-- 主环模块 -->
+      <g font-family="Noto Sans SC,sans-serif" font-size="12.5" fill="#15191B">
+        <rect x="200" y="120" width="150" height="64" rx="3" fill="#fff" stroke="#23439B"/><text x="275" y="148" text-anchor="middle">采集 · AFE · ADC</text><text x="275" y="170" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10.5" fill="#23439B">10 ms 采样 + 8 ms 滤波</text>
+        <rect x="400" y="120" width="150" height="64" rx="3" fill="#fff" stroke="#23439B"/><text x="475" y="148" text-anchor="middle">特征提取 + 意图分类</text><text x="475" y="170" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10.5" fill="#23439B">6 ms + 12 ms 端侧</text>
+        <rect x="600" y="120" width="150" height="64" rx="3" fill="#fff" stroke="#23439B"/><text x="675" y="148" text-anchor="middle">决策 · 硬限幅</text><text x="675" y="170" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10.5" fill="#23439B">6 ms 限幅 120%</text>
+        <rect x="800" y="120" width="150" height="64" rx="3" fill="#fff" stroke="#23439B"/><text x="875" y="148" text-anchor="middle">驱动 · 执行器</text><text x="875" y="170" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10.5" fill="#23439B">义肢 / 外骨骼 / 刺激</text>
+      </g>
+      <!-- 反馈 -->
+      <rect x="800" y="300" width="150" height="56" rx="3" fill="#E4EFEC" stroke="#0D5B55"/>
+      <text x="875" y="325" text-anchor="middle" font-size="12.5">触觉 / 听觉反馈</text>
+      <text x="875" y="346" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10.5" fill="#0D5B55">8 ms 反馈再现</text>
+      <!-- 主环连线 -->
+      <g stroke="#3E4644" stroke-width="1.6" fill="none" marker-end="url(#a2)">
+        <path d="M150 250 L275 184"/>
+        <path d="M350 152 L398 152"/>
+        <path d="M550 152 L598 152"/>
+        <path d="M750 152 L798 152"/>
+        <path d="M875 184 L875 298"/>
+        <path d="M800 328 L150 328 L150 300"/>
+        <path d="M875 184 L920 250 L152 250" stroke-dasharray="0"/>
+      </g>
+      <text x="500" y="225" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#828A86">端到端 P50 ≤50 ms · P95 ≤80 ms（PR-01）</text>
+      <!-- 安全通道 -->
+      <rect x="200" y="450" width="280" height="70" rx="3" fill="#F4E3E0" stroke="#9B3226"/>
+      <text x="340" y="480" text-anchor="middle" font-size="13" font-weight="700" fill="#9B3226">安全监视（独立 MCU + 看门狗）</text>
+      <text x="340" y="504" text-anchor="middle" font-size="11.5" fill="#3E4644">过流 · 低置信度 · 死机 · 阻抗异常 → 硬件判定 ≤100 ms</text>
+      <rect x="560" y="450" width="200" height="70" rx="3" fill="#F4E3E0" stroke="#9B3226" stroke-width="1.8"/>
+      <text x="660" y="480" text-anchor="middle" font-size="13" font-weight="700" fill="#9B3226">硬件急停回路</text>
+      <text x="660" y="504" text-anchor="middle" font-size="11.5" fill="#3E4644">常闭继电器切断输出 ≤10 ms</text>
+      <rect x="830" y="450" width="120" height="70" rx="3" fill="#fff" stroke="#9B3226"/>
+      <text x="890" y="478" text-anchor="middle" font-size="12.5">急停按钮</text>
+      <text x="890" y="500" text-anchor="middle" font-size="11" fill="#828A86">人工 · 常闭回路</text>
+      <g stroke="#9B3226" stroke-width="1.8" fill="none" marker-end="url(#ar)">
+        <path d="M480 485 L558 485"/>
+        <path d="M760 485 L828 485"/>
+        <path d="M660 450 L660 200 L800 152"/>
+      </g>
+      <text x="340" y="556" font-family="JetBrains Mono,monospace" font-size="11" fill="#9B3226">安全通道独立供电与时钟（CN-04），主 MCU 死机不影响切断。</text>
+    </svg>
+    <figcaption>图 3-1　主闭环（上）与并行安全通道（下）。安全回路与主环物理分离，是本架构区别于普通辅助设备的关键。</figcaption>
+  </figure>
+  <p class="note">模式与框图对应：M3 监护基态（主环断开，仅采集）→ M4 完整闭环 → M5 限幅降级 → M6 急停安全态；M0 自检、M2 标定、M7 维护为非工作态。</p>
+</div></section>
+
+<!-- ===== CH.04 安全 ===== -->
+<section id="s4"><div class="wrap">
+  <div class="sh"><div class="no">SECTION 04</div><h2>安全需求与安全架构<em>SAFETY REQUIREMENTS &amp; ARCHITECTURE</em></h2></div>
+
+  <h3>4.1 危险源分析 HAZID / FMEA 摘要</h3>
+  <div class="table-wrap">
+    <table>
+      <colgroup><col style="width:8%"><col style="width:20%"><col style="width:22%"><col style="width:18%"><col style="width:14%"><col style="width:18%"></colgroup>
+      <thead><tr><th>编号</th><th>危险源 / 诱因</th><th>可能后果</th><th>控制措施</th><th>风险</th><th>安全需求</th></tr></thead>
+      <tbody>
+        <tr><td class="id">HZ-01</td><td>刺激过流 / 电荷超限（电路漂移）</td><td>组织灼伤、疼痛</td><td>硬件限流 + 独立检测，超限即切断</td><td>高</td><td class="src">SR-02 / SR-04</td></tr>
+        <tr><td class="id">HZ-02</td><td>解码错误导致误动作输出</td><td>碰撞、跌倒、误伤</td><td>硬限幅 120% + 低置信度降级</td><td>高</td><td class="src">SR-02 / FR-02 / FR-03</td></tr>
+        <tr><td class="id">HZ-03</td><td>电极脱落 / 阻抗漂移，信号失真</td><td>误判意图、失控输出</td><td>10 s 阻抗巡检，超限转 M3 监护</td><td>中</td><td class="src">FR-01 / SR-05</td></tr>
+        <tr><td class="id">HZ-04</td><td>主控死机 / 任务阻塞</td><td>输出悬空或持续</td><td>外部看门狗 500 ms 复位并切断</td><td>高</td><td class="src">SR-03</td></tr>
+        <tr><td class="id">HZ-05</td><td>低电量 / 突然断电</td><td>训练中断、突然失去支撑</td><td>分级限幅 → 有序关机，禁止直接停机</td><td>中</td><td class="src">SR-06 / PR-06</td></tr>
+        <tr><td class="id">HZ-06</td><td>无线链路中断，告警不可达</td><td>夜间异常无人知晓</td><td>本地闭环 + 短信 / 电话兜底通道</td><td>中</td><td class="src">FR-08 / IR-03</td></tr>
+        <tr><td class="id">HZ-07</td><td>越权访问 / 原始神经数据外泄</td><td>隐私损害、信任崩塌</td><td>默认本地处理、最小权限、审计留痕</td><td>高</td><td class="src">SR-09 / FR-11</td></tr>
+        <tr><td class="id">HZ-08</td><td>急停按钮或回路失效</td><td>无法终止危险输出</td><td>常闭硬件回路 + 人工复位，独立于软件</td><td>高</td><td class="src">SR-01 / SR-07</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>4.2 安全需求 SR</h3>
+  <div class="table-wrap">
+    <table>
+      <colgroup><col style="width:9%"><col style="width:46%"><col style="width:22%"><col style="width:9%"><col style="width:14%"></colgroup>
+      <thead><tr><th>编号</th><th>需求陈述</th><th>验证</th><th>优先级</th><th>来源</th></tr></thead>
+      <tbody>
+        <tr><td class="id">SR-01</td><td>急停回路为硬件常闭回路，独立于操作系统与主 MCU；触发后 ≤10 ms 切断全部输出。</td><td>T · 示波器 + 故障注入</td><td>M</td><td class="src">StR-PT-02 / CN-04</td></tr>
+        <tr><td class="id">SR-02</td><td>输出端设硬件限幅，软件失效时输出仍不得超过配置上限 120%。</td><td>T · 过量指令注入</td><td>M</td><td class="src">StR-PT-04</td></tr>
+        <tr><td class="id">SR-03</td><td>外部看门狗监视主控，死机或阻塞 500 ms 内复位并切断输出。</td><td>T · 死机注入</td><td>M</td><td class="src">故障表 / BR-04</td></tr>
+        <tr><td class="id">SR-04</td><td>刺激链路硬件限流与独立电流检测，过流 / 电荷超限立即切断并进入 M6。</td><td>T · 过流试验</td><td>M</td><td class="src">StR-REG-01 / HZ-01</td></tr>
+        <tr><td class="id">SR-05</td><td>任何单点失效都退到输出更少的状态（失效即安全 fail-safe）。</td><td>A/I · FMEA 复核</td><td>M</td><td class="src">BR-04</td></tr>
+        <tr><td class="id">SR-06</td><td>降级分级：限幅 → 仅监护 → 急停，禁止无过渡一刀切停机。</td><td>T · 降级链测试</td><td>M</td><td class="src">C-3 / StR-PT-04</td></tr>
+        <tr><td class="id">SR-07</td><td>急停后必须人工复位，复位后强制重跑自检，不复用故障前参数。</td><td>D · 复位流程演示</td><td>M</td><td class="src">M6→M1 迁移</td></tr>
+        <tr><td class="id">SR-08</td><td>安全子系统独立供电与时钟，主链路断电时安全仍有效。</td><td>I · 电源隔离检查</td><td>M</td><td class="src">CN-04</td></tr>
+        <tr><td class="id">SR-09</td><td>使用前取得书面知情同意，可随时无代价退出；神经数据单独同意、最小必要、境内存储、可删除。</td><td>I · 流程与合规审计</td><td>M</td><td class="src">StR-REG-02 / 03</td></tr>
+        <tr><td class="id">SR-10</td><td>操作、变更、访问与安全事件日志 ≥5 年、防篡改，支持不良事件复盘。</td><td>I · 完整性检查</td><td>M</td><td class="src">StR-REG-04</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>4.3 安全架构（两层隔离）</h3>
+  <figure>
+    <svg viewBox="0 0 1000 420" role="img" aria-label="安全架构图：主链路与安全链路两层隔离">
+      <defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9B3226"/></marker></defs>
+      <rect x="40" y="40" width="920" height="150" rx="4" fill="#F1F2EE" stroke="#C6CBC4"/>
+      <text x="60" y="70" font-family="JetBrains Mono,monospace" font-size="13" fill="#3E4644">主链路 · APPLICATION PATH（可被看门狗监视）</text>
+      <g font-family="Noto Sans SC,sans-serif" font-size="12.5">
+        <rect x="70" y="95" width="190" height="56" rx="3" fill="#fff" stroke="#3E4644"/><text x="165" y="118" text-anchor="middle">应用 MCU（解码 / 决策）</text><text x="165" y="140" text-anchor="middle" font-size="11" fill="#828A86">软件可升级、可回滚</text>
+        <rect x="330" y="95" width="190" height="56" rx="3" fill="#fff" stroke="#3E4644"/><text x="425" y="118" text-anchor="middle">驱动与限幅（软件部分）</text><text x="425" y="140" text-anchor="middle" font-size="11" fill="#828A86">受硬件限幅约束</text>
+        <rect x="590" y="95" width="190" height="56" rx="3" fill="#fff" stroke="#3E4644"/><text x="685" y="118" text-anchor="middle">执行器（义肢 / 刺激）</text><text x="685" y="140" text-anchor="middle" font-size="11" fill="#828A86">输出经常闭继电器</text>
+      </g>
+      <rect x="40" y="230" width="920" height="150" rx="4" fill="#F4E3E0" stroke="#9B3226"/>
+      <text x="60" y="260" font-family="JetBrains Mono,monospace" font-size="13" fill="#9B3226">安全链路 · SAFETY PATH（独立供电 / 独立时钟 / 不依赖软件）</text>
+      <g font-family="Noto Sans SC,sans-serif" font-size="12.5">
+        <rect x="70" y="285" width="190" height="56" rx="3" fill="#fff" stroke="#9B3226"/><text x="165" y="308" text-anchor="middle">安全 MCU + 看门狗</text><text x="165" y="330" text-anchor="middle" font-size="11" fill="#828A86">500 ms 监视主 MCU</text>
+        <rect x="330" y="285" width="190" height="56" rx="3" fill="#fff" stroke="#9B3226"/><text x="425" y="308" text-anchor="middle">硬件限流 / 急停回路</text><text x="425" y="330" text-anchor="middle" font-size="11" fill="#828A86">常闭继电器 ≤10 ms</text>
+        <rect x="590" y="285" width="190" height="56" rx="3" fill="#fff" stroke="#9B3226"/><text x="685" y="308" text-anchor="middle">独立电源 / 时钟</text><text x="685" y="330" text-anchor="middle" font-size="11" fill="#828A86">主链路断电仍有效</text>
+      </g>
+      <g stroke="#9B3226" stroke-width="1.8" fill="none" marker-end="url(#a3)">
+        <path d="M425 285 L425 153"/>
+        <path d="M685 285 L685 153"/>
+      </g>
+      <text x="500" y="405" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11.5" fill="#9B3226">设计原则：安全功能的可用性不能由被监视对象自己证明。</text>
+    </svg>
+    <figcaption>图 4-1　两层隔离：主链路负责功能，安全链路负责在主链路失效时切断；两者供电、时钟、判断权都分离。</figcaption>
+  </figure>
+</div></section>
+
+<!-- ===== CH.05 追踪 ===== -->
+<section id="s5"><div class="wrap">
+  <div class="sh"><div class="no">SECTION 05</div><h2>追踪、遗留问题与自检<em>TRACEABILITY &amp; REVIEW</em></h2></div>
+  <h3>5.1 需求追踪摘要</h3>
+  <p class="lead">每条 SyR 都向上挂接 StR/BR，向下分配到子系统；作业 2 的 12 条 BR 在本表全部有落点，无悬空业务需求。</p>
+  <div class="table-wrap">
+    <table>
+      <colgroup><col style="width:14%"><col style="width:36%"><col style="width:26%"><col style="width:24%"></colgroup>
+      <thead><tr><th>业务需求</th><th>承接的系统需求</th><th>分配子系统</th><th>安全落点</th></tr></thead>
+      <tbody>
+        <tr><td class="id">BR-01 连续照护闭环</td><td>FR-06 / FR-07，PR-08</td><td>平台服务 / E 通信</td><td>SR-10 审计</td></tr>
+        <tr><td class="id">BR-02 意图驱动双向辅助</td><td>FR-02 / FR-03 / FR-04，PR-01</td><td>B 解码 / C 输出</td><td>SR-02 限幅</td></tr>
+        <tr><td class="id">BR-03 连续客观评估</td><td>FR-06，PR-08</td><td>平台服务</td><td>—</td></tr>
+        <tr><td class="id">BR-04 失效即安全</td><td>FR-08 / FR-12，PR-02，SR-01~08</td><td>F 安全</td><td>本页第 4 章</td></tr>
+        <tr><td class="id">BR-05 数据主权与合规</td><td>FR-11，CN-02，SR-09 / SR-10</td><td>E 通信 / 平台服务</td><td>SR-09</td></tr>
+        <tr><td class="id">BR-06 三级连续照护</td><td>FR-10，IR-05</td><td>E 通信</td><td>—</td></tr>
+        <tr><td class="id">BR-07 规模化低成本运维</td><td>FR-09，PR-06，CN-05</td><td>平台服务 / D 电源</td><td>—</td></tr>
+        <tr><td class="id">BR-08 开放接口模块化</td><td>IR-01~08，CN-05</td><td>全部子系统</td><td>—</td></tr>
+        <tr><td class="id">BR-09 受控数据回流</td><td>FR-11，IR-04，CN-03</td><td>B 解码 / 平台服务</td><td>SR-10</td></tr>
+        <tr><td class="id">BR-10 疗效成本证据</td><td>FR-06，PR-08</td><td>平台服务</td><td>—</td></tr>
+        <tr><td class="id">BR-11 长期可演进</td><td>CN-03 / CN-05</td><td>架构预留</td><td>新增不动安全链路</td></tr>
+        <tr><td class="id">BR-12 全周期服务培训</td><td>FR-09，PR-05</td><td>平台服务</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5.2 遗留问题（进入设计阶段）</h3>
+  <ul class="tight">
+    <li><b>精度—时延交换（C-1）：</b>12 ms 推理预算对应的模型规模与窗口长度，需在原型上实测后回填 PR-10，不得默认放宽 50 ms。</li>
+    <li><b>刺激电荷定量：</b>SR-04 的过流阈值与电荷上限需按电极阵列规格与 IEC 60601-2-10 给出具体 μC/cm² 数值。</li>
+    <li><b>急救格式：</b>IR-06 事件包需与当地急救调度系统完成一次联调，格式字段待确认。</li>
+    <li><b>分级配置（C-4）：</b>家用 / 医疗两档配置的 BOM 与限幅差异，留待详细设计。</li>
+  </ul>
+
+  <h3>5.3 质量自检</h3>
+  <ul class="tight">
+    <li>每条需求单一陈述、可验证、无“等 / 适当”模糊词；优先级与验证方法齐全。</li>
+    <li>22 条 SyR 全部有 StR 或 BR 来源，无凭空新增。</li>
+    <li>性能指标均可测量（毫秒、百分比、次数 / 小时、温度）。</li>
+    <li>安全需求与主功能需求分离，安全架构独立供电与时钟。</li>
+    <li>云端不进入闭环；断网、死机、急停三类场景均有明确降级 / 切断路径。</li>
+  </ul>
+</div></section>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <span>复杂系统工程 · 小组作业 3 · SyRS / 初始架构 / 控制框图 / 安全架构 · 2026-11-25</span>
+    <span><a href="index.html">主页</a> · <a href="homework1.html">作业一</a> · <a href="homework2.html">作业二</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
