@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人机混合神经闭环系统 · 四次作业精简版｜复杂系统工程</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%2316181A'/%3E%3Cpath d='M14 20h36M14 32h36M14 44h20' stroke='%23E8EDEA' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;700&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#FBFBF9;--ink:#15181A;--ink2:#3D4442;--muted:#7E8683;
+  --line:#E4E6E2;--line2:#C6CBC4;
+  --c1:#23439B;--c2:#0D5B55;--c3:#8A5A12;--c4:#8E3B2F;
+  --serif:"Noto Serif SC",Songti SC,SimSun,serif;
+  --sans:"Noto Sans SC",system-ui,-apple-system,"Microsoft YaHei",sans-serif;
+  --mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:980px;margin:0 auto;padding:0 28px}
+
+header{padding:40px 0 26px;border-bottom:2px solid var(--ink)}
+.kicker{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--muted);margin-bottom:20px}
+h1{font-family:var(--serif);font-size:clamp(24px,3.6vw,34px);font-weight:700;line-height:1.3;margin:0}
+h1 span{display:block;font-size:.55em;font-weight:500;color:var(--ink2);margin-top:8px;letter-spacing:.02em}
+.sum{margin:16px 0 0;color:var(--ink2);font-weight:300;max-width:52em;font-size:13.5px}
+.nums{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:20px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted)}
+.nums b{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--ink);margin-right:5px}
+
+section{padding:26px 0 4px;border-top:1px solid var(--line);margin-top:26px}
+section:first-of-type{border-top:none}
+.head{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+.head .n{font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:0;line-height:1}
+.head .n.a{color:var(--c1)}.head .n.b{color:var(--c2)}.head .n.c{color:var(--c3)}.head .n.d{color:var(--c4)}
+.head h2{font-family:var(--serif);font-size:18px;font-weight:700;margin:0}
+.head .en{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted)}
+.head .more{margin-left:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);border-bottom:1px solid var(--line2);white-space:nowrap}
+.head .more:hover{color:var(--ink);border-bottom-color:var(--ink)}
+
+p.take{margin:0 0 12px;color:var(--ink2);font-weight:300;font-size:13.5px}
+p.take b{color:var(--ink);font-weight:500}
+
+table{width:100%;border-collapse:collapse;font-size:12.5px;table-layout:fixed}
+th{text-align:left;font-weight:500;font-size:11px;color:var(--muted);letter-spacing:.05em;padding:7px 10px;border-bottom:1px solid var(--line2);background:#F1F2EE}
+td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink2)}
+td.k{font-family:var(--mono);font-size:11px;color:var(--c2);white-space:nowrap}
+td.k.blue{color:var(--c1)}td.k.amber{color:var(--c3)}td.k.red{color:var(--c4)}
+tr:hover td{background:#FAFAF7}
+
+ul.tight{margin:6px 0 0;padding-left:18px}
+ul.tight li{padding:2px 0;font-size:13px;color:var(--ink2)}
+ul.tight li b{color:var(--ink);font-weight:500}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;padding:2px 8px;border:1px solid var(--line2);color:var(--ink2);background:#fff}
+.chip.hi{border-color:#D9B3AC;color:var(--c4);background:#F7E9E6}
+
+footer{margin-top:34px;border-top:2px solid var(--ink);padding:16px 0 50px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+
+@media(max-width:820px){
+  .wrap{padding:0 18px}
+  .head{flex-wrap:wrap;gap:8px}
+  .head .more{margin-left:0}
+  table{font-size:12px}
+}
+@media print{body{background:#fff;font-size:9.5pt}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker"><span>COMPLEX SYSTEMS ENGINEERING / 精简版</span><span>小组作业 1–4 合订</span></div>
+    <h1>机器增强的人机混合神经系统
+      <span>四次作业的浓缩版：每部分只留结论、关键数字与承接关系</span>
+    </h1>
+    <p class="sum">一份可通读的提纲。原版四份作业分别为层级图谱、概念定义、SyRS 与架构、场景与运行条件；本页把每份压到一屏，保留可检索的编号与判定阈值，删去过程叙述与示例展开。</p>
+    <div class="nums">
+      <span><b>62</b>层级条目</span><span><b>12</b>业务需求</span><span><b>34</b>相关方需求</span><span><b>22</b>系统需求</span><span><b>4</b>场景层</span><span><b>12</b>风险场景</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <div class="head"><span class="n a">01</span><h2>六层层级图谱</h2><span class="en">HIERARCHY</span><a class="more" href="homework1.html">原版 →</a></div>
+  <p class="take">系统对象锁定在第四层：<b>人机混合神经闭环系统</b>。往上是任务与体系（为什么做），往下是系统、子系统与模块（怎么实现），信号在人体与机器之间双向闭合。</p>
+  <table>
+    <colgroup><col style="width:8%"><col style="width:24%"><col style="width:10%"><col style="width:30%"><col style="width:28%"></colgroup>
+    <thead><tr><th>层</th><th>分解对象</th><th>数量</th><th>代表性条目</th><th>层间承接</th></tr></thead>
+    <tbody>
+      <tr><td class="k blue">L1</td><td>任务</td><td>6</td><td>感知代偿、运动辅助、双向闭环、状态监护、安全伦理、长期演进</td><td>定义价值与场景，向 L2 分配</td></tr>
+      <tr><td class="k blue">L2</td><td>体系</td><td>6</td><td>把任务转为整机组合与使用场景</td><td>组织整机配套，向 L3 下达集成要求</td></tr>
+      <tr><td class="k blue">L3</td><td>整机</td><td>8</td><td>手环腕带、头环脑电帽、AR 眼镜、耳后听觉处理器、义肢外骨骼、植入接口体、边缘主机、床旁终端</td><td>每台整机承载 L4 的一个或多个系统</td></tr>
+      <tr><td class="k blue">L4</td><td><b>系统（分析对象）</b></td><td>6</td><td>采集、解码、输出、电源、通信、安全</td><td>接口与 50 ms 闭环在此定义</td></tr>
+      <tr><td class="k blue">L5</td><td>子系统</td><td>18</td><td>电极与 AFE、意图解码、驱动控制、电池与 BMS、无线链路、安全监控</td><td>功能分配的落点</td></tr>
+      <tr><td class="k blue">L6</td><td>模块</td><td>18</td><td>可更换件、固件单元、算法组件</td><td>维修与演进的最小单元</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <div class="head"><span class="n b">02</span><h2>概念定义：BRS 与 StRS</h2><span class="en">CONCEPT</span><a class="more" href="homework2.html">原版 →</a></div>
+  <p class="take">回答两个问题：<b>为什么值得做</b>（12 条业务需求），<b>做到什么程度算合格</b>（34 条相关方需求，分 10 类）。运营概念覆盖 4 类环境、8 个角色、6 个场景与 8 个接口。</p>
+  <table>
+    <colgroup><col style="width:16%"><col style="width:10%"><col style="width:40%"><col style="width:34%"></colgroup>
+    <thead><tr><th>需求族</th><th>条数</th><th>关键条目</th><th>判定阈值（摘）</th></tr></thead>
+    <tbody>
+      <tr><td class="k">PT 性能</td><td>8</td><td>闭环时延、急停、温升、自立性</td><td>P50 ≤50 ms / P95 ≤80 ms；急停 ≤100 ms；8 h 温升 ≤2 ℃；准备 ≤5 min</td></tr>
+      <tr><td class="k">CG 认知与可用</td><td>4</td><td>误报控制、事件包、界面可读</td><td>夜间误报 ≤1 次；事件包 ≤10 s；反馈辨识 ≥90%</td></tr>
+      <tr><td class="k">RT 可靠</td><td>5</td><td>降级、断网自治、复位</td><td>断网 ≥24 h 可用；单点失效不产生危险输出</td></tr>
+      <tr><td class="k">MD 维护</td><td>3</td><td>模块可换、固件回滚</td><td>现场更换 ≤10 min；升级失败自动回滚</td></tr>
+      <tr><td class="k">ADM 管理</td><td>3</td><td>账户、权限、审计</td><td>处方变更留痕；三级权限分离</td></tr>
+      <tr><td class="k">EN 环境</td><td>4</td><td>医院 / 社区 / 家庭 / 户外</td><td>四类环境各有明确配置档位</td></tr>
+      <tr><td class="k">REG 合规</td><td>4</td><td>器械、隐私、数据境内存储</td><td>原始神经数据默认不出端</td></tr>
+      <tr><td class="k">PAY / EMR / ALG</td><td>1 / 1 / 1</td><td>支付对接、病历回写、算法可解释</td><td>报告可归档；解码结果给出置信度</td></tr>
+    </tbody>
+  </table>
+  <div class="chips">
+    <span class="chip">ENV-1 医院</span><span class="chip">ENV-2 社区</span><span class="chip">ENV-3 家庭</span><span class="chip">ENV-4 户外</span>
+    <span class="chip">S1–S6 场景</span><span class="chip">IF-01–IF-08 接口</span><span class="chip">M0–M7 模式</span>
+    <span class="chip">BR-01–BR-12</span><span class="chip">C-1–C-5 冲突</span><span class="chip">A1–A8 假设</span>
+  </div>
+  <p class="take" style="margin-top:12px"><b>12 条业务需求的主题：</b>连续照护闭环、意图驱动双向辅助、连续客观评估、失效即安全、数据主权合规、三级连续照护、规模化低成本运维、开放接口模块化、受控数据回流、疗效成本证据、长期可演进、全周期服务培训。</p>
+</section>
+
+<section>
+  <div class="head"><span class="n c">03</span><h2>系统需求规格书与初始架构</h2><span class="en">SyRS</span><a class="more" href="homework3.html">原版 →</a></div>
+  <p class="take">把 BR / StR 落成 <b>22 条系统需求</b>（12 功能 + 10 性能），另有 8 条接口需求与 5 条约束；六子系统架构 + 50 ms 闭环 + 10 条安全需求。</p>
+  <table>
+    <colgroup><col style="width:22%"><col style="width:40%"><col style="width:38%"></colgroup>
+    <thead><tr><th>子系统</th><th>职责</th><th>关键接口</th></tr></thead>
+    <tbody>
+      <tr><td class="k amber">A 采集</td><td>电极、AFE、阻抗监测、运动伪迹抑制</td><td>向 B 输出采样流；阻抗超标信号给 F</td></tr>
+      <tr><td class="k amber">B 解码</td><td>特征提取、意图分类、置信度评估</td><td>向 C 下达辅助指令；置信度给 F</td></tr>
+      <tr><td class="k amber">C 输出</td><td>驱动控制、力矩限幅、反馈呈现</td><td>接收 B 指令；受 F 硬件门控</td></tr>
+      <tr><td class="k amber">D 电源</td><td>电池、BMS、电量分级策略</td><td>低电量信号给 C 与 F</td></tr>
+      <tr><td class="k amber">E 通信</td><td>BLE / Wi-Fi / 4G、缓存补传</td><td>向云端同步；断网本地闭环</td></tr>
+      <tr><td class="k amber">F 安全</td><td>急停、看门狗、越限判定、事件记录</td><td>独立硬件通道，可切断 C 的动力回路</td></tr>
+    </tbody>
+  </table>
+  <div class="chips" style="margin-top:12px">
+    <span class="chip">FR-01–12</span><span class="chip">PR-01–10</span><span class="chip">IR-01–08</span><span class="chip">CN-01–05</span>
+    <span class="chip hi">SR-01–10 安全需求</span><span class="chip hi">HZ-01–08 危险源</span>
+    <span class="chip">50 ms 预算：采样 10 / 滤波 8 / 特征 6 / 推理 12 / 驱动 6 / 反馈 8</span>
+  </div>
+  <p class="take" style="margin-top:12px"><b>安全设计的骨架是两层隔离：</b>软件层（越限判定 + 限幅 + 分级告警）与硬件层（独立急停回路 + 看门狗），后者不依赖前者的正确性。</p>
+</section>
+
+<section>
+  <div class="head"><span class="n d">04</span><h2>场景分层与运行设计条件</h2><span class="en">SCENARIO</span><a class="more" href="homework4.html">原版 →</a></div>
+  <p class="take">把环境切成四层，每层十类要素（共 40 项）；把"正常"定成可判定范围，再用居家独立训练这个典型场景检验安全设计。</p>
+  <table>
+    <colgroup><col style="width:18%"><col style="width:14%"><col style="width:68%"></colgroup>
+    <thead><tr><th>场景层 · 尺度</th><th>决策主体</th><th>本层要素要点</th></tr></thead>
+    <tbody>
+      <tr><td class="k red">SL-1 环境<br><span style="color:#7E8683">年—月</span></td><td>机构 / 监管</td><td>温湿度 10–30 ℃、湿度 20–80%、噪声 ≤70 dB、供电与网络覆盖、器械与支付政策</td></tr>
+      <tr><td class="k red">SL-2 使命<br><span style="color:#7E8683">周—月</span></td><td>医院 / 社区</td><td>三级连续照护流程、处方权归属、周训练 ≥3 次、4 周复评节点</td></tr>
+      <tr><td class="k red">SL-3 运行<br><span style="color:#7E8683">小时</span></td><td>患者 / 照护者</td><td>一次会期 ≤60 min、单日佩戴 ≤8 h、八状态 M0–M7 与迁移、降级与急停处置</td></tr>
+      <tr><td class="k red">SL-4 交互<br><span style="color:#7E8683">毫秒—秒</span></td><td>系统控制器</td><td>四类控制动作（提供辅助 / 切断 / 降级 / 告警）、硬限幅 120%、误输出 ≤1 次/h</td></tr>
+    </tbody>
+  </table>
+  <p class="take" style="margin-top:12px"><b>典型场景 S2（居家晚间独立训练）：</b>T0 自检 → T1 佩戴（≤2 min）→ T2 标定 → T3 加载处方 → T4–T6 三组训练（渐入 300 ms、撤力斜坡）→ T7 低置信度降为限幅 → T8 摘要 ≤5 min 生成、弱网缓存 → T9 卸下记录。<b>关键判据：准备 ≤5 min、摘要在本地闭环、患者是唯一能按急停的人。</b></p>
+  <p class="take">经 STPA 得 <b>12 个风险场景</b>（5 项高风险：量级误判、超时仍输出、急停回路失效、长时间低置信度仍全量输出、告警错送达），均指向同一失效模式——<b>该降级时保持了沉默</b>；据此补一条原则：降级必须可见、可感知、可取消。</p>
+</section>
+
+<footer>
+  <span>复杂系统工程 · 作业 1–4 精简版 · 2026-11-26</span>
+  <span><a href="homework1.html">01</a> · <a href="homework2.html">02</a> · <a href="homework3.html">03</a> · <a href="homework4.html">04</a> · <a href="index.html">主页</a></span>
+</footer>
+</div>
+
+</body>
+</html>
