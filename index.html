@@ -17,6 +17,7 @@
   --c1:#23439B;
   --c2:#0D5B55;
   --amber:#8A5A12;
+  --c4:#8E3B2F;
   --serif:"Noto Serif SC",Songti SC,SimSun,serif;
   --sans:"Noto Sans SC",system-ui,-apple-system,"Microsoft YaHei",sans-serif;
   --mono:"JetBrains Mono","SFMono-Regular",Consolas,"Courier New",monospace;
@@ -42,28 +43,31 @@ h1 .thin{display:block;font-weight:500;font-size:.62em;color:var(--ink2);margin-
 .meta{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px 24px;font-family:var(--mono);
   font-size:11px;letter-spacing:.08em;color:var(--muted)}
 
-/* ===== 双入口 ===== */
+/* ===== 四入口 ===== */
 .entries{padding:20px 0 10px;border-top:2px solid var(--ink);display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr))}
-.entry{padding:44px 26px 46px 0;position:relative}
-.entry + .entry{border-left:1px solid var(--line2);padding:44px 0 46px 26px}
+  grid-template-columns:repeat(2,minmax(0,1fr))}
+.entry{padding:40px 34px 44px 0;position:relative}
+.entry:nth-child(even){border-left:1px solid var(--line2);padding:40px 0 44px 34px}
+.entry:nth-child(n+3){border-top:1px solid var(--line2)}
 .tag{display:flex;align-items:baseline;gap:12px;font-family:var(--mono);
   font-size:11px;letter-spacing:.14em;color:var(--muted)}
 .tag .n{font-family:var(--serif);font-size:34px;font-weight:500;letter-spacing:0;line-height:1}
 .tag.a .n{color:var(--c1)}
 .tag.b .n{color:var(--c2)}
 .tag.c .n{color:var(--amber)}
-.entry h2{font-family:var(--serif);font-weight:700;font-size:clamp(23px,2.6vw,31px);
-  line-height:1.42;margin:18px 0 0;letter-spacing:.01em}
-.entry p{margin:14px 0 0;color:var(--ink2);font-size:13.5px;font-weight:300;max-width:26em}
-.facts{margin:22px 0 0;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--muted);
+.tag.d .n{color:var(--c4)}
+.entry h2{font-family:var(--serif);font-weight:700;font-size:clamp(21px,2.2vw,27px);
+  line-height:1.42;margin:16px 0 0;letter-spacing:.01em}
+.entry p{margin:13px 0 0;color:var(--ink2);font-size:13.5px;font-weight:300;max-width:26em}
+.facts{margin:20px 0 0;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--muted);
   display:flex;flex-wrap:wrap;gap:6px 14px}
 .facts span::before{content:"";display:inline-block;width:5px;height:5px;margin-right:7px;
   vertical-align:1px;background:var(--line2)}
 .facts.a span::before{background:#A9B7DC}
 .facts.b span::before{background:#A6C8C2}
 .facts.c span::before{background:#D9B97E}
-.go{display:inline-flex;align-items:center;gap:10px;margin-top:30px;
+.facts.d span::before{background:#CDA6A0}
+.go{display:inline-flex;align-items:center;gap:10px;margin-top:26px;
   font-size:13.5px;color:var(--ink);padding-bottom:3px;border-bottom:1px solid var(--ink);
   transition:gap .18s ease,color .18s ease}
 .go .arrow{font-family:var(--mono);font-size:12px}
@@ -71,6 +75,7 @@ h1 .thin{display:block;font-weight:500;font-size:.62em;color:var(--ink2);margin-
 .entry a.go.a:hover{color:var(--c1);border-bottom-color:var(--c1)}
 .entry a.go.b:hover{color:var(--c2);border-bottom-color:var(--c2)}
 .entry a.go.c:hover{color:var(--amber);border-bottom-color:var(--amber)}
+.entry a.go.d:hover{color:var(--c4);border-bottom-color:var(--c4)}
 
 /* ===== 说明 ===== */
 .about{padding:44px 0 8px;border-top:2px solid var(--ink);display:grid;
@@ -91,7 +96,8 @@ footer{margin-top:46px;border-top:1px solid var(--line2);padding:18px 0 60px;
   header{padding:44px 0 34px}
   .entries{grid-template-columns:minmax(0,1fr)}
   .entry{padding:30px 0 32px}
-  .entry + .entry{border-left:none;border-top:1px solid var(--line2);padding:30px 0 32px}
+  .entry:nth-child(even){border-left:none;padding:30px 0 32px}
+  .entry:nth-child(n+2){border-top:1px solid var(--line2)}
   .about{grid-template-columns:minmax(0,1fr);gap:10px}
   .entry p{max-width:none}
 }
@@ -111,12 +117,12 @@ footer{margin-top:46px;border-top:1px solid var(--line2);padding:18px 0 60px;
       <span>小组作业 · 2026 秋</span>
     </div>
     <h1>机器增强的人机混合神经系统
-      <span class="thin">三次小组作业的在线版本</span>
+      <span class="thin">四次小组作业的在线版本</span>
     </h1>
-    <p class="sub">先看系统由哪几个层级构成、信号如何在人体与机器之间闭合；再看谁需要它、需要到什么程度；最后把需求落成系统规格、初始架构与安全设计。三个页面共用同一套系统对象与编号。</p>
+    <p class="sub">先看系统由哪几个层级构成、信号如何在人体与机器之间闭合；再看谁需要它、需要到什么程度；然后把需求落成系统规格、初始架构与安全设计；最后把它放回真实环境，分层梳理场景并定出正常运行的条件。</p>
     <div class="meta">
       <span>系统对象 · LEVEL 04 人机混合神经闭环系统</span>
-      <span>提交 · 2026-11-25</span>
+      <span>提交 · 2026-11-26</span>
     </div>
   </div>
 </header>
@@ -154,21 +160,31 @@ footer{margin-top:46px;border-top:1px solid var(--line2);padding:18px 0 60px;
       <a class="go c" href="homework3.html"><span>打开需求与架构</span><span class="arrow">→</span></a>
     </div>
 
+    <div class="entry">
+      <div class="tag d"><span class="n">04</span><span>SCENARIO LAYERS</span></div>
+      <h2>场景分层<br>与运行设计条件</h2>
+      <p>把系统所处的环境切成环境、使命、运行、交互四层，逐层梳理十类场景要素，把"正常运行"定成可判定的范围，再对居家独立训练这一典型场景展开到秒级，并做安全风险分析。</p>
+      <div class="facts d">
+        <span>4 LAYERS</span><span>40 ELEMENTS</span><span>8 STATES</span><span>12 RS</span>
+      </div>
+      <a class="go d" href="homework4.html"><span>打开场景与运行条件</span><span class="arrow">→</span></a>
+    </div>
+
   </div>
 
   <div class="about">
     <div class="lab">阅读顺序</div>
     <div class="body">
-      建议先读<b>作业一</b>：它确定了系统的六层结构，也就确定了后面讨论的边界——分析对象是第四层的<b>人机混合神经闭环系统</b>，而不是某一台整机。再读<b>作业二</b>：业务需求回答“为什么值得做”，相关方需求回答“做到什么程度算合格”。最后读<b>作业三</b>：把这些需求落成可验证的系统需求，形成初始架构与独立安全设计。
+      建议先读<b>作业一</b>：它确定了系统的六层结构，也就确定了后面讨论的边界——分析对象是第四层的<b>人机混合神经闭环系统</b>，而不是某一台整机。再读<b>作业二</b>：业务需求回答“为什么值得做”，相关方需求回答“做到什么程度算合格”。再读<b>作业三</b>：把这些需求落成可验证的系统需求，形成初始架构与独立安全设计。最后读<b>作业四</b>：把系统放回环境里，分层看场景，明确"正常"的边界，并取一个典型场景检验安全设计是否够用。
       <div class="seq">
-        <span>层级图谱</span><em>→</em><span>概念定义</span><em>→</em><span>SyRS 与架构</span>
+        <span>层级图谱</span><em>→</em><span>概念定义</span><em>→</em><span>SyRS 与架构</span><em>→</em><span>场景与运行条件</span>
       </div>
     </div>
   </div>
 
   <footer>
-    <span>复杂系统工程 · 小组作业 1 / 2 / 3</span>
-    <span>2026-11-25</span>
+    <span>复杂系统工程 · 小组作业 1 / 2 / 3 / 4</span>
+    <span>2026-11-26</span>
   </footer>
 </div>
 
