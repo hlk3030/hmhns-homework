@@ -102,17 +102,16 @@ footer a:hover{color:var(--teal)}
     <a class="back" href="index.html">← 主页</a>
     <div class="mast-meta">
       <span>复杂系统工程 / 小组作业 4</span>
-      <span>场景分层 · 运行设计条件 · 典型场景 · 安全风险分析</span>
       <span>对象 LEVEL 04 人机混合神经闭环系统</span>
       <span>2026-11-26</span>
     </div>
     <h1>人机混合神经闭环系统<br>场景分层与运行设计条件</h1>
     <p class="sub">系统不是悬在空中运行的：它嵌在家庭、社区与医院三类环境里，由不同状态的人操作。本页把环境切成四层场景，逐层梳理要素，定出正常运行的设计条件，再取居家独立训练这一个典型场景展开到秒级，并对它做安全风险分析，得到风险场景列表。</p>
     <div class="mast-stats">
-      <div><b>4</b><small>SCENARIO LAYERS</small></div>
-      <div><b>40</b><small>SCENARIO ELEMENTS</small></div>
-      <div><b>8</b><small>SYSTEM STATES</small></div>
-      <div><b>12</b><small>RISK SCENARIOS</small></div>
+      <div><b>4</b><small>场景层</small></div>
+      <div><b>40</b><small>场景要素</small></div>
+      <div><b>8</b><small>运行状态</small></div>
+      <div><b>12</b><small>风险场景</small></div>
     </div>
   </div>
 </header>
@@ -131,7 +130,7 @@ footer a:hover{color:var(--teal)}
 
 <!-- ===== 00 ===== -->
 <section id="s0"><div class="wrap">
-  <div class="sh"><div class="no">SECTION 00</div><h2>依据、对象与做法<em>BASIS &amp; METHOD</em></h2></div>
+  <div class="sh"><div class="no">00</div><h2>依据、对象与做法</h2></div>
   <p class="lead">作业 1 给出六层分解与第四层的系统边界；作业 2 给出 ENV-1～ENV-4 四类环境、S1～S6 六个运营场景、M0～M7 八个运行模式与人员角色；作业 3 给出 22 条系统需求、六个子系统与安全需求。本页在这三者之上做"环境—场景"这一维度的展开，不重复定义系统功能。</p>
   <div class="grid2">
     <div class="card"><h5>四步做法</h5><p>① 场景分层：按时间尺度与决策主体，把系统所处环境切成四层；② 逐层梳理要素：每层用同一套十类要素填满，避免只写故事不写条件；③ 定运行设计条件：把"正常"写成可判定的范围，包括环境范围、系统状态、人员状态；④ 取一个典型场景详述，并对它做安全风险分析。</p></div>
@@ -142,7 +141,7 @@ footer a:hover{color:var(--teal)}
 
 <!-- ===== 01 分层 ===== -->
 <section id="s1"><div class="wrap">
-  <div class="sh"><div class="no">SECTION 01</div><h2>场景分层<em>SCENARIO LAYERING</em></h2></div>
+  <div class="sh"><div class="no">01</div><h2>场景分层</h2></div>
   <p class="lead">四层由外向内：环境层决定"允许在什么条件下用"，使命层决定"为什么用、谁组织"，运行层决定"一次使用怎么走"，交互层决定"毫秒之间怎么配合"。上层给下层设约束，下层向上层反馈证据。</p>
 
   <figure>
@@ -187,7 +186,7 @@ footer a:hover{color:var(--teal)}
 
 <!-- ===== 02 要素 ===== -->
 <section id="s2"><div class="wrap">
-  <div class="sh"><div class="no">SECTION 02</div><h2>各层场景要素<em>SCENARIO ELEMENTS</em></h2></div>
+  <div class="sh"><div class="no">02</div><h2>各层场景要素</h2></div>
   <p class="lead">十类要素 × 四层 = 40 个格子。每一格都必须写成可判定的内容，而不是"视情况而定"——否则后面的运行设计条件就无从设定。</p>
   <div class="table-wrap">
     <table>
@@ -212,10 +211,10 @@ footer a:hover{color:var(--teal)}
 
 <!-- ===== 03 运行设计条件 ===== -->
 <section id="s3"><div class="wrap">
-  <div class="sh"><div class="no">SECTION 03</div><h2>正常运行的设计条件<em>RUN DESIGN CONDITIONS</em></h2></div>
+  <div class="sh"><div class="no">03</div><h2>正常运行的设计条件</h2></div>
   <p class="lead">"正常运行"必须可以被判定。下面三张表分别给出：运行设计范围（环境与用户的边界值）、系统状态（每个状态允许什么）、人员状态（谁有资格做什么）。任一条件越界，即进入降级或禁止使用，而不是"尽量适配"。</p>
 
-  <h3>3.1 运行设计范围 RDL<span class="hid">RUN DESIGN LIMITS</span></h3>
+  <h3>3.1 运行设计范围 RDL</h3>
   <div class="table-wrap">
     <table>
       <colgroup><col style="width:12%"><col style="width:14%"><col style="width:34%"><col style="width:28%"><col style="width:12%"></colgroup>
@@ -240,7 +239,7 @@ footer a:hover{color:var(--teal)}
     </table>
   </div>
 
-  <h3>3.2 系统状态与允许行为<span class="hid">SYSTEM STATES</span></h3>
+  <h3>3.2 系统状态与允许行为</h3>
   <div class="table-wrap">
     <table>
       <colgroup><col style="width:10%"><col style="width:22%"><col style="width:26%"><col style="width:22%"><col style="width:20%"></colgroup>
@@ -258,7 +257,7 @@ footer a:hover{color:var(--teal)}
     </table>
   </div>
 
-  <h3>3.3 人员状态与资格<span class="hid">PERSONNEL STATES</span></h3>
+  <h3>3.3 人员状态与资格</h3>
   <div class="table-wrap">
     <table>
       <colgroup><col style="width:14%"><col style="width:20%"><col style="width:30%"><col style="width:22%"><col style="width:14%"></colgroup>
@@ -277,7 +276,7 @@ footer a:hover{color:var(--teal)}
 
 <!-- ===== 04 典型场景 ===== -->
 <section id="s4"><div class="wrap">
-  <div class="sh"><div class="no">SECTION 04</div><h2>典型场景详述：居家独立训练<span class="hid">SCENARIO INSTANCE</span></h2></div>
+  <div class="sh"><div class="no">04</div><h2>典型场景详述：居家独立训练</h2></div>
   <p class="lead">选择理由：这是使用频次最高、专业人员在最少、环境最不可控的场景，也是作业 2 中 BR-01 要成立的场景。它同时暴露了三类问题——用户自立性、弱网自治、以及无人监督下的安全边界。</p>
 
   <div class="scene-card">
@@ -331,7 +330,7 @@ footer a:hover{color:var(--teal)}
 
 <!-- ===== 05 安全风险分析 ===== -->
 <section id="s5"><div class="wrap">
-  <div class="sh"><div class="no">SECTION 05</div><h2>典型场景的安全风险分析<em>STPA · RISK SCENARIOS</em></h2></div>
+  <div class="sh"><div class="no">05</div><h2>典型场景的安全风险分析</h2></div>
   <p class="lead">用系统理论过程分析（STPA）的做法：先定损失与危险，再逐个控制动作问"没给 / 给错 / 给太久 / 给太早"四类不安全行为，最后落到风险场景列表与控制措施。它比逐部件 FMEA 更能抓到"人—机—环境配合错位"这一类失效。</p>
 
   <h3>5.1 损失与危险</h3>
@@ -370,7 +369,7 @@ footer a:hover{color:var(--teal)}
     </table>
   </div>
 
-  <h3>5.3 风险场景列表<span class="hid">RISK SCENARIO LIST</span></h3>
+  <h3>5.3 风险场景列表</h3>
   <div class="table-wrap">
     <table>
       <colgroup><col style="width:8%"><col style="width:24%"><col style="width:20%"><col style="width:26%"><col style="width:9%"><col style="width:13%"></colgroup>
@@ -396,7 +395,7 @@ footer a:hover{color:var(--teal)}
 
 <!-- ===== 06 ===== -->
 <section id="s6"><div class="wrap">
-  <div class="sh"><div class="no">SECTION 06</div><h2>追踪与结论<em>TRACE &amp; CONCLUSION</em></h2></div>
+  <div class="sh"><div class="no">06</div><h2>追踪与结论</h2></div>
   <h3>6.1 场景层与需求对照</h3>
   <div class="table-wrap">
     <table>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>人机混合神经闭环系统 · 概念定义（BRS / StRS）</title>
+<title>人机混合神经闭环系统 · 概念定义</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%230F1A18'/%3E%3Cpath d='M6 34h10l6-14 8 26 7-18 6 8h15' fill='none' stroke='%2359C9BE' stroke-width='3.2' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://miaoda.feishu.cn">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
@@ -251,18 +251,16 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       <a href="index.html" style="color:#6FC6BC;text-decoration:none;border-bottom:1px solid rgba(111,198,188,.45);padding-bottom:1px">← 主页</a>
       <span>复杂系统工程 / 小组作业 2</span>
       <span>第 4 章 概念定义</span>
-      <span>BRS + StRS</span>
-      <span>提交节点 2026-11-18 12:00</span>
     </div>
     <div class="mast-grid">
       <div>
-        <p class="kicker">概念定义 / CONCEPT DEFINITION</p>
+        <p class="kicker">概念定义</p>
         <h1>人机混合神经闭环系统<br>业务需求与相关方需求</h1>
         <p class="mast-sub">承接小组作业 1 的六层层级图谱，聚焦 LEVEL 04 选定的功能系统：把人体的意图、机器的输出与感觉反馈串成一条可运行、可验证、可追责的闭环，并把"谁需要它、为什么需要、需要到什么程度"写成可追踪的需求。</p>
         <div class="mast-stats">
-          <div><b>12</b><small>业务需求 BR</small></div>
-          <div><b>34</b><small>相关方需求 StR</small></div>
-          <div><b>14</b><small>相关方 SH</small></div>
+          <div><b>12</b><small>业务需求</small></div>
+          <div><b>34</b><small>相关方需求</small></div>
+          <div><b>14</b><small>相关方</small></div>
           <div><b>8</b><small>运行模式</small></div>
         </div>
       </div>
@@ -280,7 +278,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
             <path d="M28 148 C 28 108, 62 74, 132 74"/>
           </g>
           <g font-family="Noto Sans SC, sans-serif" font-size="13" fill="#EAF1EF" text-anchor="middle">
-            <text x="210" y="30" fill="#8FB3AE" font-size="10.5" letter-spacing="2">CLOSED LOOP</text>
+            <text x="210" y="30" fill="#8FB3AE" font-size="10.5" letter-spacing="2">闭环回路</text>
             <text x="210" y="52">人体生物神经</text>
           </g>
           <g font-family="Noto Sans SC, sans-serif" font-size="12.5" text-anchor="middle">
@@ -306,11 +304,11 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
   <div class="wrap nav-inner">
     <a href="#s0"><span>00</span>系统定位</a>
     <a href="#s1"><span>01</span>业务与任务分析</a>
-    <a href="#s2"><span>02</span>运营概念 ConOps</a>
-    <a href="#s3"><span>03</span>运行概念 OpsCon</a>
+    <a href="#s2"><span>02</span>运营概念</a>
+    <a href="#s3"><span>03</span>运行概念</a>
     <a href="#s4"><span>04</span>相关方列表</a>
-    <a href="#s5"><span>05</span>相关方需求 StRS</a>
-    <a href="#s6"><span>06</span>业务需求 BRS</a>
+    <a href="#s5"><span>05</span>相关方需求</a>
+    <a href="#s6"><span>06</span>业务需求</a>
     <a href="#s7"><span>07</span>追踪与一致性</a>
   </div>
 </nav>
@@ -319,12 +317,12 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
 
 <!-- ===== 00 系统定位 ===== -->
 <section class="sec" id="s0">
-  <div class="sec-rail"><span class="num">00</span><span class="tag">SCOPE<br>系统定位与<br>作业接口</span></div>
+  <div class="sec-rail"><span class="num">00</span><span class="tag">系统定位与<br>作业接口</span></div>
   <div class="sec-body">
-    <h2>先钉住"系统"是谁<span class="en">SYSTEM OF INTEREST</span></h2>
-    <p class="lede">作业 2 要求围绕小组选定的"系统"展开业务/任务分析与相关方需求分析。本文沿用作业 1 的选择：系统对象不是单台设备，而是 LEVEL 04 的<strong>人机混合神经闭环系统</strong>——它由采集、解码、输出、电源、通信、安全六类功能系统构成，向上被整机承载、被体系调度，向下由子系统与模块实现。</p>
+    <h2>先钉住"系统"是谁</h2>
+    <p class="lede">本文的分析对象沿用作业 1 的选择：系统对象不是单台设备，而是 LEVEL 04 的<strong>人机混合神经闭环系统</strong>——它由采集、解码、输出、电源、通信、安全六类功能系统构成，向上被整机承载、被体系调度，向下由子系统与模块实现。</p>
 
-    <h3>系统边界与需求接口<span class="hid">SoI BOUNDARY</span></h3>
+    <h3>系统边界与需求接口</h3>
     <p>把边界划清楚，是把需求写清楚的前提。系统之内是被需求约束的对象；系统之外的一切，要么是提供输入的使能系统，要么是接收输出的用户组织，它们在本轮只以接口和约束的身份出现。</p>
 
     <div class="table-wrap">
@@ -340,7 +338,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       </table>
     </div>
 
-    <h3>与作业 1 的承接关系<span class="hid">TRACE TO HW-1</span></h3>
+    <h3>与作业 1 的承接关系</h3>
     <p>作业 1 交付的是"任务—体系—整机—系统—子系统—模块"的静态分解；作业 2 要回答的是这条分解链为什么成立。下面的对应关系保证本文需求能原路挂回六层层级，而不是另起一套叙事。</p>
 
     <div class="table-wrap">
@@ -366,16 +364,16 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
 
 <!-- ===== 01 业务与任务分析 ===== -->
 <section class="sec" id="s1">
-  <div class="sec-rail"><span class="num">01</span><span class="tag">BUSINESS<br>&amp; TASK<br>ANALYSIS</span></div>
+  <div class="sec-rail"><span class="num">01</span><span class="tag">业务与<br>任务分析</span></div>
   <div class="sec-body">
-    <h2>业务/任务分析<span class="en">BUSINESS &amp; TASK ANALYSIS</span></h2>
+    <h2>业务/任务分析</h2>
     <p class="lede">业务分析回答"这门生意为什么值得做"，任务分析回答"为了做成它，人和系统每天到底要干哪些活"。两者合起来构成 BRS 的问题域输入，也是后续每一条相关方需求的出处。</p>
 
-    <h3>业务背景：四个环节之间的断裂<span class="hid">CONTEXT</span></h3>
+    <h3>业务背景：四个环节之间的断裂</h3>
     <p>康复与辅助器具业务的基本链路是"评估—处方—训练—复评"。问题不在环节缺失，而在环节之间的信息断裂：评估依赖量表与治疗师观察，处方依赖经验，训练发生在治疗室内的有限时段，复评往往要等下一次门诊。患者回到家里之后，训练做了什么、做了多少、做得好不好，临床上基本不可见。神经接口类设备本可以补上这段数据，但多数产品把信号留在设备里，没有回流到临床决策，形成了"设备能用、业务不通"的局面。</p>
     <p>另一个断裂发生在辅助环节本身。传统义肢与外骨骼是被动执行器：人给指令，机器执行，人不接收机器的反馈。把意图解码与感觉反馈接进来之后，辅助才从"替人做"变成"与人一起做"，但随之而来的是安全责任、数据责任和临床责任的新界面——这三类责任必须在业务层先定义清楚，否则系统做得再精细也无法交付。</p>
 
-    <h3>业务问题与影响<span class="hid">PROBLEMS</span></h3>
+    <h3>业务问题与影响</h3>
     <div class="table-wrap">
       <table class="tbl">
         <colgroup><col style="width:9%"><col style="width:30%"><col style="width:31%"><col style="width:30%"></colgroup>
@@ -391,7 +389,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       </table>
     </div>
 
-    <h3>业务目标与成功度量<span class="hid">GOALS &amp; MOEs</span></h3>
+    <h3>业务目标与成功度量</h3>
     <p>目标写成"可被否证"的形式：每个目标配一个度量、一个阈值、一个采集方式。阈值是小组在概念阶段设定的工作目标，用于对齐讨论，不代表临床结论。</p>
     <div class="table-wrap">
       <table class="tbl">
@@ -407,7 +405,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       </table>
     </div>
 
-    <h3>任务分析：一天里到底发生什么<span class="hid">TASK ANALYSIS</span></h3>
+    <h3>任务分析：一天里到底发生什么</h3>
     <p>任务分析的粒度取"一个角色在一段时间内为完成一个可交付结果所做的连续动作"。九个任务覆盖从入组到退役的完整链路，每个任务都标出主责角色、支撑系统与成功准则——这三列后面会直接变成 StRS 的验证准则。</p>
     <div class="table-wrap">
       <table class="tbl">
@@ -438,7 +436,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
     </div>
     <p class="small muted">这条流每循环一次，构成一个"训练周期"。系统的时间常数应当是"天"，而不是"次门诊"——这是 O3 与 BR-03 的来源。</p>
 
-    <h3>业务过程<span class="hid">BUSINESS PROCESSES</span></h3>
+    <h3>业务过程</h3>
     <div class="table-wrap">
       <table class="tbl">
         <colgroup><col style="width:9%"><col style="width:19%"><col style="width:16%"><col style="width:28%"><col style="width:28%"></colgroup>
@@ -457,37 +455,37 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
 
 <!-- ===== 02 运营概念 ConOps ===== -->
 <section class="sec" id="s2">
-  <div class="sec-rail"><span class="num">02</span><span class="tag">ConOps<br>运营概念<br>组织视角</span></div>
+  <div class="sec-rail"><span class="num">02</span><span class="tag">运营概念<br>组织视角</span></div>
   <div class="sec-body">
-    <h2>运营概念 ConOps<span class="en">CONCEPT OF OPERATIONS</span></h2>
+    <h2>运营概念 ConOps</h2>
     <p class="lede">ConOps 是组织视角的叙事：一家医院、一个社区康复站或一个家庭，怎样把这套系统嵌入现有的班次、角色和流程里，用它在真实环境中完成使命。它描述"谁—何时—何地—做什么—靠什么协同"，不描述系统内部的模式与时序。</p>
 
-    <h3>使用情境与运行环境<span class="hid">CONTEXTS</span></h3>
+    <h3>使用情境与运行环境</h3>
     <p>同一套系统在四种环境里的约束完全不同：医院有稳定的电源与网络、有专业人员在场，但空间拥挤、患者周转快；家庭有充足的佩戴时长，但网络、照明、照护者能力都不稳定；社区与户外则把安全边界推到最大。场景设计必须覆盖这四种环境的最差组合，而不是按最好的那种设计。</p>
     <div class="grid2">
       <div class="card">
-        <span class="idx">ENV-1 / 医院康复科</span>
+        
         <h5>高强度、短周期、强监督</h5>
         <p>患者在治疗师视线内训练 30–60 分钟，设备每日多患者轮用，要求快速消杀与快速换人；网络与电源稳定，数据需当日进入病历。</p>
       </div>
       <div class="card">
-        <span class="idx">ENV-2 / 社区康复站</span>
+        
         <h5>中等强度、弱专业支持</h5>
         <p>由康复指导员协助，专业判断能力弱于医院；设备数量少、维护半径大，故障必须能远程定位。</p>
       </div>
       <div class="card">
-        <span class="idx">ENV-3 / 家庭</span>
+        
         <h5>长时间佩戴、弱网、照护者非专业</h5>
         <p>每日佩戴数小时，训练与日常生活混在一起；网络时断时续，夜间告警必须本地可见、可听、可触达。</p>
       </div>
       <div class="card">
-        <span class="idx">ENV-4 / 社区与户外</span>
+        
         <h5>移动、不可预测、安全优先级最高</h5>
         <p>地面材质变化、人流、上下台阶、强光与噪声都会干扰信号与反馈可辨识度；跌倒风险与设备脱落风险同时上升。</p>
       </div>
     </div>
 
-    <h3>角色、职责与协同<span class="hid">ROLES</span></h3>
+    <h3>角色、职责与协同</h3>
     <div class="table-wrap">
       <table class="tbl">
         <colgroup><col style="width:16%"><col style="width:14%"><col style="width:40%"><col style="width:16%"><col style="width:14%"></colgroup>
@@ -505,12 +503,12 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       </table>
     </div>
 
-    <h3>运营场景<span class="hid">OPERATIONAL SCENARIOS</span></h3>
+    <h3>运营场景</h3>
     <p>六个场景覆盖"配置—日常—随行—复评—应急—退役"的完整运营周期。每个场景都写明触发条件、主流程、异常分支与后置状态；异常分支不是附注，它是安全类需求的主要来源。</p>
 
     <div class="grid2">
       <div class="card">
-        <span class="idx">S1 · 首次 90 分钟 / 医院</span>
+        
         <h5>入组与基线标定</h5>
         <p><b>触发</b>　门诊评估通过并签署知情同意。<br>
         <b>主流程</b>　基线量表与运动功能评估 → 电极点位选择与阻抗检查 → 静息与最大自主收缩采样 → 阈值与分类器标定 → 试戴验收与宣教。<br>
@@ -519,7 +517,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
         <b>承接</b>　T1–T4，<span class="id">StR-RT-01 / RT-03 / PT-05</span></p>
       </div>
       <div class="card">
-        <span class="idx">S2 · 每个训练日 / 家庭</span>
+        
         <h5>居家训练闭环</h5>
         <p><b>触发</b>　患者按计划开机，或治疗师推送了新任务。<br>
         <b>主流程</b>　佩戴自检（阻抗、电量、时基）→ 任务引导与动作示范 → 多组闭环辅助训练（组间休息）→ 训练后小结（完成率、辅助占比、主观用力）→ 本地留存并在联网时回传。<br>
@@ -528,7 +526,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
         <b>承接</b>　T5，<span class="id">StR-PT-05 / PT-06 / RT-01 / RT-02</span></p>
       </div>
       <div class="card">
-        <span class="idx">S3 · 白天不定时 / 社区与户外</span>
+        
         <h5>随行辅助</h5>
         <p><b>触发</b>　患者主动开启辅助，或按场景预设自动切换。<br>
         <b>主流程</b>　场景选择（平地 / 上下楼 / 坐站 / 抓握）→ 连续意图解码与助力输出 → 感觉反馈按接触强度分级 → 疲劳与姿态监测 → 结束回传当日累计。<br>
@@ -537,7 +535,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
         <b>承接</b>　T5–T6，<span class="id">StR-PT-03 / PT-04 / PT-06</span></p>
       </div>
       <div class="card">
-        <span class="idx">S4 · 每 1–2 周 / 治疗师工作站</span>
+        
         <h5>随访复评</h5>
         <p><b>触发</b>　周期到达，或指标异常触发提醒。<br>
         <b>主流程</b>　打开趋势视图（依从率、辅助占比、异常事件）→ 与基线及上次对比 → 调整处方或参数（草稿→确认）→ 推送患者端 → 生成复评摘要写入病历。<br>
@@ -546,7 +544,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
         <b>承接</b>　T7，<span class="id">StR-RT-02 / RT-03 / RT-05 / MD-01 / MD-02</span></p>
       </div>
       <div class="card">
-        <span class="idx">S5 · 夜间 / 家庭</span>
+        
         <h5>异常与应急</h5>
         <p><b>触发</b>　跌倒、电极脱落、刺激过流、心率异常，或患者主动呼救。<br>
         <b>主流程</b>　系统分级判定（关注 / 处置 / 紧急）→ 紧急级立即切断输出并本地声光提示 → 通知照护者与家属 → 按预案呼叫急救并上报位置与状态 → 事件留痕待复盘。<br>
@@ -555,7 +553,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
         <b>承接</b>　<span class="id">StR-CG-01 / CG-03 / EMR-01 / REG-01</span></p>
       </div>
       <div class="card">
-        <span class="idx">S6 · 季度或按需 / 机构</span>
+        
         <h5>维护、升级与退役</h5>
         <p><b>触发</b>　版本发布、故障码上报、寿命计数到限，或患者退出。<br>
         <b>主流程</b>　远程诊断读取故障码与健康度 → 备件更换或分阶段 OTA → 升级后自检与回滚点确认 → 退役时导出个人数据并彻底清除 → 归档设备履历。<br>
@@ -565,7 +563,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       </div>
     </div>
 
-    <h3>生命周期阶段<span class="hid">LIFE CYCLE</span></h3>
+    <h3>生命周期阶段</h3>
     <p>ConOps 不只看"用起来的时候"。部署、支持与退役同样消耗相关方的时间与信任，也最容易在需求阶段被漏掉。</p>
     <div class="timeline">
       <div class="tl-t">阶段 1</div><div class="tl-axis"><span class="tl-dot"></span></div>
@@ -580,7 +578,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       <div class="tl-c"><b>退役与数据清除</b><span>导出个人数据、彻底清除设备内数据、回收含植入件的处置路径；清除需留下可审计证明。</span></div>
     </div>
 
-    <h3>ConOps 层面的度量<span class="hid">USER-VIEW MEASURES</span></h3>
+    <h3>ConOps 层面的度量</h3>
     <div class="table-wrap">
       <table class="tbl">
         <colgroup><col style="width:26%"><col style="width:34%"><col style="width:20%"><col style="width:20%"></colgroup>
@@ -599,12 +597,12 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
 
 <!-- ===== 03 运行概念 OpsCon ===== -->
 <section class="sec" id="s3">
-  <div class="sec-rail"><span class="num">03</span><span class="tag">OpsCon<br>运行概念<br>系统视角</span></div>
+  <div class="sec-rail"><span class="num">03</span><span class="tag">运行概念<br>系统视角</span></div>
   <div class="sec-body">
-    <h2>运行概念 OpsCon<span class="en">OPERATIONAL CONCEPT</span></h2>
+    <h2>运行概念 OpsCon</h2>
     <p class="lede">如果说 ConOps 讲"这家机构怎么开展工作"，OpsCon 讲"这台系统怎么跑起来"：它有哪些运行模式、模式之间靠什么条件迁移、一次闭环要花多少毫秒、故障时退到哪个安全状态。这一层直接约束架构与人机功能分配，也是作业 3 系统需求的直接上游。</p>
 
-    <h3>ConOps 与 OpsCon 的分工<span class="hid">WHO DOES WHAT</span></h3>
+    <h3>ConOps 与 OpsCon 的分工</h3>
     <div class="table-wrap">
       <table class="tbl">
         <colgroup><col style="width:16%"><col style="width:32%"><col style="width:32%"><col style="width:20%"></colgroup>
@@ -619,7 +617,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
     </div>
     <p class="small muted">两者的边界不是文档边界，而是责任边界：ConOps 决定"该不该做"，OpsCon 决定"做的时候系统允许什么、禁止什么"。</p>
 
-    <h3>系统边界与外部接口<span class="hid">INTERFACES</span></h3>
+    <h3>系统边界与外部接口</h3>
     <div class="table-wrap">
       <table class="tbl">
         <colgroup><col style="width:8%"><col style="width:20%"><col style="width:8%"><col style="width:26%"><col style="width:20%"><col style="width:18%"></colgroup>
@@ -637,7 +635,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       </table>
     </div>
 
-    <h3>运行模式与状态迁移<span class="hid">MODES &amp; TRANSITIONS</span></h3>
+    <h3>运行模式与状态迁移</h3>
     <p>八种模式的设计原则只有一条：<strong>任何不确定都退到输出更少的那个状态</strong>。模式不是界面皮肤，而是软件与硬件的联合状态——每个模式都明确允许做什么、禁止做什么，以及谁能把它迁出去。</p>
 
     <div class="modes" id="modeStrip" role="group" aria-label="运行模式选择"></div>
@@ -664,7 +662,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       </table>
     </div>
 
-    <h3>闭环时序与时间预算<span class="hid">TIMING BUDGET</span></h3>
+    <h3>闭环时序与时间预算</h3>
     <p>闭环的时间预算不能"事后凑"：先由人的动作节律倒推端到端时延上限，再把它切成若干段，每段归属一个子系统。下面这组数字是概念阶段的分配方案，用于在作业 3 中转化为可验证的性能需求。</p>
     <div class="table-wrap">
       <table class="tbl">
@@ -686,7 +684,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
     </div>
     <p class="small muted">时延预算与 O2、StR-PT-03 直接对应；若后续为提升精度而加大窗口或模型规模，必须先在这张表上交换预算，而不是默认放宽端到端指标。</p>
 
-    <h3>故障响应与降级<span class="hid">FAULT RESPONSE</span></h3>
+    <h3>故障响应与降级</h3>
     <div class="table-wrap">
       <table class="tbl">
         <colgroup><col style="width:20%"><col style="width:20%"><col style="width:26%"><col style="width:19%"><col style="width:15%"></colgroup>
@@ -703,7 +701,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       </table>
     </div>
 
-    <h3>人机功能分配<span class="hid">FUNCTION ALLOCATION</span></h3>
+    <h3>人机功能分配</h3>
     <div class="table-wrap">
       <table class="tbl">
         <colgroup><col style="width:24%"><col style="width:26%"><col style="width:26%"><col style="width:24%"></colgroup>
@@ -721,23 +719,23 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       </table>
     </div>
 
-    <h3>运行约束与合规基线<span class="hid">CONSTRAINTS</span></h3>
+    <h3>运行约束与合规基线</h3>
     <div class="grid3">
-      <div class="card"><span class="idx">POWER</span><h5>功耗与续航</h5><p>整机运行 ≤3.5 W；训练日续航 ≥8 h；低电量按分级降级而非直接停机。</p></div>
-      <div class="card"><span class="idx">COMPUTE</span><h5>端侧算力</h5><p>推理预算 12 ms，端侧完成；云端只做训练与仿真，不得进入闭环控制路径。</p></div>
-      <div class="card"><span class="idx">DATA</span><h5>存储与断网</h5><p>本地保留 ≥7 天原始数据与 ≥90 天指标；断网状态下闭环能力不降级。</p></div>
-      <div class="card"><span class="idx">SAFETY</span><h5>安全独立性</h5><p>安全系统独立于主链路供电与时钟，可随时切断输出；急停不依赖操作系统。</p></div>
-      <div class="card"><span class="idx">REGULATORY</span><h5>器械与软件</h5><p>IEC 60601-1、60601-1-2（EMC）、60601-2-10（神经肌肉刺激）、ISO 14971、IEC 62304。</p></div>
-      <div class="card"><span class="idx">PRIVACY</span><h5>数据合规</h5><p>敏感个人信息单独同意、最小必要、可撤回可删除；日志留存与审计满足监管要求。</p></div>
+      <div class="card"><h5>功耗与续航</h5><p>整机运行 ≤3.5 W；训练日续航 ≥8 h；低电量按分级降级而非直接停机。</p></div>
+      <div class="card"><h5>端侧算力</h5><p>推理预算 12 ms，端侧完成；云端只做训练与仿真，不得进入闭环控制路径。</p></div>
+      <div class="card"><h5>存储与断网</h5><p>本地保留 ≥7 天原始数据与 ≥90 天指标；断网状态下闭环能力不降级。</p></div>
+      <div class="card"><h5>安全独立性</h5><p>安全系统独立于主链路供电与时钟，可随时切断输出；急停不依赖操作系统。</p></div>
+      <div class="card"><h5>器械与软件</h5><p>IEC 60601-1、60601-1-2（EMC）、60601-2-10（神经肌肉刺激）、ISO 14971、IEC 62304。</p></div>
+      <div class="card"><h5>数据合规</h5><p>敏感个人信息单独同意、最小必要、可撤回可删除；日志留存与审计满足监管要求。</p></div>
     </div>
   </div>
 </section>
 
 <!-- ===== 04 相关方列表 ===== -->
 <section class="sec" id="s4">
-  <div class="sec-rail"><span class="num">04</span><span class="tag">STAKEHOLDER<br>LIST</span></div>
+  <div class="sec-rail"><span class="num">04</span><span class="tag">相关方<br>列表</span></div>
   <div class="sec-body">
-    <h2>相关方列表<span class="en">STAKEHOLDERS</span></h2>
+    <h2>相关方列表</h2>
     <p class="lede">相关方识别不是列名单，而是判定"谁有权提出要求、谁承担后果、谁能否决"。判据有三条：是否直接使用或受影响、是否掌握资源或审批权、是否在生命周期某一阶段承担支持责任。三条中任一成立即入列，并在"影响与权力"列标出它说话的分量。</p>
 
     <div class="table-wrap">
@@ -753,15 +751,15 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
 
 <!-- ===== 05 相关方需求 StRS ===== -->
 <section class="sec" id="s5">
-  <div class="sec-rail"><span class="num">05</span><span class="tag">StRS<br>相关方需求<br>规格说明</span></div>
+  <div class="sec-rail"><span class="num">05</span><span class="tag">相关方需求<br>规格说明</span></div>
   <div class="sec-body">
-    <h2>相关方需求 StRS<span class="en">STAKEHOLDER REQUIREMENTS SPECIFICATION</span></h2>
+    <h2>相关方需求 StRS</h2>
     <p class="lede">StRS 是问题域的最后一站：它把各相关方的期望写成可验证的陈述，仍不谈系统怎么实现。它上承 BRS 的业务目标与约束，下启作业 3 的系统需求（SyRS）——本文写"要什么程度"，SyRS 才写"由哪个子系统、用什么指标实现"。</p>
 
     <div class="grid3">
-      <div class="card"><span class="idx">PRIORITY</span><h5>优先级口径</h5><p><span class="chip m">M</span> 必须满足，缺失即不可交付；<span class="chip s">S</span> 应该满足，可在首版降级；<span class="chip c">C</span> 可以考虑，用于后续版本取舍。</p></div>
-      <div class="card"><span class="idx">VERIFICATION</span><h5>验证方法</h5><p><span class="chip ghost">T</span> 测试　<span class="chip ghost">A</span> 分析　<span class="chip ghost">I</span> 检查　<span class="chip ghost">D</span> 演示。概念阶段先定方法，避免后期为"无法验证"的需求补造证据。</p></div>
-      <div class="card"><span class="idx">SCOPE</span><h5>范围与非目标</h5><p>本文只写相关方视角的需求与约束；不写功能分解、接口协议、软件架构与选型，这些属于 SyRS 与设计阶段。</p></div>
+      <div class="card"><h5>优先级口径</h5><p><span class="chip m">M</span> 必须满足，缺失即不可交付；<span class="chip s">S</span> 应该满足，可在首版降级；<span class="chip c">C</span> 可以考虑，用于后续版本取舍。</p></div>
+      <div class="card"><h5>验证方法</h5><p><span class="chip ghost">T</span> 测试　<span class="chip ghost">A</span> 分析　<span class="chip ghost">I</span> 检查　<span class="chip ghost">D</span> 演示。概念阶段先定方法，避免后期为"无法验证"的需求补造证据。</p></div>
+      <div class="card"><h5>范围与非目标</h5><p>本文只写相关方视角的需求与约束；不写功能分解、接口协议、软件架构与选型，这些属于 SyRS 与设计阶段。</p></div>
     </div>
 
     <div class="toolbar" id="strToolbar">
@@ -789,7 +787,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
     </div>
     <p class="small muted" id="strEmpty" style="display:none">没有匹配的需求，换一个筛选条件试试。</p>
 
-    <h3>StRS 的结构完整性<span class="hid">FRAMEWORK CHECK</span></h3>
+    <h3>StRS 的结构完整性</h3>
     <p>按教材表 4-5 的内容框架逐条自查，确保输出的是"规格说明"而不是一堆零散期望。标为"精简"的条目在本文合并处理，理由一并注明。</p>
     <div class="table-wrap">
       <table class="tbl">
@@ -823,12 +821,12 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
 
 <!-- ===== 06 业务需求 BRS ===== -->
 <section class="sec" id="s6">
-  <div class="sec-rail"><span class="num">06</span><span class="tag">BRS<br>业务需求<br>规格说明</span></div>
+  <div class="sec-rail"><span class="num">06</span><span class="tag">业务需求<br>规格说明</span></div>
   <div class="sec-body">
-    <h2>业务需求 BRS<span class="en">BUSINESS REQUIREMENTS SPECIFICATION</span></h2>
+    <h2>业务需求 BRS</h2>
     <p class="lede">BRS 站在出资方与运营方的位置，说清楚"这门业务必须成立的条件"。它不承诺任何技术方案，只承诺成效、约束与责任：一条业务需求若不能被业务侧单方面验收，就说明它写成了系统需求，应当往下走一层。</p>
 
-    <h3>BRS 的结构完整性<span class="hid">FRAMEWORK CHECK</span></h3>
+    <h3>BRS 的结构完整性</h3>
     <div class="table-wrap">
       <table class="tbl">
         <colgroup><col style="width:6%"><col style="width:30%"><col style="width:40%"><col style="width:24%"></colgroup>
@@ -857,7 +855,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       </table>
     </div>
 
-    <h3>十二条业务需求<span class="hid">BUSINESS REQUIREMENTS</span></h3>
+    <h3>十二条业务需求</h3>
     <div class="brgrid" id="brGrid"></div>
     <p class="small muted">每条业务需求都配一个"成功准则"，它是业务侧验收的最小单元；卡片底部的编号指向支撑它的相关方需求，反向追踪见 07 章。</p>
   </div>
@@ -865,12 +863,12 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
 
 <!-- ===== 07 追踪与一致性 ===== -->
 <section class="sec" id="s7">
-  <div class="sec-rail"><span class="num">07</span><span class="tag">TRACE<br>CONSISTENCY<br>&amp; ASSUMPTIONS</span></div>
+  <div class="sec-rail"><span class="num">07</span><span class="tag">追踪、一致性与<br>待确认</span></div>
   <div class="sec-body">
-    <h2>追踪、一致性与待确认<span class="en">TRACEABILITY &amp; CONSISTENCY</span></h2>
+    <h2>追踪、一致性与待确认</h2>
     <p class="lede">需求文档最容易出问题的地方不是漏写，而是写完之后各部分互相矛盾、又没人能追到源头。本章给出三个体检：正向追踪、冲突消解、假设清单。</p>
 
-    <h3>正向追踪矩阵<span class="hid">TRACE MATRIX</span></h3>
+    <h3>正向追踪矩阵</h3>
     <div class="table-wrap">
       <table class="tbl">
         <colgroup><col style="width:9%"><col style="width:30%"><col style="width:15%"><col style="width:13%"><col style="width:33%"></colgroup>
@@ -879,7 +877,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       </table>
     </div>
 
-    <h3>需求之间的冲突与决策<span class="hid">CONFLICTS</span></h3>
+    <h3>需求之间的冲突与决策</h3>
     <p>冲突不是文档缺陷，而是设计约束的显性化。下面五组冲突在小组讨论中被反复提出，处理原则统一为"先定安全与合规的硬边界，再在边界内做性能与成本的交换"。</p>
     <div class="table-wrap">
       <table class="tbl">
@@ -895,7 +893,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       </table>
     </div>
 
-    <h3>假设与待确认项<span class="hid">ASSUMPTIONS</span></h3>
+    <h3>假设与待确认项</h3>
     <p>概念定义阶段必须把"还没确认的事"写出来，否则它们会以隐性假设的形式进入设计。以下八项需在小组评审与临床调研中逐条关闭。</p>
     <div class="table-wrap">
       <table class="tbl">
@@ -914,7 +912,7 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
       </table>
     </div>
 
-    <h3>需求质量自检<span class="hid">QUALITY CHECK</span></h3>
+    <h3>需求质量自检</h3>
     <div class="table-wrap">
       <table class="tbl">
         <colgroup><col style="width:14%"><col style="width:34%"><col style="width:52%"></colgroup>
@@ -943,11 +941,10 @@ footer .footrow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wr
 <footer>
   <div class="wrap">
     <div class="footrow">
-      <div>人机混合神经闭环系统 · 概念定义（BRS + StRS）<br>复杂系统工程 · 小组作业 2 · 承接小组作业 1 六层层级图谱</div>
-      <div style="text-align:right">提交节点 2026-11-18 12:00<br>形式：HTML 网页推送</div>
+      <div>人机混合神经闭环系统 · 概念定义<br>复杂系统工程 · 小组作业 2 · 承接小组作业 1 六层层级图谱</div>
     </div>
     <div class="footrow" style="margin-top:18px">
-      <div>小组成员与分工：待小组补充。需求条目经小组讨论与 AI 问答生成，量化阈值为概念阶段工程假设。</div>
+      <div>量化阈值为概念阶段的工程假设，需在后续评审与临床调研中复核。</div>
       <div>v1.0 / 2026-11-17</div>
     </div>
   </div>

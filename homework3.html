@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>人机混合神经闭环系统 · 系统需求规格书与初始架构（SyRS）｜复杂系统工程 作业3</title>
+<title>人机混合神经闭环系统 · 系统需求规格书与初始架构｜复杂系统工程</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%230D5B55'/%3E%3Cg stroke='%23EAF2F0' stroke-width='3' fill='none'%3E%3Ccircle cx='32' cy='32' r='13'/%3E%3Cpath d='M32 19v-6M45 32h6M32 45v6M19 32h6'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;700&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
@@ -101,17 +101,15 @@ footer a:hover{color:var(--teal)}
     <a class="back" href="index.html">← 主页</a>
     <div class="mast-meta">
       <span>复杂系统工程 / 小组作业 3</span>
-      <span>SyRS · 初始系统架构 · 控制框图 · 安全架构</span>
-      <span>ISO/IEC/IEEE 29148:2018 表 5-1</span>
       <span>2026-11-25</span>
     </div>
     <h1>人机混合神经闭环系统<br>系统需求规格书与初始系统架构</h1>
     <p class="sub">承接作业 2 的 12 条业务需求（BR）与 34 条相关方需求（StR），在 LEVEL 04 系统层把它们落成可验证的系统需求（SyRS），据此给出功能架构、闭环控制框图，并完成危险分析、安全需求与安全架构。</p>
     <div class="mast-stats">
-      <div><b>22</b><small>SYSTEM REQUIREMENTS</small></div>
-      <div><b>6</b><small>FUNCTIONAL SUBSYSTEMS</small></div>
-      <div><b>10</b><small>SAFETY REQUIREMENTS</small></div>
-      <div><b>8</b><small>HAZARDS ANALYZED</small></div>
+      <div><b>22</b><small>系统需求</small></div>
+      <div><b>6</b><small>子系统</small></div>
+      <div><b>10</b><small>安全需求</small></div>
+      <div><b>8</b><small>危险源</small></div>
     </div>
   </div>
 </header>
@@ -129,8 +127,8 @@ footer a:hover{color:var(--teal)}
 
 <!-- ===== CH.00 ===== -->
 <section id="s0"><div class="wrap">
-  <div class="sh"><div class="no">SECTION 00</div><h2>定位、范围与方法<em>SCOPE &amp; METHOD</em></h2></div>
-  <p class="lead">本页是作业 3 的交付物。需求来源是作业 2 已经评审过的业务需求 BRS（BR-01～BR-12）与相关方需求 StRS（StR-PT/CG/RT/MD/ADM/EN/REG/PAY/EMR/ALG）；作业 1 的六层层级图谱提供系统分解骨架。本文按 ISO/IEC/IEEE 29148:2018 第 5 章表 5-1 的 SyRS 范例组织：每条系统需求含编号、陈述、理由、验证方法、优先级与来源追踪。</p>
+  <div class="sh"><div class="no">00</div><h2>定位、范围与方法</h2></div>
+  <p class="lead">需求来源是作业 2 已经评审过的业务需求 BRS（BR-01～BR-12）与相关方需求 StRS（StR-PT/CG/RT/MD/ADM/EN/REG/PAY/EMR/ALG）；作业 1 的六层层级图谱提供系统分解骨架。本文按 ISO/IEC/IEEE 29148:2018 第 5 章表 5-1 的 SyRS 范例组织：每条系统需求含编号、陈述、理由、验证方法、优先级与来源追踪。</p>
   <div class="grid2">
     <div class="card"><h5>本页回答什么</h5><p>系统应当做什么（功能需求 FR）、做到什么程度（性能需求 PR）、与外部如何交接（接口需求 IR）、受什么约束（CN）；这些需求按功能分配到六个子系统，形成初始架构；最后给出危险分析、安全需求 SR 与独立安全架构。</p></div>
     <div class="card"><h5>本页不回答什么</h5><p>不做详细硬件选型、电路图与软件设计；不重新论证业务价值（作业 2 已完成）；模型精度与训练策略只给约束，不展开算法细节。下一层（设计阶段）从 FR/PR 的分配结果进入。</p></div>
@@ -140,9 +138,9 @@ footer a:hover{color:var(--teal)}
 
 <!-- ===== CH.01 SyRS ===== -->
 <section id="s1"><div class="wrap">
-  <div class="sh"><div class="no">SECTION 01</div><h2>系统需求规格书 SyRS<em>SYSTEM REQUIREMENTS SPECIFICATION</em></h2></div>
+  <div class="sh"><div class="no">01</div><h2>系统需求规格书 SyRS</h2></div>
 
-  <h3>1.1 功能需求 FR<em style="font-family:var(--mono);font-size:11px;color:var(--muted)">FUNCTIONAL</em></h3>
+  <h3>1.1 功能需求 FR</h3>
   <div class="table-wrap">
     <table>
       <colgroup><col style="width:9%"><col style="width:34%"><col style="width:26%"><col style="width:13%"><col style="width:9%"><col style="width:9%"></colgroup>
@@ -164,7 +162,7 @@ footer a:hover{color:var(--teal)}
     </table>
   </div>
 
-  <h3>1.2 性能需求 PR<em style="font-family:var(--mono);font-size:11px;color:var(--muted)">PERFORMANCE</em></h3>
+  <h3>1.2 性能需求 PR</h3>
   <div class="table-wrap">
     <table>
       <colgroup><col style="width:9%"><col style="width:38%"><col style="width:22%"><col style="width:13%"><col style="width:9%"><col style="width:9%"></colgroup>
@@ -184,7 +182,7 @@ footer a:hover{color:var(--teal)}
     </table>
   </div>
 
-  <h3>1.3 接口需求 IR<em style="font-family:var(--mono);font-size:11px;color:var(--muted)">INTERFACE</em></h3>
+  <h3>1.3 接口需求 IR</h3>
   <div class="table-wrap">
     <table>
       <colgroup><col style="width:9%"><col style="width:20%"><col style="width:9%"><col style="width:38%"><col style="width:24%"></colgroup>
@@ -202,7 +200,7 @@ footer a:hover{color:var(--teal)}
     </table>
   </div>
 
-  <h3>1.4 设计与合规约束 CN<em style="font-family:var(--mono);font-size:11px;color:var(--muted)">CONSTRAINTS</em></h3>
+  <h3>1.4 设计与合规约束 CN</h3>
   <div class="table-wrap">
     <table>
       <colgroup><col style="width:9%"><col style="width:44%"><col style="width:38%"><col style="width:9%"></colgroup>
@@ -220,7 +218,7 @@ footer a:hover{color:var(--teal)}
 
 <!-- ===== CH.02 初始系统架构 ===== -->
 <section id="s2"><div class="wrap">
-  <div class="sh"><div class="no">SECTION 02</div><h2>初始系统架构<em>INITIAL SYSTEM ARCHITECTURE</em></h2></div>
+  <div class="sh"><div class="no">02</div><h2>初始系统架构</h2></div>
   <p class="lead">把 22 条系统需求按功能分配到六个子系统：采集、解码、输出、电源、通信、安全；平台服务（记录报告、处方、运维、数据主权）横向贯穿。云端只作旁路，不进入闭环。</p>
 
   <h3>2.1 功能架构与需求分配</h3>
@@ -311,7 +309,7 @@ footer a:hover{color:var(--teal)}
 
 <!-- ===== CH.03 控制框图 ===== -->
 <section id="s3"><div class="wrap">
-  <div class="sh"><div class="no">SECTION 03</div><h2>系统控制框图<em>CLOSED-LOOP CONTROL DIAGRAM</em></h2></div>
+  <div class="sh"><div class="no">03</div><h2>系统控制框图</h2></div>
   <p class="lead">主闭环是一个典型的“感知—决策—执行—反馈”负反馈环；安全监视是与主环并行的第二通道，不经过主 MCU，直接作用于输出切断。各段标注的时间预算之和即 PR-01 的 50 ms。</p>
   <figure>
     <svg viewBox="0 0 1000 600" role="img" aria-label="闭环控制框图">
@@ -369,7 +367,7 @@ footer a:hover{color:var(--teal)}
 
 <!-- ===== CH.04 安全 ===== -->
 <section id="s4"><div class="wrap">
-  <div class="sh"><div class="no">SECTION 04</div><h2>安全需求与安全架构<em>SAFETY REQUIREMENTS &amp; ARCHITECTURE</em></h2></div>
+  <div class="sh"><div class="no">04</div><h2>安全需求与安全架构</h2></div>
 
   <h3>4.1 危险源分析 HAZID / FMEA 摘要</h3>
   <div class="table-wrap">
@@ -439,7 +437,7 @@ footer a:hover{color:var(--teal)}
 
 <!-- ===== CH.05 追踪 ===== -->
 <section id="s5"><div class="wrap">
-  <div class="sh"><div class="no">SECTION 05</div><h2>追踪、遗留问题与自检<em>TRACEABILITY &amp; REVIEW</em></h2></div>
+  <div class="sh"><div class="no">05</div><h2>追踪、遗留问题与自检</h2></div>
   <h3>5.1 需求追踪摘要</h3>
   <p class="lead">每条 SyR 都向上挂接 StR/BR，向下分配到子系统；作业 2 的 12 条 BR 在本表全部有落点，无悬空业务需求。</p>
   <div class="table-wrap">
