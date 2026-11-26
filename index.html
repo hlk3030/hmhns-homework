@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>机器增强的人机混合神经系统｜复杂系统工程 · 小组作业</title>
+<title>上肢康复混合辅助训练系统｜复杂系统工程 · 小组作业</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2316181A'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23E8EDEA' stroke-width='3'/%3E%3Ccircle cx='32' cy='17' r='5' fill='%230D5B55'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;700&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
@@ -31,7 +31,6 @@ body{
 a{color:inherit;text-decoration:none}
 .wrap{max-width:1060px;margin:0 auto;padding:0 34px}
 
-/* ===== 报头 ===== */
 header{padding:64px 0 44px}
 .kicker{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
   font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--muted);
@@ -43,7 +42,6 @@ h1 .thin{display:block;font-weight:500;font-size:.62em;color:var(--ink2);margin-
 .meta{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px 24px;font-family:var(--mono);
   font-size:11px;letter-spacing:.08em;color:var(--muted)}
 
-/* ===== 四入口 ===== */
 .entries{padding:20px 0 10px;border-top:2px solid var(--ink);display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr))}
 .entry{padding:40px 34px 44px 0;position:relative}
@@ -77,15 +75,11 @@ h1 .thin{display:block;font-weight:500;font-size:.62em;color:var(--ink2);margin-
 .entry a.go.c:hover{color:var(--amber);border-bottom-color:var(--amber)}
 .entry a.go.d:hover{color:var(--c4);border-bottom-color:var(--c4)}
 
-/* ===== 说明 ===== */
 .about{padding:44px 0 8px;border-top:2px solid var(--ink);display:grid;
   grid-template-columns:180px minmax(0,1fr);gap:30px}
 .about .lab{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);padding-top:5px}
 .about .body{color:var(--ink2);font-size:13.5px;max-width:52em;font-weight:300}
 .about .body b{color:var(--ink);font-weight:500}
-.seq{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px;
-  font-family:var(--mono);font-size:11.5px;color:var(--muted)}
-.seq em{font-style:normal;color:var(--line2)}
 
 footer{margin-top:46px;border-top:1px solid var(--line2);padding:18px 0 60px;
   font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);
@@ -116,13 +110,13 @@ footer{margin-top:46px;border-top:1px solid var(--line2);padding:18px 0 60px;
       <span>复杂系统工程</span>
       <span>小组作业 · 2026 秋</span>
     </div>
-    <h1>机器增强的人机混合神经系统
-      <span class="thin">四次小组作业的在线版本</span>
+    <h1>上肢康复混合辅助训练系统
+      <span class="thin">患者自己发力，机器补上差的那一点力</span>
     </h1>
-    <p class="sub">先看系统由哪几个层级构成、信号如何在人体与机器之间闭合；再看谁需要它、需要到什么程度；然后把需求落成系统规格、初始架构与安全设计；最后把它放回真实环境，分层梳理场景并定出正常运行的条件。</p>
+    <p class="sub">先看系统由哪几个层级构成、信号如何在人体与机器之间闭合；再看谁需要它、需要到什么程度；然后把需求落成系统规格、初始架构与安全设计；最后把它放回诊室、社区站与家庭，分层梳理场景并定出正常运行的条件。</p>
     <div class="meta">
-      <span>系统对象 · LEVEL 04 人机混合神经闭环系统</span>
-      <span>提交 · 2026-11-26</span>
+      <span>案例 · 脑卒中后偏瘫上肢康复</span>
+      <span>小组 · 宁海宇　杨博文　杨雨泽　刘凯　张闻涛</span>
     </div>
   </div>
 </header>
@@ -133,9 +127,9 @@ footer{margin-top:46px;border-top:1px solid var(--line2);padding:18px 0 60px;
     <div class="entry">
       <div class="tag a"><span class="n">01</span></div>
       <h2>六层层级图谱<br>与闭环链路</h2>
-      <p>从任务、体系、整机、系统到子系统与模块的六层分解，每一层列明职责、成员与上下承接关系，并给出神经信号的双向闭环链路。</p>
+      <p>从任务、体系、整机、系统到子系统与模块的六层分解：三条任务、六个功能系统、十九个子系统、三十二个模块，并给出前向、反馈、前馈与旁路安全构成的闭环。</p>
       <div class="facts a">
-        <span>6 层级</span><span>62 条目</span><span>1 闭环</span>
+        <span>6 层级</span><span>3 任务</span><span>19 子系统</span><span>32 模块</span>
       </div>
       <a class="go a" href="homework1.html"><span>打开层级图谱</span><span class="arrow">→</span></a>
     </div>
@@ -143,9 +137,9 @@ footer{margin-top:46px;border-top:1px solid var(--line2);padding:18px 0 60px;
     <div class="entry">
       <div class="tag b"><span class="n">02</span></div>
       <h2>概念定义<br>业务需求与相关方需求</h2>
-      <p>围绕同一系统做业务与任务分析：业务需求、运营概念、运行概念、相关方清单与相关方需求，两套需求按表 4-1、表 4-5 的框架逐条编写并互相追踪。</p>
+      <p>三条业务与四条硬约束、八类相关方的二十四条需求，四层场景、七个运行状态与六条接口，把"谁需要、需要到什么程度"写成可追溯的条目。</p>
       <div class="facts b">
-        <span>8 章</span><span>12 业务需求</span><span>34 相关方需求</span><span>14 相关方</span>
+        <span>3 业务层</span><span>8 相关方</span><span>24 相关方需求</span><span>7 状态</span>
       </div>
       <a class="go b" href="homework2.html"><span>打开概念定义</span><span class="arrow">→</span></a>
     </div>
@@ -153,9 +147,9 @@ footer{margin-top:46px;border-top:1px solid var(--line2);padding:18px 0 60px;
     <div class="entry">
       <div class="tag c"><span class="n">03</span></div>
       <h2>系统需求规格书<br>与初始架构</h2>
-      <p>把 BR / StR 落成可验证的系统需求（FR / PR / IR），给出功能架构、闭环控制框图，并完成危险分析、安全需求与独立安全架构。</p>
+      <p>把诉求落成可验收的系统规格：十二条功能需求、七条性能需求、六条接口需求、十二条安全需求，配六系统双通道功能架构与四层安全架构，并用 STPA 校核控制动作的失效。</p>
       <div class="facts c">
-        <span>22 系统需求</span><span>6 子系统</span><span>10 安全需求</span><span>8 危险源</span>
+        <span>37 系统需求</span><span>6 功能系统</span><span>12 安全需求</span><span>4 安全层级</span>
       </div>
       <a class="go c" href="homework3.html"><span>打开需求与架构</span><span class="arrow">→</span></a>
     </div>
@@ -163,18 +157,26 @@ footer{margin-top:46px;border-top:1px solid var(--line2);padding:18px 0 60px;
     <div class="entry">
       <div class="tag d"><span class="n">04</span></div>
       <h2>场景分层<br>与运行设计条件</h2>
-      <p>把系统所处的环境切成环境、使命、运行、交互四层，逐层梳理十类场景要素，把"正常运行"定成可判定的范围，再对居家独立训练这一典型场景展开到秒级，并做安全风险分析。</p>
+      <p>把场景切成使命、环境、任务、交互四层，逐层梳理十类要素，把"正常"定成可判定的四组条件，再取居家主动辅助这一典型回合展开，并给出十二条风险场景。</p>
       <div class="facts d">
-        <span>4 场景层</span><span>40 要素</span><span>8 运行状态</span><span>12 风险场景</span>
+        <span>4 场景层</span><span>40 要素</span><span>7 运行状态</span><span>12 风险场景</span>
       </div>
       <a class="go d" href="homework4.html"><span>打开场景与运行条件</span><span class="arrow">→</span></a>
     </div>
 
   </div>
 
+  <div class="about">
+    <div class="lab">一条主线</div>
+    <div class="body">
+      <p><b>辅助不是替代。</b>肌肉与关节没有坏，缺的是足够强的那一次收缩，所以系统只在患者主动发力之上叠加助力；<b>结构分两条轨道</b>，生物通道与人工通道并行，任一降级另一条维持基础功能，实时闭环留在本地边缘，云端不进控制链路；<b>底线是失效默认安全</b>，坏了就停，人的否决权最高，急停走硬线不过软件。</p>
+      <p>四次作业按同一套编号往下走：层级给约束，概念定需求，规格给验收口径，场景给运行条件。任何一条改动，都要能在链条上找回来处。</p>
+    </div>
+  </div>
+
   <footer>
-    <span>复杂系统工程 · 小组作业 1 / 2 / 3 / 4</span>
-    <span>2026-11-26</span>
+    <span>复杂系统工程 · 小组作业 1 / 2 / 3 / 4　｜　<a href="brief.html">精简版</a></span>
+    <span>上肢康复混合辅助训练系统</span>
   </footer>
 </div>
 
